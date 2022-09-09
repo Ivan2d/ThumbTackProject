@@ -6,28 +6,28 @@ public class ColoredCircle extends Circle{
 
     private int color;
 
-    public ColoredCircle(Point center, int radius, int color){//1
+    public ColoredCircle(Point center, int radius, int color){
         this(center.getX(), center.getY(), radius, color);
     }
 
-    public ColoredCircle(int xCenter, int yCenter, int radius, int color){//2
+    public ColoredCircle(int xCenter, int yCenter, int radius, int color){
         super(xCenter, yCenter, radius);
         this.color = color;
     }
 
-    public ColoredCircle(int radius, int color){//3
+    public ColoredCircle(int radius, int color){
         this(0, 0, radius, color);
     }
 
-    public ColoredCircle(int color){//4
+    public ColoredCircle(int color){
         this(0, 0, 1, color);
     }
 
-    public ColoredCircle(){//5
+    public ColoredCircle(){
         this(0, 0, 1, 1);
     }
 
-    public int getColor(){//10
+    public int getColor(){
         return color;
     }
 

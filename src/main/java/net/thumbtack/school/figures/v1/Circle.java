@@ -2,33 +2,24 @@ package net.thumbtack.school.figures.v1;
 import java.util.Objects;
 
 public class Circle {
-    // REVU не надо new Point. Создавайте их в конструкторе
-    // нет смысла создать точку (0,0) а потом ее менять
-    private Point center = new Point();
+    private Point center;
     private int radius;
 
-    // REVU В классе должен быть только один конструктор, явно присваивающий значения полям. Остальные должны вызывать другой конструктор
     public Circle(Point center, int radius){
         this.center = center;
         this.radius = radius;
     }
 
     public Circle(int xCenter, int yCenter, int radius){
-        center.setX(xCenter);
-        center.setY(yCenter);
-        this.radius = radius;
+       this(new Point(xCenter,yCenter), radius);
     }
 
     public Circle(int radius){
-        center.setX(0);
-        center.setY(0);
-        this.radius = radius;
+        this(new Point(0,0), radius);
     }
 
     public Circle(){
-        center.setX(0);
-        center.setY(0);
-        this.radius = 1;
+        this(new Point(0, 0), 1);
     }
 
     public Point getCenter(){
@@ -75,15 +66,11 @@ public class Circle {
     }
 
     public boolean isInside(int x, int y){
-        // REVU sqrt не нужен
-        return Math.sqrt((x - center.getX())*(x - center.getX()) +
-                (y - center.getY())*(y - center.getY())) <= radius;
+        return radius >= Math.pow(Math.pow(x - center.getX(), 2) + Math.pow(y - center.getY(), 2), 0.5);
     }
 
     public boolean isInside(Point point){
-        // REVU вызовите предыдущий метод
-        return Math.sqrt((point.getX() - center.getX())*(point.getX() - center.getX()) +
-                (point.getY() - center.getY())*(point.getY() - center.getY())) <= radius;
+        return isInside(point.getX(), point.getY());
     }
 
     @Override

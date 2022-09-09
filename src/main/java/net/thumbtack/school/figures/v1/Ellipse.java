@@ -3,12 +3,10 @@ package net.thumbtack.school.figures.v1;
 import java.util.Objects;
 
 public class Ellipse {
-    // REVU не надо new Point. Создавайте их в конструкторе
-    private Point center = new Point();
+    private Point center;
     private int xAxis;
     private int yAxis;
 
-    // REVU В классе должен быть только один конструктор, явно присваивающий значения полям. Остальные должны вызывать другой конструктор
     public Ellipse(Point center, int xAxis, int yAxis){
         this.center = center;
         this.xAxis = xAxis;
@@ -16,24 +14,15 @@ public class Ellipse {
     }
 
     public Ellipse(int xCenter, int yCenter, int xAxis, int yAxis){
-        center.setX(xCenter);
-        center.setY(yCenter);
-        this.xAxis = xAxis;
-        this.yAxis = yAxis;
+        this(new Point(xCenter, yCenter), xAxis, yAxis);
     }
 
     public Ellipse(int xAxis, int yAxis){
-        center.setX(0);
-        center.setY(0);
-        this.xAxis = xAxis;
-        this.yAxis = yAxis;
+        this(new Point(0,0), xAxis, yAxis);
     }
 
     public Ellipse(){
-        center.setX(0);
-        center.setY(0);
-        this.xAxis = 1;
-        this.yAxis = 1;
+        this(new Point(0,0), 1,1);
     }
 
     public Point getCenter(){

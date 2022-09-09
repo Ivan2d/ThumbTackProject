@@ -3,42 +3,28 @@ package net.thumbtack.school.figures.v1;
 import java.util.Objects;
 
 public class Rectangle {
-    // REVU не надо new Point. Создавайте их в конструкторе
-    private Point center = new Point();
+    private Point center;
     private int width, height;
 
-    // REVU В классе должен быть только один конструктор, явно присваивающий значения полям. Остальные должны вызывать другой конструктор
     public Rectangle(Point center, int width, int height){
-        if(width % 2 == 0 && height % 2 ==0){
-            this.center = center;
+        if(width % 2 == 0 && height % 2 ==0)
+        {
+            this.center = new Point(center.getX(), center.getY());
             this.width = width;
             this.height = height;
         }
     }
 
     public Rectangle(int xCenter, int yCenter, int width, int height){
-        if(width % 2 == 0 && height % 2 == 0){
-            center.setX(xCenter);
-            center.setY(yCenter);
-            this.width = width;
-            this.height = height;
-        }
+        this(new Point(xCenter, yCenter), width, height);
     }
 
     public Rectangle(int width, int height){
-        if(width % 2 == 0 && height % 2 == 0){
-            center.setX(0);
-            center.setY(0);
-            this.width = width;
-            this.height = height;
-        }
+        this(new Point(0, 0), width, height);
     }
 
     public Rectangle(){
-        center.setX(0);
-        center.setY(0);
-        width = 2;
-        height = 2;
+        this(new Point(0, 0), 2, 2);
     }
 
     public Point getTopLeft(){

@@ -3,8 +3,7 @@ package net.thumbtack.school.figures.v1;
 import java.util.Objects;
 
 public class Square {
-    // REVU не надо new Point. Создавайте их в конструкторе
-    private Point center = new Point();
+    private Point center;
     private int size;
 
     public Square(Point center, int size){
@@ -15,27 +14,15 @@ public class Square {
     }
 
     public Square(int xCenter, int yCenter, int size){
-        if(size % 2 == 0 && size > 0){
-            center.setX(xCenter);
-            center.setY(yCenter);
-            this.size = size;
-        }
+        this(new Point(xCenter,yCenter), size);
     }
 
     public Square(int size){
-        if(size % 2 == 0 && size > 0){
-            center.setX(0);
-            center.setY(0);
-            this.size = size;
-        }
+        this(new Point(0,0), size);
     }
 
     public Square(){
-        {
-            center.setX(0);
-            center.setY(0);
-            this.size = 2;
-        }
+        this(new Point(0,0), 2);
     }
 
     public Point getTopLeft(){
@@ -128,11 +115,5 @@ public class Square {
     public int hashCode() {
         return Objects.hash(center, size);
     }
-
-
-
-
-
-
 
 }

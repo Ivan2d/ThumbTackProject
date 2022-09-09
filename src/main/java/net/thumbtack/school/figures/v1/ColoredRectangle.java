@@ -6,25 +6,21 @@ public class ColoredRectangle extends Rectangle{
 
     private int color;
 
-    // REVU В классе должен быть только один конструктор, явно присваивающий значения полям. Остальные должны вызывать другой конструктор
     public ColoredRectangle(Point center, int width, int height, int color){
        super(center, width, height);
        this.color = color;
     }
 
     public ColoredRectangle(int xCenter, int yCenter, int width, int height, int color){
-        super(xCenter, yCenter, width, height);
-        this.color = color;
+        this(new Point(xCenter, yCenter), width, height, color);
     }
 
     public ColoredRectangle(int width, int height, int color){
-        super(width, height);
-        this.color = color;
+        this(new Point(0,0), width, height, color);
     }
 
     public ColoredRectangle(int color){
-        super();
-        this.color = color;
+        this(new Point(0,0), 2, 2, color);
     }
 
     public ColoredRectangle(){

@@ -43,25 +43,25 @@ public class FirstSteps
         // REVU не используйте подчеркивание
         // camelCase, то есть sumArr
         // здесь и везде
-        int sum_arr = 0;
+        int sumArr = 0;
         if(array.length == 0){
-            return sum_arr;
+            return sumArr;
         }
         for(int item: array){
-            sum_arr+=item;
+            sumArr+=item;
         }
-        return sum_arr;
+        return sumArr;
     }
 
     public int mul(int[] array){
         if(array.length == 0){
             return 0;
         }
-        int sum_arr = 1;
+        int sumArr = 1;
         for(int item: array){
-            sum_arr*=item;
+            sumArr*=item;
         }
-        return sum_arr;
+        return sumArr;
     }
 
     public int min(int[] array){
@@ -69,13 +69,13 @@ public class FirstSteps
             return Integer.MAX_VALUE;
         }
 
-        int min_arr = array[0];
+        int minArr = array[0];
         for(int item: array){
-            if (min_arr >= item){
-                min_arr = item;
+            if (minArr >= item){
+                minArr = item;
             }
         }
-        return min_arr;
+        return minArr;
     }
 
     public int max(int[] array){
@@ -83,13 +83,13 @@ public class FirstSteps
             return Integer.MIN_VALUE;
         }
 
-        int max_arr = array[0];
+        int maxArr = array[0];
         for(int item: array){
-            if (max_arr <= item){
-                max_arr = item;
+            if (maxArr <= item){
+                maxArr = item;
             }
         }
-        return max_arr;
+        return maxArr;
     }
 
     public double average(int[] array){
@@ -98,10 +98,7 @@ public class FirstSteps
         }
 
         // REVU вызовите sum
-        double average = 0;
-        for(int item: array){
-                average += item;
-        }
+        double average = sum(array);
         average/= array.length;
         return average;
     }
@@ -118,7 +115,7 @@ public class FirstSteps
     public void cube(int[]array){
         for(int i =0; i < array.length; i++){
             // REVU умножение быстрее, *=
-            array[i]= (int) Math.pow(array[i], 3);
+            array[i] = array[i]*array[i]*array[i];
         }
     }
 
@@ -153,27 +150,23 @@ public class FirstSteps
     }
 
     public int sum(int[][] matrix){
-        int sum = 0;
-        int max_lenght = matrix.length;
-        // REVU for each
-        for (int i = 0; i < max_lenght; i++) {
-            // REVU вызовите sum для линейного массива
-            for (int j = 0; j < max_lenght; j++) {
-                sum += matrix[i][j];
-            }
+        int res = 0;
+        for (int[] item: matrix)
+        {
+            res += sum(item);
         }
-        return sum;
+        return res;
     }
 
     public int max(int[][] matrix) {
 
         Integer max = null;
         // REVU аналогично
-        for (int i = 0; i < matrix.length; i++) {
-            for (int j = 0; j < matrix[i].length; j++) {
-                if(max == null) max = matrix[i][j];
-                if (matrix[i][j] > max) {
-                    max = matrix[i][j];
+        for (int[] ints : matrix) {
+            for (int anInt : ints) {
+                if (max == null) max = anInt;
+                if (anInt > max) {
+                    max = anInt;
                 }
             }
         }
@@ -184,18 +177,15 @@ public class FirstSteps
 
 
     public int diagonalMax(int[][] matrix) {
-        Integer max = null;
-        // REVU двойной цикл не нужен
-        for (int i = 0; i < matrix.length; i++) {
-            for (int j = 0; j < matrix[i].length; j++) {
-                if(max == null) max = matrix[i][j];
-                if (i == j && matrix[i][j] > max) {
-                    max = matrix[i][j];
+            if (matrix.length == 0 || matrix.length == 1)
+                return Integer.MIN_VALUE;
+            else {
+                int max = matrix[0][0];
+                for (int i = 0; i < matrix.length; i++) {
+                    if (max < matrix[i][i]) max = matrix[i][i];
                 }
+                return max;
             }
-        }
-        max = max != null ? max : Integer.MIN_VALUE;
-        return max;
     }
 
     public boolean isSortedDescendant(int[][] matrix){

@@ -65,22 +65,19 @@ public class StringOperations
     }
 
     public static String getCommonPrefix(String string1, String string2) {
-        // REVU StringBuilder и цеплять сиволы не нужно
-        // просто считайте их, пока ==, а потом substring
-        StringBuilder result = new StringBuilder();
         int min = string1.length();
         if (min >= string2.length()) {
             min = string2.length();
         }
-
+        int counter = 0;
         for (int i = 0; i < min; i++) {
             if (string1.charAt(i) == string2.charAt(i)) {
-                result.append(string1.charAt(i));
+                counter++;
             } else {
                 break;
             }
         }
-        return result.toString();
+        return string1.substring(0, counter);
     }
 
     public static String reverse(String string){
@@ -88,10 +85,7 @@ public class StringOperations
     }
 
     public static boolean isPalindrome(String string) {
-        // REVU сделайте без reverse
-                 return string.replaceAll("\\W","")
-                        .equals(new StringBuilder(string.replaceAll("\\W",""))
-                        .reverse().toString());
+        return string.equals(reverse(string));
     }
 
     public static boolean isPalindromeIgnoreCase(String string){
@@ -112,18 +106,11 @@ public class StringOperations
     public static boolean hasSameSubstring(String string1, String string2, int index, int length) {
         int str1_len = string1.length();
         int str2_len = string2.length();
-        // REVU просто сравните 2 substring
-
         if (str1_len < index+length || str2_len < index+length){
             return false;
         }
 
-            for (int i = index; i < length; i++) {
-                if (string1.charAt(i) != string2.charAt(i)) {
-                    return false;
-                }
-            }
-        return true;
+        return string1.substring(index, length).equals(string2.substring(index, length));
     }
 
     public static boolean isEqualAfterReplaceCharacters(String string1, char replaceInStr1, char replaceByInStr1, String string2, char replaceInStr2, char replaceByInStr2)
@@ -145,7 +132,6 @@ public class StringOperations
     }
 
     public static String makeCsvStringFromInts(int[] array) {
-// REVU Вызовите аналогичный метод, возвращающий StringBuilder и toString
         if(array == null || array.length == 0)
         {
             return "";
@@ -161,7 +147,6 @@ public class StringOperations
     }
 
     public static String makeCsvStringFromDoubles(double[] array){
-// REVU Вызовите аналогичный метод, возвращающий StringBuilder и toString
         if(array == null || array.length == 0)
         {
             return "";
@@ -177,35 +162,13 @@ public class StringOperations
     }
 
     public static StringBuilder makeCsvStringBuilderFromInts(int[] array){
-        if(array == null || array.length == 0)
-        {
-            return new StringBuilder();
-        }
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append(array[0]);
-        for(int i = 1; i < array.length; i++)
-        {
-            stringBuilder.append(',');
-            stringBuilder.append(array[i]);
-        }
-        return stringBuilder;
+        return new StringBuilder(makeCsvStringFromInts(array));
 
     }
 
     public static StringBuilder makeCsvStringBuilderFromDoubles(double[] array)
     {
-        if(array == null || array.length == 0)
-        {
-            return new StringBuilder();
-        }
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append(String.format("%.2f",array[0]));
-        for(int i = 1; i < array.length; i++)
-        {
-            stringBuilder.append(',');
-            stringBuilder.append(String.format("%.2f",array[i]));
-        }
-        return stringBuilder;
+        return new StringBuilder(makeCsvStringFromDoubles(array));
     }
 
     public static StringBuilder removeCharacters(String string, int[] positions) {

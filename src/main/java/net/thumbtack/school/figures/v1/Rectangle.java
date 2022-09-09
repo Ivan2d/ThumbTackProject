@@ -115,7 +115,8 @@ public class Rectangle {
     }
 
     public boolean isInside(Point point){
-        if(getTopLeft().getX() <= point.getX() && getTopLeft().getY() <= point.getY() && getBottomRight().getX() >= point.getX() && getBottomRight().getY() >= point.getY()) {
+        if(getTopLeft().getX() <= point.getX() && getTopLeft().getY() <= point.getY() &&
+                getBottomRight().getX() >= point.getX() && getBottomRight().getY() >= point.getY()) {
             return true;
         }
         return false;

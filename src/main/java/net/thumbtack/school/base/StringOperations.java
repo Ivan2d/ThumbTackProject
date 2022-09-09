@@ -65,6 +65,8 @@ public class StringOperations
     }
 
     public static String getCommonPrefix(String string1, String string2) {
+        // REVU StringBuilder и цеплять сиволы не нужно
+        // просто считайте их, пока ==, а потом substring
         StringBuilder result = new StringBuilder();
         int min = string1.length();
         if (min >= string2.length()) {
@@ -86,6 +88,7 @@ public class StringOperations
     }
 
     public static boolean isPalindrome(String string) {
+        // REVU сделайте без reverse
                  return string.replaceAll("\\W","")
                         .equals(new StringBuilder(string.replaceAll("\\W",""))
                         .reverse().toString());
@@ -109,6 +112,7 @@ public class StringOperations
     public static boolean hasSameSubstring(String string1, String string2, int index, int length) {
         int str1_len = string1.length();
         int str2_len = string2.length();
+        // REVU просто сравните 2 substring
 
         if (str1_len < index+length || str2_len < index+length){
             return false;
@@ -141,6 +145,7 @@ public class StringOperations
     }
 
     public static String makeCsvStringFromInts(int[] array) {
+// REVU Вызовите аналогичный метод, возвращающий StringBuilder и toString
         if(array == null || array.length == 0)
         {
             return "";
@@ -156,6 +161,7 @@ public class StringOperations
     }
 
     public static String makeCsvStringFromDoubles(double[] array){
+// REVU Вызовите аналогичный метод, возвращающий StringBuilder и toString
         if(array == null || array.length == 0)
         {
             return "";

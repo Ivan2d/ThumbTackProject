@@ -3,6 +3,7 @@ package net.thumbtack.school.figures.v1;
 import java.util.Objects;
 
 public class Square {
+    // REVU не надо new Point. Создавайте их в конструкторе
     private Point center = new Point();
     private int size;
 

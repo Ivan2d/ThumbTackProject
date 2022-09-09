@@ -29,6 +29,7 @@ public class FirstSteps
     }
 
     public boolean isInsideRect(int xLeft, int yTop, int xRight, int yBottom, int x, int y){
+        // REVU сразу return ...
         if (xLeft < xRight && yTop < yBottom){
             if( (xLeft <= x && x <= xRight) && (yTop <= y && yBottom >= y) ){
                 return true;
@@ -39,6 +40,9 @@ public class FirstSteps
 
     public int sum(int[] array)
     {
+        // REVU не используйте подчеркивание
+        // camelCase, то есть sumArr
+        // здесь и везде
         int sum_arr = 0;
         if(array.length == 0){
             return sum_arr;
@@ -93,6 +97,7 @@ public class FirstSteps
             return 0;
         }
 
+        // REVU вызовите sum
         double average = 0;
         for(int item: array){
                 average += item;
@@ -112,6 +117,7 @@ public class FirstSteps
 
     public void cube(int[]array){
         for(int i =0; i < array.length; i++){
+            // REVU умножение быстрее, *=
             array[i]= (int) Math.pow(array[i], 3);
         }
     }
@@ -149,7 +155,9 @@ public class FirstSteps
     public int sum(int[][] matrix){
         int sum = 0;
         int max_lenght = matrix.length;
+        // REVU for each
         for (int i = 0; i < max_lenght; i++) {
+            // REVU вызовите sum для линейного массива
             for (int j = 0; j < max_lenght; j++) {
                 sum += matrix[i][j];
             }
@@ -160,6 +168,7 @@ public class FirstSteps
     public int max(int[][] matrix) {
 
         Integer max = null;
+        // REVU аналогично
         for (int i = 0; i < matrix.length; i++) {
             for (int j = 0; j < matrix[i].length; j++) {
                 if(max == null) max = matrix[i][j];
@@ -176,6 +185,7 @@ public class FirstSteps
 
     public int diagonalMax(int[][] matrix) {
         Integer max = null;
+        // REVU двойной цикл не нужен
         for (int i = 0; i < matrix.length; i++) {
             for (int j = 0; j < matrix[i].length; j++) {
                 if(max == null) max = matrix[i][j];

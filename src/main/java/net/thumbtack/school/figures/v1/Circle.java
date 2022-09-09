@@ -2,9 +2,12 @@ package net.thumbtack.school.figures.v1;
 import java.util.Objects;
 
 public class Circle {
+    // REVU не надо new Point. Создавайте их в конструкторе
+    // нет смысла создать точку (0,0) а потом ее менять
     private Point center = new Point();
     private int radius;
 
+    // REVU В классе должен быть только один конструктор, явно присваивающий значения полям. Остальные должны вызывать другой конструктор
     public Circle(Point center, int radius){
         this.center = center;
         this.radius = radius;
@@ -72,11 +75,13 @@ public class Circle {
     }
 
     public boolean isInside(int x, int y){
+        // REVU sqrt не нужен
         return Math.sqrt((x - center.getX())*(x - center.getX()) +
                 (y - center.getY())*(y - center.getY())) <= radius;
     }
 
     public boolean isInside(Point point){
+        // REVU вызовите предыдущий метод
         return Math.sqrt((point.getX() - center.getX())*(point.getX() - center.getX()) +
                 (point.getY() - center.getY())*(point.getY() - center.getY())) <= radius;
     }

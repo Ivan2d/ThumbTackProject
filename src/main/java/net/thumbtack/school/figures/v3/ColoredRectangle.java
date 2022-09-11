@@ -11,7 +11,6 @@ public class ColoredRectangle extends Rectangle implements Colored, Stretchable,
 {
     private Color color;
 
-    // REVU В классе должен быть только один конструктор, явно присваивающий значения полям. Остальные должны вызывать другой конструктор
     public ColoredRectangle(Point center, int width, int height, Color color) throws ColorException {
         super(center, width, height);
         this.color = color;
@@ -31,8 +30,7 @@ public class ColoredRectangle extends Rectangle implements Colored, Stretchable,
     }
 
     public ColoredRectangle(Point center, int width, int height, String color) throws ColorException {
-        super(center, width, height);
-        this.color = Color.colorFromString(color);
+        this(center, width, height, Color.colorFromString(color));
     }
 
     public ColoredRectangle(int xCenter, int yCenter, int width, int height, String color) throws ColorException {

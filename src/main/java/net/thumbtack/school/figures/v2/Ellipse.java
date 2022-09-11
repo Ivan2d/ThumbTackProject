@@ -4,15 +4,14 @@ import java.util.Objects;
 
 public class Ellipse extends Figure {
 
-    private int xAxis, yAxis, xCenter, yCenter;
+    private int xAxis, yAxis;
 
     public Ellipse(Point center, int xAxis, int yAxis){//1
         this(center.getX(), center.getY(), xAxis, yAxis);
     }
 
     public Ellipse(int xCenter, int yCenter, int xAxis, int yAxis){//2
-        this.xCenter = xCenter;
-        this.yCenter = yCenter;
+        super(xCenter, yCenter);
         this.xAxis = xAxis;
         this.yAxis = yAxis;
     }
@@ -26,7 +25,7 @@ public class Ellipse extends Figure {
     }
 
     public Point getCenter(){//5
-        return new Point(xCenter, yCenter);
+        return center;
     }
 
     public int getXAxis(){//6
@@ -46,20 +45,20 @@ public class Ellipse extends Figure {
     }
 
     public void setCenter(Point center){//10
-        xCenter = center.getX();
-        yCenter = center.getY();
+        this.center.setX(center.getX());
+        this.center.setY(center.getY());
     }
 
     @Override
     public void moveTo(int x, int y){//11
-        xCenter = x;
-        yCenter = y;
+        this.center.setX(x);
+        this.center.setY(y);
     }
 
     @Override
     public void moveRel(int dx, int dy){//13
-        xCenter += dx;
-        yCenter += dy;
+        this.center.setX(center.getX()+dx);
+        this.center.setY(center.getY()+dy);
     }
 
     @Override
@@ -92,8 +91,8 @@ public class Ellipse extends Figure {
     public boolean isInside(int x, int y){//18
         double a = xAxis / 2;
         double b = yAxis / 2;
-        x -= xCenter;
-        y -= yCenter;
+        x -= center.getX();
+        y -= center.getY();
         return ((x * x) / (a * a) + (y * y) / (b * b) <= 1.);
     }
 
@@ -104,12 +103,12 @@ public class Ellipse extends Figure {
         Ellipse ellipse = (Ellipse) o;
         return xAxis == ellipse.xAxis &&
                 yAxis == ellipse.yAxis &&
-                xCenter == ellipse.xCenter &&
-                yCenter == ellipse.yCenter;
+                center.getX() == ellipse.center.getX() &&
+                center.getY() == ellipse.center.getY();
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(xAxis, yAxis, xCenter, yCenter);
+        return Objects.hash(xAxis, yAxis, center.getX(), center.getY());
     }
 }

@@ -1,22 +1,19 @@
 package net.thumbtack.school.figures.v3;
-
 import java.util.Objects;
 
 public class Circle extends Figure
 {
-    // REVU xCenter, yCenter не нужны, есть center в Figure
-    private int xCenter, yCenter, radius;
+    private int radius;
 
     public Circle(Point center, int radius) {
         this(center.getX(), center.getY(), radius);
     }
 
-    public Circle(int xCenter, int yCenter, int radius) {
-        this.xCenter = xCenter;
-        this.yCenter = yCenter;
+    public Circle(int xCenter, int yCenter, int radius)
+    {
+        super(xCenter, yCenter);
         this.radius = radius;
-
- }
+    }
 
     public Circle(int radius) {
         this(0,0, radius);
@@ -27,7 +24,7 @@ public class Circle extends Figure
     }
 
     public Point getCenter() {
-        return new Point(xCenter, yCenter);
+        return new Point(center.getX(), center.getY());
     }
 
     public int getRadius() {
@@ -35,8 +32,8 @@ public class Circle extends Figure
     }
 
     public void setCenter(Point center){
-        this.xCenter = center.getX();
-        this.yCenter = center.getY();
+        this.center.setX(center.getX());
+        this.center.setY(center.getY());
     }
 
     public void setRadius(int radius){
@@ -45,8 +42,8 @@ public class Circle extends Figure
 
     @Override
     public void moveTo(int x, int y){
-        xCenter = x;
-        yCenter = y;
+        this.center.setX(x);
+        this.center.setY(y);
     }
 
     @Override
@@ -56,8 +53,8 @@ public class Circle extends Figure
 
     @Override
     public void moveRel(int dx, int dy){
-        xCenter += dx;
-        yCenter += dy;
+        this.center.setX(center.getX()+dx);
+        this.center.setY(center.getY()+dy);
     }
 
     @Override
@@ -78,7 +75,7 @@ public class Circle extends Figure
     @Override
     public boolean isInside(int x, int y)
     {
-        return radius >= Math.pow(Math.pow(x - xCenter, 2) + Math.pow(y - yCenter, 2), 0.5);
+        return radius >= Math.pow(Math.pow(x - center.getX(), 2) + Math.pow(y - center.getY(), 2), 0.5);
     }
 
     @Override
@@ -86,13 +83,13 @@ public class Circle extends Figure
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Circle circle = (Circle) o;
-        return xCenter == circle.xCenter &&
-                yCenter == circle.yCenter &&
+        return center.getX() == circle.center.getX() &&
+                center.getY() == circle.center.getY() &&
                 radius == circle.radius;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(xCenter, yCenter, radius);
+        return Objects.hash(center.getX(), center.getY(), radius);
     }
 }

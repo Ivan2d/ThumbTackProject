@@ -9,9 +9,9 @@ public class Rectangle extends Figure {
     }
 
     public Rectangle(Point center, int width, int height){
+        super(center);
         if(width % 2 == 0 && height % 2 ==0)
         {
-            this.center = new Point(center.getX(), center.getY());
             this.width = width;
             this.height = height;
         }
@@ -54,7 +54,7 @@ public class Rectangle extends Figure {
     }
 
     @Override
-    public Point getCenter(){
+    public net.thumbtack.school.figures.v3.Point getCenter(){
         return center;
     }
 

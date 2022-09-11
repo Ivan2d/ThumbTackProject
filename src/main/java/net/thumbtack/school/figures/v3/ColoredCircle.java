@@ -1,5 +1,4 @@
 package net.thumbtack.school.figures.v3;
-
 import net.thumbtack.school.colors.v3.Color;
 import net.thumbtack.school.colors.v3.ColorException;
 import net.thumbtack.school.iface.v3.Colored;
@@ -10,7 +9,6 @@ public class ColoredCircle extends Circle implements Colored {
 
     private Color color;
 
-    // REVU В классе должен быть только один конструктор, явно присваивающий значения полям. Остальные должны вызывать другой конструктор
     public ColoredCircle(int xCenter, int yCenter, int radius, Color color) throws ColorException {//2
         super(xCenter, yCenter, radius);
         Color.colorEqualsNull(color);
@@ -34,8 +32,7 @@ public class ColoredCircle extends Circle implements Colored {
     }
 
     public ColoredCircle(int xCenter, int yCenter, int radius, String color) throws ColorException {//2
-        super(xCenter, yCenter, radius);
-        this.color = Color.colorFromString(color);
+        this(xCenter, yCenter, radius, Color.colorFromString(color));
     }
 
     public ColoredCircle(int radius, String color) throws ColorException {//3

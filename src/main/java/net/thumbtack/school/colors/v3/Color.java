@@ -5,12 +5,12 @@ public enum Color {
 
     public static Color colorFromString(String colorString) throws ColorException {
         try {
+            if(colorString == null) {
+                throw new ColorException(ColorErrorCode.NULL_COLOR);
+            }
             return Color.valueOf(colorString);
         } catch (IllegalArgumentException ex) {
             throw new ColorException(ColorErrorCode.WRONG_COLOR_STRING);
-            // REVU можно и так, но лучше проверить на null
-        } catch (NullPointerException ex) {
-            throw new ColorException(ColorErrorCode.NULL_COLOR);
         }
     }
 

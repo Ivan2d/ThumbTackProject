@@ -5,8 +5,8 @@ public class Square extends Figure {
     private int size;
 
     public Square(Point center, int size){
+        super(center);
         if(size % 2 == 0 && size > 0){
-            this.center = center;
             this.size = size;
         }
     }

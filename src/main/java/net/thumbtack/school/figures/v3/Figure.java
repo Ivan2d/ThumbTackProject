@@ -6,6 +6,7 @@ import net.thumbtack.school.iface.v3.Resizable;
 abstract public class Figure implements Movable, Resizable, HasArea
 {
     public Point center;
+    // REVU сделайте конструктор
     public void moveTo(int x, int y){
         center.setX(x);
         center.setY(y);

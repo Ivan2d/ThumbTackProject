@@ -4,6 +4,7 @@ import java.util.Objects;
 
 public class Circle extends Figure
 {
+    // REVU xCenter, yCenter не нужны, есть center в Figure
     private int xCenter, yCenter, radius;
 
     public Circle(Point center, int radius) {

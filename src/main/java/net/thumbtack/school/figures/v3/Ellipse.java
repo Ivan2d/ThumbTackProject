@@ -4,6 +4,7 @@ import java.util.Objects;
 
 public class Ellipse extends Figure {
 
+    // REVU xCenter, yCenter не нужны, есть center в Figure
     private int xAxis, yAxis, xCenter, yCenter;
 
     public Ellipse(Point center, int xAxis, int yAxis){//1

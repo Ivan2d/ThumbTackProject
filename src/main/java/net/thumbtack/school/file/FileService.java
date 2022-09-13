@@ -6,6 +6,7 @@ import net.thumbtack.school.figures.v3.Rectangle;
 import net.thumbtack.school.ttschool.Trainee;
 import net.thumbtack.school.ttschool.TrainingException;
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.Scanner;
 
 public class FileService {
@@ -125,8 +126,8 @@ public class FileService {
     }
 
     public static void writeRectangleToTextFileOneLine(File file, Rectangle rect) throws IOException {
-        // REVU всегда указывайте кодировку UTF8 для текстового ввода-вывода
-        try (PrintWriter printWriter = new PrintWriter(file)) {
+        try (PrintWriter printWriter = new PrintWriter(file, StandardCharsets.UTF_8))
+        {
             printWriter.format("%d %d %d %d",
                     rect.getCenter().getX(),
                     rect.getCenter().getY(),
@@ -137,8 +138,6 @@ public class FileService {
 
     public static Rectangle readRectangleFromTextFileOneLine(File file) throws IOException {
         Rectangle react = null;
-        // REVU забудьте про класс Scanner. Очень медленно
-        // BufferedReader
         try (Scanner scanner = new Scanner(new FileReader(file))) {
             while (scanner.hasNext()) {
                 react = new Rectangle(scanner.nextInt(), scanner.nextInt(),
@@ -169,7 +168,6 @@ public class FileService {
 
     public static Trainee readTraineeFromTextFileOneLine(File file) throws IOException, TrainingException {
         Trainee trainee = null;
-        // REVU то же
         try (Scanner scanner = new Scanner(new FileReader(file))) {
             while (scanner.hasNext()) {
                 trainee = new Trainee(scanner.next(), scanner.next(), scanner.nextInt());

@@ -1,7 +1,5 @@
 package net.thumbtack.school.ttschool;
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 public class School {
     private String name;
@@ -14,7 +12,7 @@ public class School {
         }
         this.name = name;
         this.year = year;
-        groupSet = new HashSet<>();
+        groupSet = new TreeSet<>(Comparator.comparing(Group::getName));
     }
 
     public String getName() {
@@ -40,21 +38,19 @@ public class School {
         return groupSet;
     }
 
-    public void addGroup(Group group) throws TrainingException {
-        // REVU Линейный проход для добавления - это плохо, медленно. Подумайте, как сделать, чтобы при формировании Set использовалось только name. Подсказка - кроме HashSet, есть и другой
-        for (Group gr : groupSet) {
-            if (gr.getName().equals(group.getName())) {
+    public void addGroup(Group group) throws TrainingException{
+        for(Group group1 : groupSet) {
+            if (group.getName().equals(group1.getName())) {
                 throw new TrainingException(TrainingErrorCode.DUPLICATE_GROUP_NAME);
             }
         }
-        groupSet.add(group);
+        this.groupSet.add(group);
     }
 
     public void removeGroup(Group group) throws TrainingException {
         int i = 0;
         for (Group gr : groupSet) {
-            // REVU то же
-            if (gr.getName().equals(group.getName())) {
+            if (gr.equals(group)) {
                 i++;
             }
         }
@@ -73,7 +69,6 @@ public class School {
                 group = gr;
             }
         }
-
         if(group == null){
             throw new TrainingException(TrainingErrorCode.GROUP_NOT_FOUND);
         }

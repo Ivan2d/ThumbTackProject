@@ -11,37 +11,24 @@ public class TraineeMap {
         traineeStringMap = new HashMap<>();
     }
 
-    public void addTraineeInfo(Trainee trainee, String institute) throws TrainingException {
-        // REVU не нужно containsKey, putIfAbsent сама скажет
-        if(traineeStringMap.containsKey(trainee)){
+    public void addTraineeInfo(Trainee trainee, String institute) throws TrainingException
+    {
+        if(traineeStringMap.putIfAbsent(trainee, institute) != null){
             throw new TrainingException(TrainingErrorCode.DUPLICATE_TRAINEE);
         }
-        traineeStringMap.put(trainee, institute);
     }
 
     public void replaceTraineeInfo(Trainee trainee, String institute) throws TrainingException {
-        // REVU не нужно containsKey, replace сама скажет
-        if(traineeStringMap.containsKey(trainee)){
-            traineeStringMap.put(trainee, institute);
-        }
-        else{
+        if(!(traineeStringMap.replace(trainee, traineeStringMap.get(trainee), institute)))
+        {
             throw new TrainingException(TrainingErrorCode.TRAINEE_NOT_FOUND);
         }
     }
 
     public void removeTraineeInfo(Trainee trainee) throws TrainingException {
-        // REVU не нужно цикла, remove сразу и она сама скажет
-        int i = 0;
-        for (Trainee tr : traineeStringMap.keySet()) {
-            if (tr.equals(trainee)) {
-                i++;
-            }
-        }
-
-        if (i == 0) {
+        if(traineeStringMap.remove(trainee) == null)
+        {
             throw new TrainingException(TrainingErrorCode.TRAINEE_NOT_FOUND);
-        } else {
-            traineeStringMap.remove(trainee);
         }
     }
 
@@ -50,8 +37,7 @@ public class TraineeMap {
     }
 
     public String getInstituteByTrainee(Trainee trainee) throws TrainingException {
-        // REVU не нужно containsKey, get сама скажет
-        if(!traineeStringMap.containsKey(trainee)){
+        if(traineeStringMap.get(trainee) == null){
             throw new TrainingException(TrainingErrorCode.TRAINEE_NOT_FOUND);
         }
         return traineeStringMap.get(trainee);
@@ -62,12 +48,7 @@ public class TraineeMap {
     }
 
     public Set<String> getAllInstitutes(){
-        // REVU values()
-        Set<String> set = new HashSet<>();
-        for(Map.Entry<Trainee, String> entry: traineeStringMap.entrySet()){
-            set.add(entry.getValue());
-        }
-        return set;
+        return new HashSet<>(traineeStringMap.values());
     }
 
     public boolean isAnyFromInstitute(String institute){

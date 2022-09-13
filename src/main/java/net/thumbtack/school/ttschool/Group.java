@@ -1,5 +1,6 @@
 package net.thumbtack.school.ttschool;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class Group {
     private String name;
@@ -7,15 +8,8 @@ public class Group {
     private List<Trainee> list;
 
     public Group(String name, String room) throws TrainingException{
-        // REVU вызовите сеттеры, не дублируйте код
-        if(name == null || name.equals("")){
-            throw new TrainingException(TrainingErrorCode.GROUP_WRONG_NAME);
-        }
-        this.name = name;
-        if(room == null || room.equals("")){
-            throw new TrainingException(TrainingErrorCode.GROUP_WRONG_ROOM);
-        }
-        this.room = room;
+        setName(name);
+        setRoom(room);
         this.list = new ArrayList<>();
     }
 
@@ -50,11 +44,9 @@ public class Group {
     }
 
     public void removeTrainee(Trainee trainee) throws TrainingException{
-        // REVU не надо contains, remove сама скажет
-        if(!list.contains(trainee)){
+        if(!list.remove(trainee)){
             throw new TrainingException(TrainingErrorCode.TRAINEE_NOT_FOUND);
         }
-        list.remove(trainee);
     }
 
     public void removeTrainee(int index) throws TrainingException{
@@ -100,37 +92,15 @@ public class Group {
         if (list.size() == 0) {
             throw new TrainingException(TrainingErrorCode.TRAINEE_NOT_FOUND);
         }
-
-        List<Trainee> list1 = new ArrayList<>();
-
-        // REVU а без вычисления max сможете ? В один проход
-        int max = 0;
-
-        for(Trainee trainee : list) {
-            if (trainee.getRating() > max) {
-                max = trainee.getRating();
-            }
-        }
-
-        for(Trainee trainee : list) {
-            if (trainee.getRating() == max)
-            {
-                list1.add(trainee);
-            }
-        }
-
-        return list1;
+        return list.stream()
+                .filter(tr -> tr.getRating() == list.stream()
+                .map(Trainee::getRating).max(Integer::compareTo).get())
+                .collect(Collectors.toList());
     }
 
     public boolean hasDuplicates(){
-        // REVU проще. Кто у нас дубликаты не любит ?
-        for(int i = 0; i < list.size(); i++){
-            for(int j = 0; j < list.size(); j++){
-                if(list.get(i).equals(list.get(j)) && i != j)
-                    return true;
-            }
-        }
-        return false;
+        List<Trainee> traineeList = list.stream().distinct().collect(Collectors.toList());
+        return traineeList.size() != list.size();
     }
 
     @Override

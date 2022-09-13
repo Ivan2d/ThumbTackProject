@@ -1,8 +1,5 @@
 package net.thumbtack.school.matrix;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.*;
 
 public class MatrixNonSimilarRows {
 
@@ -13,39 +10,19 @@ public class MatrixNonSimilarRows {
     }
 
     public List<int[]> getNonSimilarRows() {
-        List<int[]> result = new CopyOnWriteArrayList<>();
-        // REVU set1
-        Set<Integer> Set1 = new HashSet<>();
-        Set<Integer> Set2 = new HashSet<>();
-
-        for (int[] element : matrix) {
-            result.add(element);
-        }
+        Set<Set<Integer>> sets = new HashSet<>();
+        Map<Set<Integer>, int[]> setMap = new HashMap<>();
 
         for (int[] array : matrix) {
+            Set<Integer> integers = new HashSet<>();
             for (int element : array) {
-                Set1.add(element);
+                integers.add(element);
             }
-
-            boolean checker = false;
-
-            // REVU Вы делаете тут работу по сравнению, которую смог бы сделать
-            // Set<Set<Integer>>
-            // а еще лучше Map<Set<Integer>, int[]>
-            for (int[] array1 : matrix) {
-                for (int element1 : array1) {
-                    Set2.add(element1);
-                }
-
-                if (Set1.equals(Set2)) {
-                    if (checker) result.remove(array1);
-                    checker = true;
-                }
-                Set2.clear();
-            }
-            Set2.clear();
+            sets.add(integers);
+            setMap.putIfAbsent(integers, array);
         }
-        return result;
+
+        return new ArrayList<>(setMap.values());
     }
 
 

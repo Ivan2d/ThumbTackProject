@@ -7,6 +7,7 @@ public class Group {
     private List<Trainee> list;
 
     public Group(String name, String room) throws TrainingException{
+        // REVU вызовите сеттеры, не дублируйте код
         if(name == null || name.equals("")){
             throw new TrainingException(TrainingErrorCode.GROUP_WRONG_NAME);
         }
@@ -49,6 +50,7 @@ public class Group {
     }
 
     public void removeTrainee(Trainee trainee) throws TrainingException{
+        // REVU не надо contains, remove сама скажет
         if(!list.contains(trainee)){
             throw new TrainingException(TrainingErrorCode.TRAINEE_NOT_FOUND);
         }
@@ -101,6 +103,7 @@ public class Group {
 
         List<Trainee> list1 = new ArrayList<>();
 
+        // REVU а без вычисления max сможете ? В один проход
         int max = 0;
 
         for(Trainee trainee : list) {
@@ -120,6 +123,7 @@ public class Group {
     }
 
     public boolean hasDuplicates(){
+        // REVU проще. Кто у нас дубликаты не любит ?
         for(int i = 0; i < list.size(); i++){
             for(int j = 0; j < list.size(); j++){
                 if(list.get(i).equals(list.get(j)) && i != j)

@@ -15,6 +15,7 @@ public class TraineeQueue {
     }
 
     public Trainee removeTrainee() throws TrainingException{
+        // REVU не нужно peek, poll сама скажет
         if(queueTrainee.peek() == null)
             throw new TrainingException(TrainingErrorCode.EMPTY_TRAINEE_QUEUE);
         return queueTrainee.poll();

@@ -41,6 +41,7 @@ public class School {
     }
 
     public void addGroup(Group group) throws TrainingException {
+        // REVU Линейный проход для добавления - это плохо, медленно. Подумайте, как сделать, чтобы при формировании Set использовалось только name. Подсказка - кроме HashSet, есть и другой
         for (Group gr : groupSet) {
             if (gr.getName().equals(group.getName())) {
                 throw new TrainingException(TrainingErrorCode.DUPLICATE_GROUP_NAME);
@@ -52,6 +53,7 @@ public class School {
     public void removeGroup(Group group) throws TrainingException {
         int i = 0;
         for (Group gr : groupSet) {
+            // REVU то же
             if (gr.getName().equals(group.getName())) {
                 i++;
             }

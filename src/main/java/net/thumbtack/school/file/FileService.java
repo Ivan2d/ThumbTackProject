@@ -125,6 +125,7 @@ public class FileService {
     }
 
     public static void writeRectangleToTextFileOneLine(File file, Rectangle rect) throws IOException {
+        // REVU всегда указывайте кодировку UTF8 для текстового ввода-вывода
         try (PrintWriter printWriter = new PrintWriter(file)) {
             printWriter.format("%d %d %d %d",
                     rect.getCenter().getX(),
@@ -136,6 +137,8 @@ public class FileService {
 
     public static Rectangle readRectangleFromTextFileOneLine(File file) throws IOException {
         Rectangle react = null;
+        // REVU забудьте про класс Scanner. Очень медленно
+        // BufferedReader
         try (Scanner scanner = new Scanner(new FileReader(file))) {
             while (scanner.hasNext()) {
                 react = new Rectangle(scanner.nextInt(), scanner.nextInt(),
@@ -166,6 +169,7 @@ public class FileService {
 
     public static Trainee readTraineeFromTextFileOneLine(File file) throws IOException, TrainingException {
         Trainee trainee = null;
+        // REVU то же
         try (Scanner scanner = new Scanner(new FileReader(file))) {
             while (scanner.hasNext()) {
                 trainee = new Trainee(scanner.next(), scanner.next(), scanner.nextInt());

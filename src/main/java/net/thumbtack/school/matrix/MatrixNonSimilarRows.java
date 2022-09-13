@@ -14,6 +14,7 @@ public class MatrixNonSimilarRows {
 
     public List<int[]> getNonSimilarRows() {
         List<int[]> result = new CopyOnWriteArrayList<>();
+        // REVU set1
         Set<Integer> Set1 = new HashSet<>();
         Set<Integer> Set2 = new HashSet<>();
 
@@ -28,6 +29,9 @@ public class MatrixNonSimilarRows {
 
             boolean checker = false;
 
+            // REVU Вы делаете тут работу по сравнению, которую смог бы сделать
+            // Set<Set<Integer>>
+            // а еще лучше Map<Set<Integer>, int[]>
             for (int[] array1 : matrix) {
                 for (int element1 : array1) {
                     Set2.add(element1);

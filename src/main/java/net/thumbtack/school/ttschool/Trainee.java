@@ -9,6 +9,7 @@ public class Trainee implements Serializable {
     private int rating;
 
     public Trainee(String firstName, String lastName, int rating) throws TrainingException {
+        // REVU вызовите сеттеры, не дублируйте код
         if(firstName == null || firstName.equals(""))
             throw new TrainingException(TrainingErrorCode.TRAINEE_WRONG_FIRSTNAME);
         this.firstName = firstName;

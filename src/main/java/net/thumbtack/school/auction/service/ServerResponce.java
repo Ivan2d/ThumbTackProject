@@ -26,3 +26,5 @@ class ServerResponce
         this.responseData = responseData;
     }
 }
+
+

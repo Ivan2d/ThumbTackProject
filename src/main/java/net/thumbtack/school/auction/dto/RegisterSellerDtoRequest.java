@@ -2,11 +2,18 @@ package net.thumbtack.school.auction.dto;
 
 public class RegisterSellerDtoRequest {
     private String firstName;
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    private String lastName;
     private String login;
     private String password;
 
-    public RegisterSellerDtoRequest(String firstName, String login, String password) {
+    public RegisterSellerDtoRequest(String firstName, String lastName, String login, String password) {
         this.firstName = firstName;
+        this.lastName = lastName;
         this.login = login;
         this.password = password;
     }
@@ -21,6 +28,10 @@ public class RegisterSellerDtoRequest {
 
     public String getLogin() {
         return login;
+    }
+
+    public String getLastName() {
+        return lastName;
     }
 
     public void setLogin(String login) {

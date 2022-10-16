@@ -1,14 +1,13 @@
 package net.thumbtack.school.auction.model;
 
-public class Buyer {
+public class Buyer extends User {
     private String firstName;
+    private String lastName;
     private String login;
     private String password;
 
-    public Buyer(String firstName, String login, String password) {
-        this.firstName = firstName;
-        this.login = login;
-        this.password = password;
+    public Buyer(String firstName, String lastName, String login, String password) {
+        super(firstName, lastName, login, password);
     }
 
     public String getFirstName() {
@@ -17,6 +16,10 @@ public class Buyer {
 
     public void setFirstName(String firstName) {
         this.firstName = firstName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
     public String getLogin() {
@@ -35,5 +38,6 @@ public class Buyer {
         this.password = password;
     }
 }
+
 
 

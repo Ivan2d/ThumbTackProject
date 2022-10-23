@@ -11,6 +11,7 @@ import net.thumbtack.school.auction.dto.response.RegisterSellerDtoResponce;
 import net.thumbtack.school.auction.exception.UserErrorCode;
 import net.thumbtack.school.auction.exception.UserException;
 import net.thumbtack.school.auction.model.Buyer;
+import org.apache.commons.lang3.StringUtils;
 
 public class BuyerService {
     private static BuyerDao buyerDao = new BuyerDaoImpl();
@@ -35,15 +36,15 @@ public class BuyerService {
     }
 
     public void checkRequest(RegisterBuyerDtoRequest request) throws UserException {
-        if(request.getFirstName() == null || request.getFirstName().replaceAll(" ", "").length() == 0)
+        if(request.getFirstName() == null || StringUtils.isEmpty(request.getFirstName()))
             throw new UserException(UserErrorCode.EMPTY_FIRST_NAME);
-        if(request.getLastName() == null || request.getLastName().replaceAll(" ", "").length() == 0 )
+        if(request.getLastName() == null || StringUtils.isEmpty(request.getLastName()))
             throw new UserException(UserErrorCode.EMPTY_LAST_NAME);
-        if(request.getLogin() == null || request.getLogin().replaceAll(" ", "").length() == 0)
+        if(request.getLogin() == null || StringUtils.isEmpty(request.getLogin()))
             throw new UserException(UserErrorCode.EMPTY_LOGIN);
         if (request.getLogin().length() < MIN_LOGIN_LEN)
             throw new UserException(UserErrorCode.SHORT_LOGIN);
-        if(request.getPassword() == null || request.getPassword().replaceAll(" ", "").length() == 0)
+        if(request.getPassword() == null || StringUtils.isEmpty(request.getPassword()))
             throw new UserException(UserErrorCode.EMPTY_PASSWORD);
         if (request.getPassword().length() < MIN_PASSWORD_LEN)
             throw new UserException(UserErrorCode.SHORT_PASSWORD);

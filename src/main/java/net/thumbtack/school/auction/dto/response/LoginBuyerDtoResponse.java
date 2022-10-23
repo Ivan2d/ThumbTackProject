@@ -1,8 +1,8 @@
 package net.thumbtack.school.auction.dto.response;
 import java.util.UUID;
-public class LoginBuyerDtoResponce {
+public class LoginBuyerDtoResponse {
     private UUID token;
-    public LoginBuyerDtoResponce(UUID token)
+    public LoginBuyerDtoResponse(UUID token)
         {
             this.token = token;
         }

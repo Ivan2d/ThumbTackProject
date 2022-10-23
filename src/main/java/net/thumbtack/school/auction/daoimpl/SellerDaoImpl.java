@@ -12,17 +12,17 @@ import java.util.UUID;
 public class SellerDaoImpl implements SellerDao
 {
     @Override
-    public UUID insert (Seller user) throws UserException {
-        return DataBase.getInstance().insert(user);
+    public UUID insert (Seller seller) throws UserException {
+        return DataBase.getInstance().insert(seller);
     }
 
     @Override
-    public UUID loginUser(LoginSellerDtoRequest lsdr) throws UserException {
-        return DataBase.getInstance().loginSeller(lsdr);
+    public UUID loginUser(LoginSellerDtoRequest loginSellerDtoRequest) throws UserException {
+        return DataBase.getInstance().loginSeller(loginSellerDtoRequest);
     }
 
     @Override
-    public ServerResponse logoutUser(LogoutSellerDtoRequest ludr) throws UserException {
-        return DataBase.getInstance().logoutSeller(ludr);
+    public ServerResponse logoutUser(LogoutSellerDtoRequest logoutSellerDtoRequest) throws UserException {
+        return DataBase.getInstance().logoutSeller(logoutSellerDtoRequest);
     }
 }

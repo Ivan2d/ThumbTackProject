@@ -6,9 +6,8 @@ import net.thumbtack.school.auction.dao.BuyerDao;
 import net.thumbtack.school.auction.daoimpl.BuyerDaoImpl;
 import net.thumbtack.school.auction.dto.request.LoginBuyerDtoRequest;
 import net.thumbtack.school.auction.dto.request.LogoutBuyerDtoRequest;
-import net.thumbtack.school.auction.dto.request.LogoutSellerDtoRequest;
 import net.thumbtack.school.auction.dto.request.RegisterBuyerDtoRequest;
-import net.thumbtack.school.auction.dto.response.LoginBuyerDtoResponce;
+import net.thumbtack.school.auction.dto.response.LoginBuyerDtoResponse;
 import net.thumbtack.school.auction.dto.response.LogoutBuyerDtoResponce;
 import net.thumbtack.school.auction.dto.response.RegisterSellerDtoResponce;
 import net.thumbtack.school.auction.exception.UserErrorCode;
@@ -57,7 +56,7 @@ public class BuyerService {
         Gson gson = new Gson();
         LoginBuyerDtoRequest ludr = gson.fromJson(requestJsonString,LoginBuyerDtoRequest.class);
         try {
-            LoginBuyerDtoResponce loginUserDtoResponce = new LoginBuyerDtoResponce(buyerDao.loginUser(ludr));
+            LoginBuyerDtoResponse loginUserDtoResponce = new LoginBuyerDtoResponse(buyerDao.loginUser(ludr));
             response = new ServerResponse(200, gson.toJson(loginUserDtoResponce));
         } catch (UserException e) {
             return new ServerResponse(400, gson.toJson(e));

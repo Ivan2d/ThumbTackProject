@@ -8,8 +8,8 @@ import net.thumbtack.school.auction.model.Seller;
 
 import java.util.UUID;
 public interface SellerDao {
-      UUID insert(Seller user) throws UserException;
-      UUID loginUser (LoginSellerDtoRequest lsdr) throws UserException;
-      ServerResponse logoutUser (LogoutSellerDtoRequest ludr) throws UserException;
+      UUID insert(Seller seller) throws UserException;
+      UUID loginUser (LoginSellerDtoRequest loginSellerDtoRequest) throws UserException;
+      ServerResponse logoutUser (LogoutSellerDtoRequest logoutSellerDtoRequest) throws UserException;
 }
 

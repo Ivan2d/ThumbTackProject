@@ -7,7 +7,6 @@ public class LogoutSellerDtoRequest {
     public LogoutSellerDtoRequest (UUID token)  {
         this.token = token;
     }
-
     public UUID getToken() {
         return token;
     }

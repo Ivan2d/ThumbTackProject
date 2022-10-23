@@ -1,6 +1,9 @@
 package net.thumbtack.school.auction.database;
+import net.thumbtack.school.auction.ServerResponse;
 import net.thumbtack.school.auction.dto.request.LoginBuyerDtoRequest;
 import net.thumbtack.school.auction.dto.request.LoginSellerDtoRequest;
+import net.thumbtack.school.auction.dto.request.LogoutBuyerDtoRequest;
+import net.thumbtack.school.auction.dto.request.LogoutSellerDtoRequest;
 import net.thumbtack.school.auction.exception.UserErrorCode;
 import net.thumbtack.school.auction.exception.UserException;
 import net.thumbtack.school.auction.model.User;
@@ -46,5 +49,19 @@ public class DataBase {
         userByToken.put(token, user);
         return token;
     }
+
+    public ServerResponse logoutBuyer (LogoutBuyerDtoRequest dtoRequest){
+        UUID token = dtoRequest.getToken();
+        userByToken.remove(token);
+        return new ServerResponse(200, token.toString());
+    }
+
+    public ServerResponse logoutSeller (LogoutSellerDtoRequest dtoRequest){
+        UUID token = dtoRequest.getToken();
+        userByToken.remove(token);
+        return new ServerResponse(200, token.toString());
+    }
+
+
 
 }

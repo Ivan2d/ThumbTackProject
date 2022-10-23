@@ -5,6 +5,10 @@ import java.util.Objects;
 public class Category {
     private String name;
 
+    public Category(String name){
+        setName(name);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -26,7 +30,5 @@ public class Category {
         this.name = name;
     }
 
-    public Category(String name) {
-        this.name = name;
-    }
+
 }

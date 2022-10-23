@@ -5,8 +5,11 @@ import net.thumbtack.school.auction.ServerResponse;
 import net.thumbtack.school.auction.dao.BuyerDao;
 import net.thumbtack.school.auction.daoimpl.BuyerDaoImpl;
 import net.thumbtack.school.auction.dto.request.LoginBuyerDtoRequest;
+import net.thumbtack.school.auction.dto.request.LogoutBuyerDtoRequest;
+import net.thumbtack.school.auction.dto.request.LogoutSellerDtoRequest;
 import net.thumbtack.school.auction.dto.request.RegisterBuyerDtoRequest;
 import net.thumbtack.school.auction.dto.response.LoginBuyerDtoResponce;
+import net.thumbtack.school.auction.dto.response.LogoutBuyerDtoResponce;
 import net.thumbtack.school.auction.dto.response.RegisterSellerDtoResponce;
 import net.thumbtack.school.auction.exception.UserErrorCode;
 import net.thumbtack.school.auction.exception.UserException;
@@ -18,7 +21,6 @@ public class BuyerService {
     private static Gson gson = new Gson();
     private static final int MIN_LOGIN_LEN = 8;
     private static final int MIN_PASSWORD_LEN = 8;
-
 
     public ServerResponse registerUser(String requestJsonString) throws UserException, JsonSyntaxException
     {
@@ -62,4 +64,18 @@ public class BuyerService {
         }
         return response;
     }
+
+    public static ServerResponse logoutBuyer (String requestJsonString) throws UserException {
+        ServerResponse response = null;
+        Gson gson = new Gson();
+        LogoutBuyerDtoRequest lbdr = gson.fromJson(requestJsonString, LogoutBuyerDtoRequest.class);
+        try{
+            LogoutBuyerDtoResponce logoutBuyerDtoRequest = new LogoutBuyerDtoResponce(buyerDao.logoutUser(lbdr));
+            response = logoutBuyerDtoRequest.getResponce();
+        } catch (UserException e) {
+            return new ServerResponse(400, gson.toJson(e));
+        }
+        return response;
+    }
+
 }

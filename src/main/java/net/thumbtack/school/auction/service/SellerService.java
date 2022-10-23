@@ -5,9 +5,12 @@ import net.thumbtack.school.auction.ServerResponse;
 import net.thumbtack.school.auction.dao.SellerDao;
 import net.thumbtack.school.auction.daoimpl.SellerDaoImpl;
 import net.thumbtack.school.auction.dto.request.LoginSellerDtoRequest;
-import net.thumbtack.school.auction.dto.request.RegisterBuyerDtoRequest;
+import net.thumbtack.school.auction.dto.request.LogoutBuyerDtoRequest;
+import net.thumbtack.school.auction.dto.request.LogoutSellerDtoRequest;
 import net.thumbtack.school.auction.dto.request.RegisterSellerDtoRequest;
 import net.thumbtack.school.auction.dto.response.LoginBuyerDtoResponce;
+import net.thumbtack.school.auction.dto.response.LogoutBuyerDtoResponce;
+import net.thumbtack.school.auction.dto.response.LogoutSellerDtoResponce;
 import net.thumbtack.school.auction.dto.response.RegisterSellerDtoResponce;
 import net.thumbtack.school.auction.exception.UserErrorCode;
 import net.thumbtack.school.auction.exception.UserException;
@@ -57,6 +60,19 @@ public class SellerService {
         try {
             LoginBuyerDtoResponce loginUserDtoResponce = new LoginBuyerDtoResponce(sellerDao.loginUser(ludr));
             response = new ServerResponse(200, gson.toJson(loginUserDtoResponce));
+        } catch (UserException e) {
+            return new ServerResponse(400, gson.toJson(e));
+        }
+        return response;
+    }
+
+    public static ServerResponse logoutSeller (String requestJsonString) throws UserException {
+        ServerResponse response = null;
+        Gson gson = new Gson();
+        LogoutSellerDtoRequest lbdr = gson.fromJson(requestJsonString, LogoutSellerDtoRequest.class);
+        try{
+            LogoutSellerDtoResponce logoutBuyerDtoRequest = new LogoutSellerDtoResponce(sellerDao.logoutUser(lbdr));
+            response = logoutBuyerDtoRequest.getResponce();
         } catch (UserException e) {
             return new ServerResponse(400, gson.toJson(e));
         }

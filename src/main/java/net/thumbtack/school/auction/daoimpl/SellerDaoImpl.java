@@ -1,4 +1,5 @@
 package net.thumbtack.school.auction.daoimpl;
+import net.thumbtack.school.auction.ServerResponse;
 import net.thumbtack.school.auction.database.DataBase;
 import net.thumbtack.school.auction.dto.request.LoginSellerDtoRequest;
 import net.thumbtack.school.auction.dto.request.LogoutSellerDtoRequest;
@@ -21,7 +22,7 @@ public class SellerDaoImpl implements SellerDao
     }
 
     @Override
-    public String logoutUser(LogoutSellerDtoRequest ludr) throws UserException {
-        return null;
+    public ServerResponse logoutUser(LogoutSellerDtoRequest ludr) throws UserException {
+        return DataBase.getInstance().logoutSeller(ludr);
     }
 }

@@ -33,4 +33,16 @@ public class Server {
         result = SellerService.loginSeller(requestJsonString);
         return result;
     }
+
+    public ServerResponse logoutBuyer (String requestJsonString) throws UserException {
+        ServerResponse result = null;
+        result = BuyerService.logoutBuyer(requestJsonString);
+        return result;
+    }
+
+    public ServerResponse logoutSeller (String requestJsonString) throws UserException {
+        ServerResponse result = null;
+        result = SellerService.logoutSeller(requestJsonString);
+        return result;
+    }
 }

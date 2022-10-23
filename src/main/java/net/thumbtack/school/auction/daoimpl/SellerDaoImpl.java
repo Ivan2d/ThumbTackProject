@@ -1,8 +1,7 @@
 package net.thumbtack.school.auction.daoimpl;
-
 import net.thumbtack.school.auction.database.DataBase;
-import net.thumbtack.school.auction.dto.LoginSellerDtoRequest;
-import net.thumbtack.school.auction.dto.LogoutSellerDtoRequest;
+import net.thumbtack.school.auction.dto.request.LoginSellerDtoRequest;
+import net.thumbtack.school.auction.dto.request.LogoutSellerDtoRequest;
 import net.thumbtack.school.auction.exception.UserException;
 import net.thumbtack.school.auction.model.Seller;
 import net.thumbtack.school.auction.dao.SellerDao;

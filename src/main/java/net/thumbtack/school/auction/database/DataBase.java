@@ -1,9 +1,8 @@
 package net.thumbtack.school.auction.database;
-import net.thumbtack.school.auction.dto.LoginBuyerDtoRequest;
-import net.thumbtack.school.auction.dto.LoginSellerDtoRequest;
+import net.thumbtack.school.auction.dto.request.LoginBuyerDtoRequest;
+import net.thumbtack.school.auction.dto.request.LoginSellerDtoRequest;
 import net.thumbtack.school.auction.exception.UserErrorCode;
 import net.thumbtack.school.auction.exception.UserException;
-import net.thumbtack.school.auction.model.TokenBox;
 import net.thumbtack.school.auction.model.User;
 
 import java.util.HashMap;
@@ -19,16 +18,14 @@ public class DataBase {
     }
 
     private Map<String, User> users = new HashMap<>();
-    private Map<UUID, TokenBox> tokenBoxes = new HashMap<>();
+    private Map<Integer, User> userByID = new HashMap<>();
+    private Map<UUID, User> userByToken = new HashMap<>();
 
-    public UUID insert (User user) throws UserException {
-        if (againLogin(user)) {
-            throw new UserException(UserErrorCode.DOUBLE_LOGIN);
-        }
-        users.put(user.getLogin(),user);
+    public UUID insert (User user) throws UserException
+    {
+        users.putIfAbsent(user.getLogin(),user);
         UUID token = UUID.randomUUID();
-        TokenBox tokenBox = new TokenBox(token,user.getLogin());
-        tokenBoxes.put(token, tokenBox);
+        userByToken.put(token, user);
         return token;
     }
 
@@ -37,8 +34,7 @@ public class DataBase {
         if (user == null || !user.getPassword().equals(dtoRequest.getPassword()))
             throw new UserException (UserErrorCode.WRONG_LOGIN_OR_PASSWORD);
         UUID token = UUID.randomUUID();
-        TokenBox tokenBox = new TokenBox(token, user.getLogin());
-        tokenBoxes.put(token, tokenBox);
+        userByToken.put(token, user);
         return token;
     }
 
@@ -47,14 +43,8 @@ public class DataBase {
         if (user == null || !user.getPassword().equals(dtoRequest.getPassword()))
             throw new UserException (UserErrorCode.WRONG_LOGIN_OR_PASSWORD);
         UUID token = UUID.randomUUID();
-        TokenBox tokenBox = new TokenBox(token, user.getLogin());
-        tokenBoxes.put(token, tokenBox);
+        userByToken.put(token, user);
         return token;
     }
-
-    public boolean againLogin (User user) {
-        return users.containsKey(user.getLogin());
-    }
-
 
 }

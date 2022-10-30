@@ -4,7 +4,6 @@ import java.util.UUID;
 
 public class RegisterSellerDtoResponce
 {
-
     private UUID token;
 
     public RegisterSellerDtoResponce(UUID token) {

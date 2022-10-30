@@ -1,5 +1,4 @@
 package net.thumbtack.school.auction.service;
-
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import net.thumbtack.school.auction.ServerResponse;
@@ -24,7 +23,7 @@ public class SellerService {
     private static final int CODE_ERROR = 400;
     private static Gson gson = new Gson();
 
-    public ServerResponse registerUser(String requestJsonString) throws UserException, JsonSyntaxException {
+    public ServerResponse registerUser(String requestJsonString) throws JsonSyntaxException {
         // REVU а если json с ошибкой ?
         // возникнет JsonSyntaxException
         // лучше сделать шаблонный метод getClassFromJson
@@ -47,7 +46,13 @@ public class SellerService {
             RegisterSellerDtoResponce registerUserDtoResponse = new RegisterSellerDtoResponce(uuid);
             EmptySuccessDtoResponse emptySuccessDtoResponse = new EmptySuccessDtoResponse();
             return new ServerResponse(CODE_SUCCESS, gson.toJson(emptySuccessDtoResponse));
-        } catch (UserException e) {
+        }
+        catch (JsonSyntaxException c) {
+            UserException exception = new UserException(UserErrorCode.WRONG_JSON);
+            ErrorDtoResponse errorDtoResponse = new ErrorDtoResponse(exception);
+            return new ServerResponse(CODE_ERROR, gson.toJson(errorDtoResponse));
+        }
+        catch (UserException e) {
             ErrorDtoResponse errorDtoResponse = new ErrorDtoResponse(e);
             return new ServerResponse(CODE_ERROR, gson.toJson(errorDtoResponse));
         }
@@ -72,27 +77,19 @@ public class SellerService {
     public static ServerResponse loginSeller(String requestJsonString) throws UserException {
         try {
             LoginSellerDtoRequest loginSellerDtoRequest = gson.fromJson(requestJsonString, LoginSellerDtoRequest.class);
-            UUID uuid = sellerDao.loginUser(loginSellerDtoRequest.getLogin(), loginSellerDtoRequest.getPassword());
-            LoginBuyerDtoResponse loginUserDtoResponce = new LoginBuyerDtoResponse(uuid);
-            return new ServerResponse(200, gson.toJson(loginUserDtoResponce));
+            UUID uuid = sellerDao.loginUser(loginSellerDtoRequest);
+            LoginBuyerDtoResponse loginUserDtoResponse = new LoginBuyerDtoResponse(uuid);
+            return new ServerResponse(200, gson.toJson(loginUserDtoResponse));
         } catch (UserException e) {
             return new ServerResponse(400, gson.toJson(e));
         }
-        return response;
     }
 
     public static ServerResponse logoutSeller(String requestJsonString) throws UserException {
-        ServerResponse response = null;
         Gson gson = new Gson();
-        LogoutSellerDtoRequest lbdr = gson.fromJson(requestJsonString, LogoutSellerDtoRequest.class);
-        try {
-            LogoutSellerDtoResponce logoutBuyerDtoRequest = new LogoutSellerDtoResponce(sellerDao.logoutUser(lbdr));
-            response = logoutBuyerDtoRequest.getResponce();
-        } catch (UserException e) {
-            return new ServerResponse(400, gson.toJson(e));
-        }
-        return response;
+        LogoutSellerDtoRequest logoutSellerDtoRequest = gson.fromJson(requestJsonString, LogoutSellerDtoRequest.class);
+        LogoutSellerDtoResponce logoutBuyerDtoRequest = new LogoutSellerDtoResponce(new ServerResponse(200, logoutSellerDtoRequest.getToken().toString()));
+        return logoutBuyerDtoRequest.getResponce();
     }
-
 
 }

@@ -24,44 +24,53 @@ public class DataBase {
     private Map<Integer, User> userByID = new HashMap<>();
     private Map<UUID, User> userByToken = new HashMap<>();
 
-    public UUID insert (User user) throws UserException
-    {
-        users.putIfAbsent(user.getLogin(),user);
+    public UUID insert(User user) throws UserException {
+        users.putIfAbsent(user.getLogin(), user);
         UUID token = UUID.randomUUID();
         userByToken.put(token, user);
         return token;
     }
 
-    public UUID loginSeller (LoginSellerDtoRequest dtoRequest) throws UserException {
+    public UUID loginSeller(LoginSellerDtoRequest dtoRequest) throws UserException {
         User user = users.get(dtoRequest.getLogin());
         if (user == null || !user.getPassword().equals(dtoRequest.getPassword()))
-            throw new UserException (UserErrorCode.WRONG_LOGIN_OR_PASSWORD);
+            throw new UserException(UserErrorCode.WRONG_LOGIN_OR_PASSWORD);
         UUID token = UUID.randomUUID();
-        userByToken.put(token, user);
+        userByToken.putIfAbsent(token, user);
         return token;
     }
 
-    public UUID loginBuyer (LoginBuyerDtoRequest dtoRequest) throws UserException {
+    public UUID loginBuyer(LoginBuyerDtoRequest dtoRequest) throws UserException {
         User user = users.get(dtoRequest.getLogin());
         if (user == null || !user.getPassword().equals(dtoRequest.getPassword()))
-            throw new UserException (UserErrorCode.WRONG_LOGIN_OR_PASSWORD);
+            throw new UserException(UserErrorCode.WRONG_LOGIN_OR_PASSWORD);
         UUID token = UUID.randomUUID();
-        userByToken.put(token, user);
+        userByToken.putIfAbsent(token, user);
         return token;
     }
 
-    public ServerResponse logoutBuyer (LogoutBuyerDtoRequest dtoRequest){
+    public ServerResponse logoutBuyer(LogoutBuyerDtoRequest dtoRequest) {
         UUID token = dtoRequest.getToken();
         userByToken.remove(token);
         return new ServerResponse(200, token.toString());
     }
 
-    public ServerResponse logoutSeller (LogoutSellerDtoRequest dtoRequest){
+    public ServerResponse logoutSeller(LogoutSellerDtoRequest dtoRequest) {
         UUID token = dtoRequest.getToken();
         userByToken.remove(token);
         return new ServerResponse(200, token.toString());
     }
 
+    public Map<String, User> getUsers() {
+        return users;
+    }
 
+    public Map<Integer, User> getUserByID() {
+        return userByID;
+    }
 
+    public Map<UUID, User> getUserByToken() {
+        return userByToken;
+    }
 }
+

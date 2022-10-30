@@ -13,6 +13,7 @@ import net.thumbtack.school.auction.exception.UserErrorCode;
 import net.thumbtack.school.auction.exception.UserException;
 import net.thumbtack.school.auction.model.Buyer;
 import net.thumbtack.school.auction.model.Seller;
+import net.thumbtack.school.auction.model.User;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.UUID;
@@ -44,8 +45,7 @@ public class BuyerService {
             // https://stackoverflow.com/questions/47676369/mapstruct-and-lombok-not-working-together
             // и жизнь станет прекрасной :-)
             Buyer buyer = new Buyer(dtoRequest.getFirstName(), dtoRequest.getLastName(), dtoRequest.getLogin(), dtoRequest.getPassword());
-            UUID uuid = buyerDao.insert(buyer);
-            RegisterSellerDtoResponce registerUserDtoResponse = new RegisterSellerDtoResponce(uuid);
+            buyerDao.insert(buyer);
             EmptySuccessDtoResponse emptySuccessDtoResponse = new EmptySuccessDtoResponse();
             return new ServerResponse(CODE_SUCCESS, gson.toJson(emptySuccessDtoResponse));
         }
@@ -60,7 +60,7 @@ public class BuyerService {
         }
 
     }
-    public void checkRequest(RegisterBuyerDtoRequest request) throws UserException {
+    private void checkRequest(RegisterBuyerDtoRequest request) throws UserException {
         if(request.getFirstName() == null || StringUtils.isEmpty(request.getFirstName()))
             throw new UserException(UserErrorCode.EMPTY_FIRST_NAME);
         if(request.getLastName() == null || StringUtils.isEmpty(request.getLastName()))
@@ -76,16 +76,19 @@ public class BuyerService {
     }
 
     public static ServerResponse loginBuyer (String requestJsonString) throws UserException {
-        ServerResponse response = null;
-        Gson gson = new Gson();
-        LoginBuyerDtoRequest ludr = gson.fromJson(requestJsonString,LoginBuyerDtoRequest.class);
         try {
-            LoginBuyerDtoResponse loginUserDtoResponce = new LoginBuyerDtoResponse(buyerDao.loginUser(ludr));
-            response = new ServerResponse(200, gson.toJson(loginUserDtoResponce));
-        } catch (UserException e) {
-            return new ServerResponse(400, gson.toJson(e));
+        LoginBuyerDtoRequest loginBuyerDtoRequest = gson.fromJson(requestJsonString,LoginBuyerDtoRequest.class);
+        checkRequest(loginBuyerDtoRequest);
+        User user = buyerDao.get(loginBuyerDtoRequest.getLogin());
+        if (user == null || !user.getPassword().equals(loginBuyerDtoRequest.getPassword())) {
+            throw new UserException(UserErrorCode.WRONG_LOGIN_OR_PASSWORD);
         }
-        return response;
+        LoginBuyerDtoResponse loginUserDtoResponse = new LoginBuyerDtoResponse(buyerDao.loginUser(user);
+        return new ServerResponse(CODE_SUCCESS, gson.toJson(loginUserDtoResponse));
+        } catch (UserException e) {
+            ErrorDtoResponse errorDtoResponse = new ErrorDtoResponse(e);
+            return new ServerResponse(CODE_ERROR, gson.toJson(errorDtoResponse));
+        }
     }
 
     public static ServerResponse logoutBuyer (String requestJsonString) throws UserException {

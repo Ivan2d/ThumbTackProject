@@ -7,6 +7,8 @@ import net.thumbtack.school.auction.dto.request.LogoutSellerDtoRequest;
 import net.thumbtack.school.auction.exception.UserErrorCode;
 import net.thumbtack.school.auction.exception.UserException;
 import net.thumbtack.school.auction.model.User;
+import org.apache.commons.collections4.BidiMap;
+import org.apache.commons.collections4.bidimap.DualHashBidiMap;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -22,21 +24,21 @@ public class DataBase {
 
     private Map<String, User> users = new HashMap<>();
     private Map<Integer, User> userByID = new HashMap<>();
-    private Map<UUID, User> userByToken = new HashMap<>();
+    private BidiMap<UUID, User> userByToken = new DualHashBidiMap<>();
 
     public UUID insert(User user) throws UserException {
-        users.putIfAbsent(user.getLogin(), user);
-        UUID token = UUID.randomUUID();
-        userByToken.put(token, user);
-        return token;
+        if(users.putIfAbsent(user.getLogin() , user) !=null) {
+            throw
+        }
     }
 
-    public UUID loginSeller(LoginSellerDtoRequest dtoRequest) throws UserException {
-        User user = users.get(dtoRequest.getLogin());
-        if (user == null || !user.getPassword().equals(dtoRequest.getPassword()))
-            throw new UserException(UserErrorCode.WRONG_LOGIN_OR_PASSWORD);
+    public UUID loginSeller(User user) throws UserException {
+        UUID uuid = userByToken.getKey(user);
+        if( uuid != null) {
+            return uuid;
+        }
         UUID token = UUID.randomUUID();
-        userByToken.putIfAbsent(token, user);
+        userByToken.put(token, user);
         return token;
     }
 
@@ -49,10 +51,8 @@ public class DataBase {
         return token;
     }
 
-    public ServerResponse logoutBuyer(LogoutBuyerDtoRequest dtoRequest) {
-        UUID token = dtoRequest.getToken();
+    public void logoutBuyer(UUID token) {
         userByToken.remove(token);
-        return new ServerResponse(200, token.toString());
     }
 
     public ServerResponse logoutSeller(LogoutSellerDtoRequest dtoRequest) {

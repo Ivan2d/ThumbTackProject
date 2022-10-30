@@ -7,35 +7,59 @@ import net.thumbtack.school.auction.daoimpl.BuyerDaoImpl;
 import net.thumbtack.school.auction.dto.request.LoginBuyerDtoRequest;
 import net.thumbtack.school.auction.dto.request.LogoutBuyerDtoRequest;
 import net.thumbtack.school.auction.dto.request.RegisterBuyerDtoRequest;
-import net.thumbtack.school.auction.dto.response.LoginBuyerDtoResponse;
-import net.thumbtack.school.auction.dto.response.LogoutBuyerDtoResponce;
-import net.thumbtack.school.auction.dto.response.RegisterSellerDtoResponce;
+import net.thumbtack.school.auction.dto.request.RegisterSellerDtoRequest;
+import net.thumbtack.school.auction.dto.response.*;
 import net.thumbtack.school.auction.exception.UserErrorCode;
 import net.thumbtack.school.auction.exception.UserException;
 import net.thumbtack.school.auction.model.Buyer;
+import net.thumbtack.school.auction.model.Seller;
 import org.apache.commons.lang3.StringUtils;
+
+import java.util.UUID;
 
 public class BuyerService {
     private static BuyerDao buyerDao = new BuyerDaoImpl();
     private static Gson gson = new Gson();
     private static final int MIN_LOGIN_LEN = 8;
     private static final int MIN_PASSWORD_LEN = 8;
+    private static final int CODE_SUCCESS = 200;
+    private static final int CODE_ERROR = 400;
 
-    public ServerResponse registerUser(String requestJsonString) throws UserException, JsonSyntaxException
-    {
+    public ServerResponse registerUser(String requestJsonString) throws JsonSyntaxException {
+        // REVU а если json с ошибкой ?
+        // возникнет JsonSyntaxException
+        // лучше сделать шаблонный метод getClassFromJson
+        // https://docs.oracle.com/javase/tutorial/extra/generics/methods.html
+        // и пусть он внутри ловит JsonSyntaxException,
+        // а поймав, выбросит ServerException с ErrorCode.WRONG_JSON
+
         try {
             RegisterBuyerDtoRequest dtoRequest = gson.fromJson(requestJsonString, RegisterBuyerDtoRequest.class);
             checkRequest(dtoRequest);
+            // REVU все верно, но если дальше не хочется такое писать, то посмотрите
+            // https://mapstruct.org/
+            // а еще можно посмотреть
+            // https://projectlombok.org/
+            // и их интеграцию
+            // https://stackoverflow.com/questions/47676369/mapstruct-and-lombok-not-working-together
+            // и жизнь станет прекрасной :-)
             Buyer buyer = new Buyer(dtoRequest.getFirstName(), dtoRequest.getLastName(), dtoRequest.getLogin(), dtoRequest.getPassword());
-            RegisterSellerDtoResponce registerUserDtoResponse = new RegisterSellerDtoResponce(buyerDao.insert(buyer));
-        } catch (UserException e)
-        {
-            return new ServerResponse(400, gson.toJson(e));
+            UUID uuid = buyerDao.insert(buyer);
+            RegisterSellerDtoResponce registerUserDtoResponse = new RegisterSellerDtoResponce(uuid);
+            EmptySuccessDtoResponse emptySuccessDtoResponse = new EmptySuccessDtoResponse();
+            return new ServerResponse(CODE_SUCCESS, gson.toJson(emptySuccessDtoResponse));
+        }
+        catch (JsonSyntaxException c) {
+            UserException exception = new UserException(UserErrorCode.WRONG_JSON);
+            ErrorDtoResponse errorDtoResponse = new ErrorDtoResponse(exception);
+            return new ServerResponse(CODE_ERROR, gson.toJson(errorDtoResponse));
+        }
+        catch (UserException e) {
+            ErrorDtoResponse errorDtoResponse = new ErrorDtoResponse(e);
+            return new ServerResponse(CODE_ERROR, gson.toJson(errorDtoResponse));
         }
 
-        return new ServerResponse(200, gson.toJson(""));
     }
-
     public void checkRequest(RegisterBuyerDtoRequest request) throws UserException {
         if(request.getFirstName() == null || StringUtils.isEmpty(request.getFirstName()))
             throw new UserException(UserErrorCode.EMPTY_FIRST_NAME);

@@ -12,5 +12,4 @@ public class LoginBuyerDtoResponse {
         public void setToken(UUID token) {
             this.token = token;
         }
-
 }

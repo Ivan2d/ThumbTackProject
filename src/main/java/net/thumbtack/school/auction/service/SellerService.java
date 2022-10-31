@@ -4,13 +4,12 @@ import com.google.gson.JsonSyntaxException;
 import net.thumbtack.school.auction.ServerResponse;
 import net.thumbtack.school.auction.dao.SellerDao;
 import net.thumbtack.school.auction.daoimpl.SellerDaoImpl;
-import net.thumbtack.school.auction.dto.request.LoginSellerDtoRequest;
-import net.thumbtack.school.auction.dto.request.LogoutSellerDtoRequest;
-import net.thumbtack.school.auction.dto.request.RegisterSellerDtoRequest;
+import net.thumbtack.school.auction.dto.request.*;
 import net.thumbtack.school.auction.dto.response.*;
 import net.thumbtack.school.auction.exception.UserErrorCode;
 import net.thumbtack.school.auction.exception.UserException;
 import net.thumbtack.school.auction.model.Seller;
+import net.thumbtack.school.auction.model.User;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.UUID;
@@ -24,39 +23,18 @@ public class SellerService {
     private static Gson gson = new Gson();
 
     public ServerResponse registerUser(String requestJsonString) throws JsonSyntaxException {
-        // REVU а если json с ошибкой ?
-        // возникнет JsonSyntaxException
-        // лучше сделать шаблонный метод getClassFromJson
-        // https://docs.oracle.com/javase/tutorial/extra/generics/methods.html
-        // и пусть он внутри ловит JsonSyntaxException,
-        // а поймав, выбросит ServerException с ErrorCode.WRONG_JSON
-
         try {
-            RegisterSellerDtoRequest dtoRequest = gson.fromJson(requestJsonString, RegisterSellerDtoRequest.class);
+            RegisterSellerDtoRequest dtoRequest = Service.getObjectFromJson(requestJsonString, RegisterSellerDtoRequest.class);
             checkRequest(dtoRequest);
-            // REVU все верно, но если дальше не хочется такое писать, то посмотрите
-            // https://mapstruct.org/
-            // а еще можно посмотреть
-            // https://projectlombok.org/
-            // и их интеграцию
-            // https://stackoverflow.com/questions/47676369/mapstruct-and-lombok-not-working-together
-            // и жизнь станет прекрасной :-)
             Seller seller = new Seller(dtoRequest.getFirstName(), dtoRequest.getLastName(), dtoRequest.getLogin(), dtoRequest.getPassword());
-            UUID uuid = sellerDao.insert(seller);
-            RegisterSellerDtoResponce registerUserDtoResponse = new RegisterSellerDtoResponce(uuid);
+            sellerDao.insert(seller);
             EmptySuccessDtoResponse emptySuccessDtoResponse = new EmptySuccessDtoResponse();
             return new ServerResponse(CODE_SUCCESS, gson.toJson(emptySuccessDtoResponse));
-        }
-        catch (JsonSyntaxException c) {
-            UserException exception = new UserException(UserErrorCode.WRONG_JSON);
-            ErrorDtoResponse errorDtoResponse = new ErrorDtoResponse(exception);
-            return new ServerResponse(CODE_ERROR, gson.toJson(errorDtoResponse));
         }
         catch (UserException e) {
             ErrorDtoResponse errorDtoResponse = new ErrorDtoResponse(e);
             return new ServerResponse(CODE_ERROR, gson.toJson(errorDtoResponse));
         }
-
     }
 
     public void checkRequest(RegisterSellerDtoRequest request) throws UserException {
@@ -74,22 +52,43 @@ public class SellerService {
             throw new UserException(UserErrorCode.SHORT_PASSWORD);
     }
 
-    public static ServerResponse loginSeller(String requestJsonString) throws UserException {
+    private void checkRequest(LoginSellerDtoRequest request) throws UserException {
+        if(request.getLogin() == null || StringUtils.isEmpty(request.getLogin()))
+            throw new UserException(UserErrorCode.EMPTY_LOGIN);
+        if(request.getPassword() == null || StringUtils.isEmpty(request.getPassword()))
+            throw new UserException(UserErrorCode.EMPTY_PASSWORD);
+    }
+
+    public ServerResponse loginSeller(String requestJsonString) throws UserException {
         try {
-            LoginSellerDtoRequest loginSellerDtoRequest = gson.fromJson(requestJsonString, LoginSellerDtoRequest.class);
-            UUID uuid = sellerDao.loginUser(loginSellerDtoRequest);
-            LoginBuyerDtoResponse loginUserDtoResponse = new LoginBuyerDtoResponse(uuid);
-            return new ServerResponse(200, gson.toJson(loginUserDtoResponse));
+            LoginSellerDtoRequest loginSellerDtoRequest = Service.getObjectFromJson(requestJsonString, LoginSellerDtoRequest.class);
+            checkRequest(loginSellerDtoRequest);
+            User user = sellerDao.get(loginSellerDtoRequest.getLogin());
+            if (user == null || !user.getPassword().equals(loginSellerDtoRequest.getPassword())) {
+                throw new UserException(UserErrorCode.WRONG_LOGIN_OR_PASSWORD);
+            }
+            UUID uuid = sellerDao.loginUser(user);
+            LoginSellerDtoResponce loginUserDtoResponse = new LoginSellerDtoResponce(uuid);
+            return new ServerResponse(CODE_SUCCESS, gson.toJson(loginUserDtoResponse));
         } catch (UserException e) {
-            return new ServerResponse(400, gson.toJson(e));
+            ErrorDtoResponse errorDtoResponse = new ErrorDtoResponse(e);
+            return new ServerResponse(CODE_ERROR, gson.toJson(errorDtoResponse));
         }
     }
 
-    public static ServerResponse logoutSeller(String requestJsonString) throws UserException {
-        Gson gson = new Gson();
-        LogoutSellerDtoRequest logoutSellerDtoRequest = gson.fromJson(requestJsonString, LogoutSellerDtoRequest.class);
-        LogoutSellerDtoResponce logoutBuyerDtoRequest = new LogoutSellerDtoResponce(new ServerResponse(200, logoutSellerDtoRequest.getToken().toString()));
-        return logoutBuyerDtoRequest.getResponce();
+    public ServerResponse logoutSeller(String requestJsonString) throws UserException {
+        try {
+            LogoutSellerDtoRequest buyerDtoRequest = Service.getObjectFromJson(requestJsonString, LogoutSellerDtoRequest.class);
+            sellerDao.logoutUser(buyerDtoRequest.getToken());
+            if (buyerDtoRequest.getToken() == null) {
+                throw new UserException(UserErrorCode.TOKEN_NOT_FOUND);
+            }
+            return new ServerResponse(CODE_SUCCESS, gson.toJson(new EmptySuccessDtoResponse()));
+        }
+        catch (UserException e){
+            ErrorDtoResponse errorDtoResponse = new ErrorDtoResponse(e);
+            return new ServerResponse(CODE_ERROR, gson.toJson(errorDtoResponse));
+        }
     }
 
 }

@@ -1,10 +1,11 @@
 package net.thumbtack.school.auction.dto.response;
+
 import net.thumbtack.school.auction.ServerResponse;
 
-public class LogoutBuyerDtoResponce {
+public class LogoutSellerDtoResponse {
     private ServerResponse responce;
 
-    public LogoutBuyerDtoResponce(ServerResponse response){
+    public LogoutSellerDtoResponse(ServerResponse response){
         this.responce = response;
     }
 

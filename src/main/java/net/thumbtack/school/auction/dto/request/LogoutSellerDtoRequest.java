@@ -1,6 +1,4 @@
-package net.thumbtack.school.auction.dto.request;
-
-import java.util.UUID;
+package net.thumbtack.school.auction.dto.request;import java.util.UUID;
 
 public class LogoutSellerDtoRequest {
     private UUID token;

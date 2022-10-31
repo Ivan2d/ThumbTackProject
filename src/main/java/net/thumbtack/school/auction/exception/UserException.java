@@ -7,7 +7,6 @@ public class UserException extends Exception {
     public UserErrorCode getUserErrorCode() {
         return userErrorCode;
     }
-
     public  UserException (UserErrorCode userErrorCode) {
         this.userErrorCode = userErrorCode;
     }

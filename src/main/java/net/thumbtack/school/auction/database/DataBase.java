@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+
 public class DataBase {
 
     private static DataBase ourInstance = new DataBase();
@@ -15,14 +16,15 @@ public class DataBase {
         return ourInstance;
     }
 
-    private Map<String, User> users = new HashMap<>();
     private Map<Integer, User> userByID = new HashMap<>();
+    private Map<String, User> users = new HashMap<>();
     private BidiMap<UUID, User> userByToken = new DualHashBidiMap<>();
 
     public void insert(User user) throws UserException {
         if(users.putIfAbsent(user.getLogin(), user) != null) {
             throw new UserException(UserErrorCode.DOUBLE_LOGIN);
         }
+        users.put(user.getLogin(), user);
     }
 
     public User get(String login){
@@ -34,7 +36,7 @@ public class DataBase {
         return userByToken.getKey(user);
     }
 
-    public UUID loginSeller(User user) throws UserException {
+    public UUID login(User user) throws UserException {
         UUID uuid = userByToken.getKey(user);
         if(uuid != null) {
             return uuid;
@@ -44,23 +46,7 @@ public class DataBase {
         return token;
     }
 
-    public UUID loginBuyer(User user) throws UserException {
-        UUID uuid = userByToken.getKey(user);
-        if(uuid != null) {
-            return uuid;
-        }
-        UUID token = UUID.randomUUID();
-        userByToken.put(token, user);
-        return token;
-    }
-
-    public void logoutBuyer(UUID token) throws UserException {
-        if (userByToken.remove(token) == null) {
-            throw new UserException(UserErrorCode.SESSION_NOT_FOUND);
-        }
-    }
-
-    public void logoutSeller(UUID token) throws UserException {
+    public void logout(UUID token) throws UserException {
         if (userByToken.remove(token) == null) {
             throw new UserException(UserErrorCode.SESSION_NOT_FOUND);
         }

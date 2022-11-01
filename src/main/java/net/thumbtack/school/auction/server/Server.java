@@ -1,5 +1,6 @@
 package net.thumbtack.school.auction.server;
 import net.thumbtack.school.auction.exception.UserException;
+import net.thumbtack.school.auction.model.User;
 import net.thumbtack.school.auction.service.BuyerService;
 import net.thumbtack.school.auction.service.SellerService;
 import net.thumbtack.school.auction.service.UserService;
@@ -23,6 +24,10 @@ public class Server {
 
     public ServerResponse logoutUser (String requestJsonString) throws UserException {
         return userService.logout(requestJsonString);
+    }
+
+    public User getUserByToken (String requestJsonString) throws UserException {
+        return userService.getUserByToken(requestJsonString);
     }
 }
 

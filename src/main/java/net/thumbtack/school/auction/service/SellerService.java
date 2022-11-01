@@ -11,12 +11,6 @@ import net.thumbtack.school.auction.exception.UserException;
 import net.thumbtack.school.auction.model.Seller;
 import org.apache.commons.lang3.StringUtils;
 public class SellerService {
-    private static SellerDao sellerDao = new SellerDaoImpl();
-    private static final int MIN_LOGIN_LEN = 8;
-    private static final int MIN_PASSWORD_LEN = 8;
-    private static final int CODE_SUCCESS = 200;
-    private static final int CODE_ERROR = 400;
-    private static Gson gson = new Gson();
 
     public ServerResponse registerUser(String requestJsonString) throws JsonSyntaxException {
         try {
@@ -47,4 +41,11 @@ public class SellerService {
         if (request.getPassword().length() < MIN_PASSWORD_LEN)
             throw new UserException(UserErrorCode.SHORT_PASSWORD);
     }
+
+    private static SellerDao sellerDao = new SellerDaoImpl();
+    private static final int MIN_LOGIN_LEN = 8;
+    private static final int MIN_PASSWORD_LEN = 8;
+    private static final int CODE_SUCCESS = 200;
+    private static final int CODE_ERROR = 400;
+    private static Gson gson = new Gson();
 }

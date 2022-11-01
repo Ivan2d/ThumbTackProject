@@ -31,10 +31,14 @@ public class DataBase {
         return users.get(login);
     }
 
-    public UUID getToken(String login){
-        User user = get(login);
-        return userByToken.getKey(user);
+    public User getByToken(UUID uuid) throws UserException {
+        if(!userByToken.containsKey(uuid)){
+            throw new UserException(UserErrorCode.TOKEN_NOT_FOUND);
+        }
+        return userByToken.get(uuid);
     }
+
+
 
     public UUID login(User user) throws UserException {
         UUID uuid = userByToken.getKey(user);

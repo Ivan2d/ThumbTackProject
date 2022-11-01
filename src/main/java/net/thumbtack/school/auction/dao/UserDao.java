@@ -11,4 +11,6 @@ public interface UserDao {
     void logout(UUID token) throws UserException;
 
     User get(String login) throws UserException;
+
+    User getUserByToken(UUID uuid) throws UserException;
 }

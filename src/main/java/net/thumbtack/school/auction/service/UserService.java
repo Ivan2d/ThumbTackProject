@@ -2,6 +2,7 @@ package net.thumbtack.school.auction.service;
 import com.google.gson.Gson;
 import net.thumbtack.school.auction.dao.UserDao;
 import net.thumbtack.school.auction.daoimpl.UserDaoImpl;
+import net.thumbtack.school.auction.dto.request.GetUserByTokenDtoRequest;
 import net.thumbtack.school.auction.dto.request.LoginDtoRequest;
 import net.thumbtack.school.auction.dto.request.LogoutDtoRequest;
 import net.thumbtack.school.auction.dto.response.EmptySuccessDtoResponse;
@@ -26,7 +27,7 @@ public class UserService {
                 throw new UserException(UserErrorCode.WRONG_LOGIN_OR_PASSWORD);
             }
             UUID uuid = userDao.login(user);
-            LoginDtoResponse loginUserDtoResponse = new LoginDtoResponse();
+            LoginDtoResponse loginUserDtoResponse = new LoginDtoResponse(uuid);
             return new ServerResponse(CODE_SUCCESS, gson.toJson(loginUserDtoResponse));
         } catch (UserException e) {
             ErrorDtoResponse errorDtoResponse = new ErrorDtoResponse(e);
@@ -37,7 +38,6 @@ public class UserService {
     public ServerResponse logout(String requestJsonString) throws UserException
     {
         try {
-            Gson gson = new Gson();
             LogoutDtoRequest buyerDtoRequest = Service.getObjectFromJson(requestJsonString, LogoutDtoRequest.class);
             userDao.logout(buyerDtoRequest.getToken());
             return new ServerResponse(CODE_SUCCESS, gson.toJson(new EmptySuccessDtoResponse()));
@@ -47,6 +47,18 @@ public class UserService {
             return new ServerResponse(CODE_ERROR, gson.toJson(errorDtoResponse));
         }
     }
+
+    public User getUserByToken(String requestJsonString) throws UserException {
+        try {
+            GetUserByTokenDtoRequest getUserByTokenDtoRequest = Service.getObjectFromJson(requestJsonString, GetUserByTokenDtoRequest.class);
+            return userDao.getUserByToken(getUserByTokenDtoRequest.getUuid());
+        }
+        catch (UserException e){
+            throw e;
+        }
+    }
+
+
 
     private static final UserDao userDao = new UserDaoImpl();
     private static final int MIN_LOGIN_LEN = 8;

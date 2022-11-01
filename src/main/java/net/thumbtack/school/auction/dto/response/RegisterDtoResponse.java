@@ -11,6 +11,6 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 
-public class RegisterDtoResponce {
+public class RegisterDtoResponse {
     private UUID token;
 }

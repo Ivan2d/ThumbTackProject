@@ -1,5 +1,6 @@
 package net.thumbtack.school.auction.model;
 
+// REVU и сюда lombok
 import java.util.Objects;
 
 public class Category {

@@ -17,6 +17,7 @@ public class DataBase {
     }
 
     private Map<Integer, User> userByID = new HashMap<>();
+    // REVU userByLogin
     private Map<String, User> users = new HashMap<>();
     private BidiMap<UUID, User> userByToken = new DualHashBidiMap<>();
 

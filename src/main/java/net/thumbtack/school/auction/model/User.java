@@ -8,6 +8,7 @@ public class User {
     private String login;
     private String password;
 
+    // REVU @AllArgsConstructor и уберите его
     public User(String firstname, String lastname, String login, String password) {
         this.firstname = firstname;
         this.lastname = lastname;

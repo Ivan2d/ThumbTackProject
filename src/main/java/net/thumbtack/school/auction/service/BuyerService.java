@@ -23,6 +23,7 @@ public class BuyerService {
         try {
             RegisterDtoRequest dtoRequest = Service.getObjectFromJson(requestJsonString, RegisterDtoRequest.class);
             checkRequest(dtoRequest);
+            // REVU так примените MapStruct
             Buyer buyer = new Buyer(dtoRequest.getFirstName(), dtoRequest.getLastName(), dtoRequest.getLogin(), dtoRequest.getPassword());
             buyerDao.insert(buyer);
             EmptySuccessDtoResponse emptySuccessDtoResponse = new EmptySuccessDtoResponse();

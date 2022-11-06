@@ -1,6 +1,7 @@
 package net.thumbtack.school.auction.service;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
+import net.thumbtack.school.auction.mapper.BuyerMapperFromRegister;
 import net.thumbtack.school.auction.server.ServerResponse;
 import net.thumbtack.school.auction.dao.BuyerDao;
 import net.thumbtack.school.auction.daoimpl.BuyerDaoImpl;
@@ -15,10 +16,9 @@ public class BuyerService {
 
     public ServerResponse registerUser(String requestJsonString) throws JsonSyntaxException {
         try {
-            RegisterDtoRequest dtoRequest = Service.getObjectFromJson(requestJsonString, RegisterDtoRequest.class);
+            RegisterDtoRequest dtoRequest = ServiceUtils.getObjectFromJson(requestJsonString, RegisterDtoRequest.class);
             checkRequest(dtoRequest);
-            // REVU так примените MapStruct
-            Buyer buyer = new Buyer(dtoRequest.getFirstName(), dtoRequest.getLastName(), dtoRequest.getLogin(), dtoRequest.getPassword());
+            Buyer buyer = BuyerMapperFromRegister.MAPPER.toBuyer(dtoRequest);
             buyerDao.insert(buyer);
             EmptySuccessDtoResponse emptySuccessDtoResponse = new EmptySuccessDtoResponse();
             return new ServerResponse(CODE_SUCCESS, gson.toJson(emptySuccessDtoResponse));

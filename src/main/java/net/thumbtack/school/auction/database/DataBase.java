@@ -1,9 +1,14 @@
 package net.thumbtack.school.auction.database;
 import net.thumbtack.school.auction.exception.UserErrorCode;
 import net.thumbtack.school.auction.exception.UserException;
+import net.thumbtack.school.auction.model.Lot;
+import net.thumbtack.school.auction.model.Seller;
 import net.thumbtack.school.auction.model.User;
 import org.apache.commons.collections4.BidiMap;
+import org.apache.commons.collections4.MultiValuedMap;
 import org.apache.commons.collections4.bidimap.DualHashBidiMap;
+import org.apache.commons.collections4.multimap.HashSetValuedHashMap;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -17,19 +22,20 @@ public class DataBase {
     }
 
     private Map<Integer, User> userByID = new HashMap<>();
-    // REVU userByLogin
-    private Map<String, User> users = new HashMap<>();
+    private Map<String, User> userByLogin = new HashMap<>();
     private BidiMap<UUID, User> userByToken = new DualHashBidiMap<>();
 
+    private MultiValuedMap<Seller, Lot> lotMultiValuedMap = new HashSetValuedHashMap<>();
+
     public void insert(User user) throws UserException {
-        if(users.putIfAbsent(user.getLogin(), user) != null) {
+        if(userByLogin.putIfAbsent(user.getLogin(), user) != null) {
             throw new UserException(UserErrorCode.DOUBLE_LOGIN);
         }
-        users.put(user.getLogin(), user);
+        userByLogin.put(user.getLogin(), user);
     }
 
     public User get(String login){
-        return users.get(login);
+        return userByLogin.get(login);
     }
 
     public User getByToken(UUID uuid) throws UserException {
@@ -39,7 +45,10 @@ public class DataBase {
         return userByToken.get(uuid);
     }
 
-
+    public void addLot(Lot lot) throws UserException {
+        if(lot == null){ throw new UserException(UserErrorCode.LOT_NOT_FOUND);}
+        lotMultiValuedMap.put(lot.getSeller(), lot);
+    }
 
     public UUID login(User user) throws UserException {
         UUID uuid = userByToken.getKey(user);

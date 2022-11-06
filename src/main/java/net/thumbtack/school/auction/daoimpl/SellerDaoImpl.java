@@ -1,7 +1,9 @@
 package net.thumbtack.school.auction.daoimpl;
+import lombok.Data;
 import net.thumbtack.school.auction.database.DataBase;
 import net.thumbtack.school.auction.exception.UserException;
 import net.thumbtack.school.auction.dao.SellerDao;
+import net.thumbtack.school.auction.model.Lot;
 import net.thumbtack.school.auction.model.User;
 
 public class SellerDaoImpl implements SellerDao
@@ -14,5 +16,10 @@ public class SellerDaoImpl implements SellerDao
     @Override
     public User get(String login) throws UserException {
         return DataBase.getInstance().get(login);
+    }
+
+    @Override
+    public void addLot(Lot lot) throws UserException {
+        DataBase.getInstance().addLot(lot);
     }
 }

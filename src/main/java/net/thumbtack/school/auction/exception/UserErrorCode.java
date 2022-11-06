@@ -13,6 +13,7 @@ public enum UserErrorCode {
     TOKEN_NOT_FOUND("This token not exist"),
     SESSION_NOT_FOUND("Session not found"),
 
+    LOT_NOT_FOUND("This lot not found"),
     WRONG_JSON("This json is wrong");
 
     private String message;

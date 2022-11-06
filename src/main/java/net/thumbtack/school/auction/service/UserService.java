@@ -10,6 +10,7 @@ import net.thumbtack.school.auction.dto.response.ErrorDtoResponse;
 import net.thumbtack.school.auction.dto.response.LoginDtoResponse;
 import net.thumbtack.school.auction.exception.UserErrorCode;
 import net.thumbtack.school.auction.exception.UserException;
+import net.thumbtack.school.auction.mapper.UserMapperFromLogin;
 import net.thumbtack.school.auction.model.User;
 import net.thumbtack.school.auction.server.ServerResponse;
 import org.apache.commons.lang3.StringUtils;
@@ -20,9 +21,9 @@ public class UserService {
 
     public ServerResponse login(String requestJsonString) throws UserException {
         try {
-            LoginDtoRequest loginBuyerDtoRequest = Service.getObjectFromJson(requestJsonString, LoginDtoRequest.class);
+            LoginDtoRequest loginBuyerDtoRequest = ServiceUtils.getObjectFromJson(requestJsonString, LoginDtoRequest.class);
             checkRequest(loginBuyerDtoRequest);
-            User user = userDao.get(loginBuyerDtoRequest.getLogin());
+            User user = UserMapperFromLogin.MAPPER.toUser(loginBuyerDtoRequest);
             if (user == null || !user.getPassword().equals(loginBuyerDtoRequest.getPassword())) {
                 throw new UserException(UserErrorCode.WRONG_LOGIN_OR_PASSWORD);
             }
@@ -38,7 +39,7 @@ public class UserService {
     public ServerResponse logout(String requestJsonString) throws UserException
     {
         try {
-            LogoutDtoRequest buyerDtoRequest = Service.getObjectFromJson(requestJsonString, LogoutDtoRequest.class);
+            LogoutDtoRequest buyerDtoRequest = ServiceUtils.getObjectFromJson(requestJsonString, LogoutDtoRequest.class);
             userDao.logout(buyerDtoRequest.getToken());
             return new ServerResponse(CODE_SUCCESS, gson.toJson(new EmptySuccessDtoResponse()));
         }
@@ -50,7 +51,7 @@ public class UserService {
 
     public User getUserByToken(String requestJsonString) throws UserException {
         try {
-            GetUserByTokenDtoRequest getUserByTokenDtoRequest = Service.getObjectFromJson(requestJsonString, GetUserByTokenDtoRequest.class);
+            GetUserByTokenDtoRequest getUserByTokenDtoRequest = ServiceUtils.getObjectFromJson(requestJsonString, GetUserByTokenDtoRequest.class);
             return userDao.getUserByToken(getUserByTokenDtoRequest.getUuid());
         }
         catch (UserException e){

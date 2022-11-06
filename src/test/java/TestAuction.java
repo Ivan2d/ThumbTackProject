@@ -16,33 +16,6 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 public class TestAuction {
     private Gson gson = new Gson();
-
-//    @Test
-//    public void testLoginUser() throws UserException {
-//        Server server = new Server();
-//        Seller seller = new Seller("Никита", "Асаевич", "Nicoolenko", "firetreef");
-//        ServerResponse serverResponse0 = server.loginUser(gson.toJson(seller));
-//        assertEquals(serverResponse0.getResponseCode(), 400);
-//        server.registerSeller(gson.toJson(seller));
-//        ServerResponse serverResponse2 = server.loginUser(gson.toJson(seller));
-//        assertEquals(serverResponse2.getResponseData(), "v");
-//        assertEquals(serverResponse2.getResponseCode(), 200);
-//    }
-//    @Test
-//    public void testLogoutUser() throws UserException {
-//        Server server = new Server();
-//        Seller seller = new Seller("Никита", "Асаевич", "Nicoolenko", "firetree");
-//    //    ServerResponse serverResponse0 = server.logoutSeller(gson.toJson(seller));
-//    //    assertEquals(serverResponse0.getResponseCode(), 400);
-//        //assertEquals(serverResponse0.getResponseData(), gson.toJson(new ErrorDtoResponse(new UserException(UserErrorCode.TOKEN_NOT_FOUND))));
-//        server.registerSeller(gson.toJson(seller));
-//        UUID uuid = base.getToken(seller.getLogin());
-//        server.loginUser(gson.toJson(seller));
-//        ServerResponse serverResponse1 = server.logoutUser(gson.toJson(new LogoutDtoRequest(uuid)));
-//        assertEquals(serverResponse1.getResponseData(), gson.toJson(new EmptySuccessDtoResponse()));
-//        assertEquals(serverResponse1.getResponseCode(), 200);
-//
-//    }
     @SneakyThrows
     @Test
     public void testRegisterUser() {
@@ -62,8 +35,6 @@ public class TestAuction {
 
         GetUserByTokenDtoRequest getUserByTokenDtoRequest = new GetUserByTokenDtoRequest(loginDtoResponse.getToken());
         User user = server.getUserByToken(gson.toJson(getUserByTokenDtoRequest));
-        assertEquals(user.getFirstname(), dtoRequest.getFirstName());
-        assertEquals(user.getLastname(), dtoRequest.getLastName());
         assertEquals(user.getLogin(), dtoRequest.getLogin());
         assertEquals(user.getPassword(), dtoRequest.getPassword());
 

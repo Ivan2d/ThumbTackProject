@@ -1,7 +1,6 @@
 package net.thumbtack.school.auction.model;
 import lombok.*;
 
-@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Setter

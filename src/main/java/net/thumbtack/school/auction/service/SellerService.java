@@ -15,6 +15,7 @@ import net.thumbtack.school.auction.model.Seller;
 import org.apache.commons.lang3.StringUtils;
 public class SellerService {
 
+    // REVU см. REVU в BuyerService
     public ServerResponse registerUser(String requestJsonString) throws JsonSyntaxException {
         try {
             RegisterDtoRequest dtoRequest = ServiceUtils.getObjectFromJson(requestJsonString, RegisterDtoRequest.class);
@@ -38,6 +39,8 @@ public class SellerService {
             return new ServerResponse(CODE_SUCCESS, gson.toJson(emptySuccessDtoResponse));
     }
 
+    // REVU а этот метод такой же, как и в BuyerService
+    // подумайте, как сделать чтобы не писать дважды
     public void checkRequest(RegisterDtoRequest request) throws UserException {
         if (request.getFirstName() == null || StringUtils.isEmpty(request.getFirstName()))
             throw new UserException(UserErrorCode.EMPTY_FIRST_NAME);

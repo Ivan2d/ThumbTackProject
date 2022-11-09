@@ -24,11 +24,15 @@ public class BuyerService {
             return new ServerResponse(CODE_SUCCESS, gson.toJson(emptySuccessDtoResponse));
         }
         catch (UserException e) {
+            // REVU а можно покороче
+            // return new ServerResponse(e);
+            // пусть конструктор все дедает
             ErrorDtoResponse errorDtoResponse = new ErrorDtoResponse(e);
             return new ServerResponse(CODE_ERROR, gson.toJson(errorDtoResponse));
         }
     }
 
+    // REVU private методы в конец класса
     private void checkRequest(RegisterDtoRequest request) throws UserException {
         if(request.getFirstName() == null || StringUtils.isEmpty(request.getFirstName()))
             throw new UserException(UserErrorCode.EMPTY_FIRST_NAME);
@@ -44,6 +48,7 @@ public class BuyerService {
             throw new UserException(UserErrorCode.SHORT_PASSWORD);
     }
 
+    // REVU а поля в начало его
     private static BuyerDao buyerDao = new BuyerDaoImpl();
     private static Gson gson = new Gson();
     private static final int MIN_LOGIN_LEN = 8;

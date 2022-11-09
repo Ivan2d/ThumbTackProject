@@ -39,6 +39,7 @@ public class DataBase {
     }
 
     public User getByToken(UUID uuid) throws UserException {
+        // REVU не надо containsKey, get сама скажет
         if(!userByToken.containsKey(uuid)){
             throw new UserException(UserErrorCode.TOKEN_NOT_FOUND);
         }
@@ -46,6 +47,8 @@ public class DataBase {
     }
 
     public void addLot(Lot lot) throws UserException {
+        // REVU странная проверка. Зачем null передавать ? Не должен сервис null передавать
+        // и как он может быть NOT_FOUND, если мы его добавляем ?
         if(lot == null){ throw new UserException(UserErrorCode.LOT_NOT_FOUND);}
         lotMultiValuedMap.put(lot.getSeller(), lot);
     }

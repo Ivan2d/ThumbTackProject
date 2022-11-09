@@ -5,6 +5,10 @@ import net.thumbtack.school.auction.dto.request.LoginDtoRequest;
 import net.thumbtack.school.auction.dto.request.LogoutDtoRequest;
 import net.thumbtack.school.auction.dto.request.RegisterDtoRequest;
 import net.thumbtack.school.auction.dto.response.LoginDtoResponse;
+// REVU тест это клиент, он внутренности сервера не видит
+// поэтому лассы модели тут использоват нельзя
+// а также DAO, сервисы и БД
+// только Server, ServerResponse и DTO
 import net.thumbtack.school.auction.model.User;
 import net.thumbtack.school.auction.server.ServerResponse;
 import net.thumbtack.school.auction.dto.response.EmptySuccessDtoResponse;

@@ -9,17 +9,19 @@ import net.thumbtack.school.auction.dao.SellerDao;
 import net.thumbtack.school.auction.daoimpl.SellerDaoImpl;
 import net.thumbtack.school.auction.dto.request.*;
 import net.thumbtack.school.auction.dto.response.*;
-import net.thumbtack.school.auction.exception.UserErrorCode;
 import net.thumbtack.school.auction.exception.UserException;
 import net.thumbtack.school.auction.model.Seller;
-import org.apache.commons.lang3.StringUtils;
 public class SellerService {
 
-    // REVU см. REVU в BuyerService
+    private static SellerDao sellerDao = new SellerDaoImpl();
+    private static final int CODE_SUCCESS = 200;
+    private static final int CODE_ERROR = 400;
+    private static Gson gson = new Gson();
+
     public ServerResponse registerUser(String requestJsonString) throws JsonSyntaxException {
         try {
             RegisterDtoRequest dtoRequest = ServiceUtils.getObjectFromJson(requestJsonString, RegisterDtoRequest.class);
-            checkRequest(dtoRequest);
+            ServiceUtils.checkRequest(dtoRequest);
             Seller seller = SellerMapperFromRegister.MAPPER.toSeller(dtoRequest);
             sellerDao.insert(seller);
             EmptySuccessDtoResponse emptySuccessDtoResponse = new EmptySuccessDtoResponse();
@@ -35,31 +37,7 @@ public class SellerService {
             AddLotDtoRequest dtoRequest = ServiceUtils.getObjectFromJson(requestJsonString, AddLotDtoRequest.class);
             Lot lot = LotMapperFromDto.MAPPER.toLot(dtoRequest);
             sellerDao.addLot(lot);
-            EmptySuccessDtoResponse emptySuccessDtoResponse = new EmptySuccessDtoResponse();
-            return new ServerResponse(CODE_SUCCESS, gson.toJson(emptySuccessDtoResponse));
+            return new ServerResponse(CODE_SUCCESS, gson.toJson(new EmptySuccessDtoResponse()));
     }
 
-    // REVU а этот метод такой же, как и в BuyerService
-    // подумайте, как сделать чтобы не писать дважды
-    public void checkRequest(RegisterDtoRequest request) throws UserException {
-        if (request.getFirstName() == null || StringUtils.isEmpty(request.getFirstName()))
-            throw new UserException(UserErrorCode.EMPTY_FIRST_NAME);
-        if (request.getLastName() == null || StringUtils.isEmpty(request.getLastName()))
-            throw new UserException(UserErrorCode.EMPTY_LAST_NAME);
-        if (request.getLogin() == null || StringUtils.isEmpty(request.getLogin()))
-            throw new UserException(UserErrorCode.EMPTY_LOGIN);
-        if (request.getLogin().length() < MIN_LOGIN_LEN)
-            throw new UserException(UserErrorCode.SHORT_LOGIN);
-        if (request.getPassword() == null || StringUtils.isEmpty(request.getPassword()))
-            throw new UserException(UserErrorCode.EMPTY_PASSWORD);
-        if (request.getPassword().length() < MIN_PASSWORD_LEN)
-            throw new UserException(UserErrorCode.SHORT_PASSWORD);
-    }
-
-    private static SellerDao sellerDao = new SellerDaoImpl();
-    private static final int MIN_LOGIN_LEN = 8;
-    private static final int MIN_PASSWORD_LEN = 8;
-    private static final int CODE_SUCCESS = 200;
-    private static final int CODE_ERROR = 400;
-    private static Gson gson = new Gson();
 }

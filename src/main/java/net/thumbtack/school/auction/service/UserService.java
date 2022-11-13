@@ -18,6 +18,12 @@ import org.apache.commons.lang3.StringUtils;
 import java.util.UUID;
 
 public class UserService {
+    private static final UserDao userDao = new UserDaoImpl();
+    private static final int MIN_LOGIN_LEN = 8;
+    private static final int MIN_PASSWORD_LEN = 8;
+    private static final int CODE_SUCCESS = 200;
+    private static final int CODE_ERROR = 400;
+    private static final Gson gson = new Gson();
 
     public ServerResponse login(String requestJsonString) throws UserException {
         try {
@@ -59,14 +65,6 @@ public class UserService {
         }
     }
 
-
-
-    private static final UserDao userDao = new UserDaoImpl();
-    private static final int MIN_LOGIN_LEN = 8;
-    private static final int MIN_PASSWORD_LEN = 8;
-    private static final int CODE_SUCCESS = 200;
-    private static final int CODE_ERROR = 400;
-    private static final Gson gson = new Gson();
     private void checkRequest(LoginDtoRequest request) throws UserException {
         if(request.getLogin() == null || StringUtils.isEmpty(request.getLogin()) || request.getLogin().length() <= MIN_LOGIN_LEN) {
             throw new UserException(UserErrorCode.EMPTY_LOGIN);

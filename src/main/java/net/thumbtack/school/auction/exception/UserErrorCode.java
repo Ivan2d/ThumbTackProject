@@ -10,7 +10,7 @@ public enum UserErrorCode {
     SHORT_LOGIN("Your login is shorter then 8 characters"),
     WRONG_LOGIN_OR_PASSWORD("This login or password is wrong"),
     // REVU DUPLICATE_LOGIN
-    DOUBLE_LOGIN("This login already existed"),
+    DUPLICATE_LOGIN("This login already existed"),
     TOKEN_NOT_FOUND("This token not exist"),
     SESSION_NOT_FOUND("Session not found"),
 

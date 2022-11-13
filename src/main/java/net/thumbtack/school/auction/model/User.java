@@ -10,4 +10,12 @@ public class User {
     private String lastname;
     private String login;
     private String password;
+    private int id = -1;
+    public User(String firstname, String lastname, String login, String password){
+        setFirstname(firstname);
+        setLastname(lastname);
+        setLogin(login);
+        setPassword(password);
+        id++;
+    }
 }

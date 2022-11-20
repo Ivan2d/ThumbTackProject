@@ -29,7 +29,7 @@ public class DataBase {
     private Map<Integer, Category> categoryById = new HashMap<>();
 
     public List<Lot> getListByCategory(int idCategory){
-        return lotMultiValuedMapByCategoryId.get(idCategory).stream().toList();
+        return (List<Lot>) lotMultiValuedMapByCategoryId.get(idCategory);
     }
 
     public void insert(User user) throws UserException {

@@ -10,11 +10,7 @@ import org.apache.commons.collections4.MultiValuedMap;
 import org.apache.commons.collections4.bidimap.DualHashBidiMap;
 import org.apache.commons.collections4.multimap.HashSetValuedHashMap;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
-
+import java.util.*;
 
 public class DataBase {
 
@@ -27,28 +23,13 @@ public class DataBase {
     private BidiMap<Integer, User> userByID = new DualHashBidiMap<>();
     private Map<String, User> userByLogin = new HashMap<>();
     private BidiMap<UUID, User> userByToken = new DualHashBidiMap<>();
-
+    private Map<Integer, Lot> integerLotMap = new HashMap<>();
     private MultiValuedMap<Seller, Lot> lotMultiValuedMap = new HashSetValuedHashMap<>();
-
-    private MultiValuedMap<Category, Lot> lotMultiValuedMapByCategory = new HashSetValuedHashMap<>();
+    private MultiValuedMap<Integer, Lot> lotMultiValuedMapByCategoryId = new HashSetValuedHashMap<>();
+    private Map<Integer, Category> categoryById = new HashMap<>();
 
     public List<Lot> getListByCategory(int idCategory){
-        Category find = null;
-        List<Lot> result = null;
-
-        for(Category category: lotMultiValuedMapByCategory.keySet()){
-            if(category.getId() == idCategory){
-                find = category;
-            }
-
-        }
-
-        for(Lot lot: lotMultiValuedMapByCategory.values()){
-            if(lot.getCategories().contains(find)){
-                result.add(lot);
-            }
-        }
-        return result;
+        return lotMultiValuedMapByCategoryId.get(idCategory).stream().toList();
     }
 
     public void insert(User user) throws UserException {
@@ -67,21 +48,23 @@ public class DataBase {
         return userByToken.get(uuid);
     }
 
-    public Lot getLotBySeller(int idSeller, int idLot) {
+    public Lot getLotBySeller(int idSeller, int idLot) throws UserException {
         Seller seller = (Seller) userByID.get(idSeller);
-        for (Lot lot : seller.getLots()) {
-            if (lot.getId() == idLot) {
-                return lot;
-            }
+        Lot lot = integerLotMap.get(idLot);
+        if(lotMultiValuedMap.containsKey(seller) && lotMultiValuedMap.containsValue(lot)) {
+            return lot;
         }
-        return null;
+        else {
+            throw new UserException(UserErrorCode.LOT_NOT_FOUND);
+        }
     }
 
     public void addLot(Lot lot) throws UserException {
         lotMultiValuedMap.put(lot.getSeller(), lot);
         for(Category item: lot.getCategories()){
-            lotMultiValuedMapByCategory.put(item, lot);
+            lotMultiValuedMapByCategoryId.put(item.getId(), lot);
         }
+        integerLotMap.put(lot.getId(), lot);
     }
 
     public UUID login(User user) throws UserException {

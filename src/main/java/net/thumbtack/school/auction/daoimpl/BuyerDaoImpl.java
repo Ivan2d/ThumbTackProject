@@ -29,4 +29,14 @@ public class BuyerDaoImpl implements BuyerDao
         return DataBase.getInstance().getListByCategory(idCategory);
     }
 
+    @Override
+    public void addPrice(int idBuyer, int value, int idLot) {
+        DataBase.getInstance().addPrice(idBuyer, value, idLot);
+    }
+
+    @Override
+    public void deletePrice(int idPrice) {
+        DataBase.getInstance().deletePrice(idPrice);
+    }
+
 }

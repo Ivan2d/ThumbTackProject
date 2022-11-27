@@ -1,14 +1,12 @@
 package net.thumbtack.school.auction.service;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
-import net.thumbtack.school.auction.dto.request.InfoAboutLotRequest;
-import net.thumbtack.school.auction.dto.request.InfoAboutLotsByCategory;
+import net.thumbtack.school.auction.dto.request.*;
 import net.thumbtack.school.auction.mapper.BuyerMapperFromRegister;
 import net.thumbtack.school.auction.model.Lot;
 import net.thumbtack.school.auction.server.ServerResponse;
 import net.thumbtack.school.auction.dao.BuyerDao;
 import net.thumbtack.school.auction.daoimpl.BuyerDaoImpl;
-import net.thumbtack.school.auction.dto.request.RegisterDtoRequest;
 import net.thumbtack.school.auction.dto.response.*;
 import net.thumbtack.school.auction.exception.UserException;
 import net.thumbtack.school.auction.model.Buyer;
@@ -49,6 +47,15 @@ public class BuyerService {
         return new ServerResponse(CODE_SUCCESS, gson.toJson(list));
     }
 
+    public ServerResponse addPrice(String requestJsonString) throws JsonSyntaxException, UserException {
+        AddPriceDtoRequest dtoRequest = ServiceUtils.getObjectFromJson(requestJsonString, AddPriceDtoRequest.class);
+        buyerDao.addPrice(dtoRequest.getBuyerID(), dtoRequest.getValue(), dtoRequest.getLotID());
+        return new ServerResponse(CODE_SUCCESS, gson.toJson(new EmptySuccessDtoResponse()));
+    }
 
-
+    public ServerResponse deletePrice(String requestJsonString) throws JsonSyntaxException, UserException {
+        DeleteLotDtoRequest dtoRequest = ServiceUtils.getObjectFromJson(requestJsonString, DeleteLotDtoRequest.class);
+        buyerDao.deletePrice(dtoRequest.getLotID());
+        return new ServerResponse(CODE_SUCCESS, gson.toJson(new EmptySuccessDtoResponse()));
+    }
 }

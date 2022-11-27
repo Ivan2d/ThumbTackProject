@@ -1,10 +1,7 @@
 package net.thumbtack.school.auction.database;
 import net.thumbtack.school.auction.exception.UserErrorCode;
 import net.thumbtack.school.auction.exception.UserException;
-import net.thumbtack.school.auction.model.Category;
-import net.thumbtack.school.auction.model.Lot;
-import net.thumbtack.school.auction.model.Seller;
-import net.thumbtack.school.auction.model.User;
+import net.thumbtack.school.auction.model.*;
 import org.apache.commons.collections4.BidiMap;
 import org.apache.commons.collections4.MultiValuedMap;
 import org.apache.commons.collections4.bidimap.DualHashBidiMap;
@@ -22,10 +19,12 @@ public class DataBase {
 
     private BidiMap<Integer, User> userByID = new DualHashBidiMap<>();
     private Map<String, User> userByLogin = new HashMap<>();
+    private Map<Integer, Price> priceById = new HashMap<>();
     private BidiMap<UUID, User> userByToken = new DualHashBidiMap<>();
     private Map<Integer, Lot> integerLotMap = new HashMap<>();
     private MultiValuedMap<Seller, Lot> lotMultiValuedMap = new HashSetValuedHashMap<>();
     private MultiValuedMap<Integer, Lot> lotMultiValuedMapByCategoryId = new HashSetValuedHashMap<>();
+
     private Map<Integer, Category> categoryById = new HashMap<>();
 
     public List<Lot> getListByCategory(int idCategory){
@@ -65,6 +64,23 @@ public class DataBase {
             lotMultiValuedMapByCategoryId.put(item.getId(), lot);
         }
         integerLotMap.put(lot.getId(), lot);
+    }
+
+    public void deleteLot(int ID) throws UserException {
+        integerLotMap.remove(ID);
+    }
+
+    public void addPrice(int idBuyer, int value, int idLot){
+        User user = userByID.get(idBuyer);
+        if(user instanceof Buyer){
+           Lot lot = integerLotMap.get(idLot);
+           Price price = new Price((Buyer) user, value, lot);
+           priceById.put(price.getId(), price);
+        }
+    }
+
+    public void deletePrice(int idValue){
+        priceById.remove(idValue);
     }
 
     public UUID login(User user) throws UserException {

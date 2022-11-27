@@ -40,4 +40,11 @@ public class SellerService {
             return new ServerResponse(CODE_SUCCESS, gson.toJson(new EmptySuccessDtoResponse()));
     }
 
+    public ServerResponse deleteLotOnAuction(String requestJsonString) throws UserException {
+            DeleteLotDtoRequest dtoRequest = ServiceUtils.getObjectFromJson(requestJsonString, DeleteLotDtoRequest.class);
+            int ID = dtoRequest.getLotID();
+            sellerDao.deleteLot(ID);
+            return new ServerResponse(CODE_ERROR, gson.toJson(new EmptySuccessDtoResponse()));
+    }
+
 }

@@ -4,6 +4,7 @@ import com.google.gson.JsonSyntaxException;
 import net.thumbtack.school.auction.mapper.LotMapperFromDto;
 import net.thumbtack.school.auction.mapper.SellerMapperFromRegister;
 import net.thumbtack.school.auction.model.Lot;
+import net.thumbtack.school.auction.model.User;
 import net.thumbtack.school.auction.server.ServerResponse;
 import net.thumbtack.school.auction.dao.SellerDao;
 import net.thumbtack.school.auction.daoimpl.SellerDaoImpl;
@@ -11,6 +12,9 @@ import net.thumbtack.school.auction.dto.request.*;
 import net.thumbtack.school.auction.dto.response.*;
 import net.thumbtack.school.auction.exception.UserException;
 import net.thumbtack.school.auction.model.Seller;
+
+import java.util.UUID;
+
 public class SellerService {
 
     private static SellerDao sellerDao = new SellerDaoImpl();
@@ -38,12 +42,22 @@ public class SellerService {
     }
 
     // REVU где передача токена ?
-    public ServerResponse addLotOnAuction(String requestJsonString) throws UserException {
+    public ServerResponse addLotOnAuction(UUID token, String requestJsonString) throws UserException {
         // REVU и тут try и тут валидация, и тут catch
+        Seller seller = getSellerByToken(token);
             AddLotDtoRequest dtoRequest = ServiceUtils.getObjectFromJson(requestJsonString, AddLotDtoRequest.class);
             Lot lot = LotMapperFromDto.MAPPER.toLot(dtoRequest);
             sellerDao.addLot(lot);
             return new ServerResponse(CODE_SUCCESS, gson.toJson(new EmptySuccessDtoResponse()));
+    }
+
+    private Seller getSellerByToken(UUID token) {
+        User user = sellerDao.getUserByToken(token);
+        if(user == null) { throw...}
+        if(!(user instanceof Seller)) {
+            throw ...
+        }
+        return (Seller) user;
     }
 
     // REVU где передача токена ?

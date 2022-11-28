@@ -9,7 +9,6 @@ import net.thumbtack.school.auction.dto.response.LoginDtoResponse;
 // поэтому лассы модели тут использоват нельзя
 // а также DAO, сервисы и БД
 // только Server, ServerResponse и DTO
-import net.thumbtack.school.auction.model.User;
 import net.thumbtack.school.auction.server.ServerResponse;
 import net.thumbtack.school.auction.dto.response.EmptySuccessDtoResponse;
 import net.thumbtack.school.auction.server.Server;

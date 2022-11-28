@@ -17,15 +17,19 @@ public class DataBase {
         return ourInstance;
     }
 
-    private BidiMap<Integer, User> userByID = new DualHashBidiMap<>();
+    private Map<Integer, User> userByID = new HashMap<>();
     private Map<String, User> userByLogin = new HashMap<>();
-    private Map<Integer, Price> priceById = new HashMap<>();
     private BidiMap<UUID, User> userByToken = new DualHashBidiMap<>();
-    private Map<Integer, Lot> integerLotMap = new HashMap<>();
-    private MultiValuedMap<Seller, Lot> lotMultiValuedMap = new HashSetValuedHashMap<>();
+
+    private MultiValuedMap<Seller, Lot> lotsBySeller = new HashSetValuedHashMap<>();
     private MultiValuedMap<Integer, Lot> lotMultiValuedMapByCategoryId = new HashSetValuedHashMap<>();
+    private Map<Integer, Lot> integerLotMap = new HashMap<>();
+
+    private Map<Integer, Price> priceById = new HashMap<>();
 
     private Map<Integer, Category> categoryById = new HashMap<>();
+
+    private int nextUserId = 1;
 
     public List<Lot> getListByCategory(int idCategory){
         return (List<Lot>) lotMultiValuedMapByCategoryId.get(idCategory);
@@ -35,8 +39,8 @@ public class DataBase {
         if (userByLogin.putIfAbsent(user.getLogin(), user) != null) {
             throw new UserException(UserErrorCode.DUPLICATE_LOGIN);
         }
-        userByLogin.put(user.getLogin(), user);
-        userByID.put(user.getId(), user);
+        user.setId(nextUserId++);
+         userByID.put(user.getId(), user);
     }
 
     public User get(String login) {

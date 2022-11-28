@@ -7,6 +7,6 @@ import net.thumbtack.school.auction.model.User;
 @AllArgsConstructor
 @Getter
 @Setter
-public class GetUserByTokenResponse {
+public class GetSellerInfoResponse {
     private User user;
 }

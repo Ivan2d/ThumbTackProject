@@ -28,7 +28,7 @@ public class Server {
         return userService.logout(requestJsonString);
     }
 
-    public User getUserByToken (String requestJsonString) throws UserException {
+    public UserResponseDto getUserByToken (String requestJsonString) throws UserException {
         return userService.getUserByToken(requestJsonString);
     }
 }

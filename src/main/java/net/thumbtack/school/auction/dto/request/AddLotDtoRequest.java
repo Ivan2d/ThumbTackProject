@@ -14,5 +14,7 @@ public class AddLotDtoRequest {
     private String name;
     private String description;
     private int minValueForSell;
+    // REVU это его id ? Тогдв selleerId
+    // сейчас непонятно
     private int seller;
 }

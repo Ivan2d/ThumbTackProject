@@ -11,6 +11,9 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class InfoAboutLotRequest {
+    // REVU гоните Of везде
+    // lotId
+    // sellerId
     private int idOfLot;
     private int idOfSeller;
 }

@@ -46,6 +46,7 @@ public class UserService {
     {
         try {
             LogoutDtoRequest buyerDtoRequest = ServiceUtils.getObjectFromJson(requestJsonString, LogoutDtoRequest.class);
+            // REVU валидация ?
             userDao.logout(buyerDtoRequest.getToken());
             return new ServerResponse(CODE_SUCCESS, gson.toJson(new EmptySuccessDtoResponse()));
         }
@@ -55,9 +56,12 @@ public class UserService {
         }
     }
 
+    // REVU нет, не может метод сервиса возвращать User. Только ServerResponse
+    // Server не знает никаких User
     public User getUserByToken(String requestJsonString) throws UserException {
         try {
             GetUserByTokenDtoRequest getUserByTokenDtoRequest = ServiceUtils.getObjectFromJson(requestJsonString, GetUserByTokenDtoRequest.class);
+            // REVU валидация ?
             return userDao.getUserByToken(getUserByTokenDtoRequest.getUuid());
         }
         catch (UserException e){

@@ -28,19 +28,27 @@ public class SellerService {
             return new ServerResponse(CODE_SUCCESS, gson.toJson(emptySuccessDtoResponse));
         }
         catch (UserException e) {
+            // REVU а так можно ?
+            // return new ServerResponse(e);
+            // и пусть конструктор ServerResponse и разбирается
+            // все логично. Сделай ServerResponse, данные возьми из исключения
             ErrorDtoResponse errorDtoResponse = new ErrorDtoResponse(e);
             return new ServerResponse(CODE_ERROR, gson.toJson(errorDtoResponse));
         }
     }
 
+    // REVU где передача токена ?
     public ServerResponse addLotOnAuction(String requestJsonString) throws UserException {
+        // REVU и тут try и тут валидация, и тут catch
             AddLotDtoRequest dtoRequest = ServiceUtils.getObjectFromJson(requestJsonString, AddLotDtoRequest.class);
             Lot lot = LotMapperFromDto.MAPPER.toLot(dtoRequest);
             sellerDao.addLot(lot);
             return new ServerResponse(CODE_SUCCESS, gson.toJson(new EmptySuccessDtoResponse()));
     }
 
+    // REVU где передача токена ?
     public ServerResponse deleteLotOnAuction(String requestJsonString) throws UserException {
+        // REVU и тут то же
             DeleteLotDtoRequest dtoRequest = ServiceUtils.getObjectFromJson(requestJsonString, DeleteLotDtoRequest.class);
             int ID = dtoRequest.getLotID();
             sellerDao.deleteLot(ID);

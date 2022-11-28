@@ -35,24 +35,29 @@ public class BuyerService {
         }
     }
 
+    // REVU где передача токена ?
     public ServerResponse takeInfoAboutSomeLot(String requestJsonString) throws JsonSyntaxException, UserException {
+        // REVU и тут try и тут валидация, и тут catch
         InfoAboutLotRequest dtoRequest = ServiceUtils.getObjectFromJson(requestJsonString, InfoAboutLotRequest.class);
         Lot lot = buyerDao.getLot(dtoRequest.getIdOfSeller(), dtoRequest.getIdOfLot());
         return new ServerResponse(CODE_SUCCESS, gson.toJson(lot));
     }
 
+    // REVU где передача токена ?
     public ServerResponse takeInfoAboutAllLotsByCategory(String requestJsonString) throws JsonSyntaxException, UserException {
         InfoAboutLotsByCategory dtoRequest = ServiceUtils.getObjectFromJson(requestJsonString, InfoAboutLotsByCategory.class);
         List<Lot> list = buyerDao.getLotListByCategory(dtoRequest.getIdCategory());
         return new ServerResponse(CODE_SUCCESS, gson.toJson(list));
     }
 
+    // REVU где передача токена ?
     public ServerResponse addPrice(String requestJsonString) throws JsonSyntaxException, UserException {
         AddPriceDtoRequest dtoRequest = ServiceUtils.getObjectFromJson(requestJsonString, AddPriceDtoRequest.class);
         buyerDao.addPrice(dtoRequest.getBuyerID(), dtoRequest.getValue(), dtoRequest.getLotID());
         return new ServerResponse(CODE_SUCCESS, gson.toJson(new EmptySuccessDtoResponse()));
     }
 
+    // REVU где передача токена ?
     public ServerResponse deletePrice(String requestJsonString) throws JsonSyntaxException, UserException {
         DeleteLotDtoRequest dtoRequest = ServiceUtils.getObjectFromJson(requestJsonString, DeleteLotDtoRequest.class);
         buyerDao.deletePrice(dtoRequest.getLotID());

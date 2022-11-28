@@ -1,4 +1,6 @@
 package net.thumbtack.school.auction.server;
+// REVU сервер не знает классов модели и исключений
+// уберите эти 2 import
 import net.thumbtack.school.auction.exception.UserException;
 import net.thumbtack.school.auction.model.User;
 import net.thumbtack.school.auction.service.BuyerService;

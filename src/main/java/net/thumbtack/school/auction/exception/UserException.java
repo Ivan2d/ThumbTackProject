@@ -1,5 +1,7 @@
 package net.thumbtack.school.auction.exception;
 
+// REVU Вам не кажется, что пора его переименовать ?
+// ServerException и ServerErrorCode
 public class UserException extends Exception {
 
     private UserErrorCode userErrorCode;

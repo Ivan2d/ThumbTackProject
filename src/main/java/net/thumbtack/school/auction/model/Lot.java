@@ -10,7 +10,7 @@ import java.util.List;
 @Setter
 @Getter
 public class Lot {
-    private int id = -1;
+    private int id;
     private List<Category> categories;
     private String name;
     private String description;
@@ -24,6 +24,5 @@ public class Lot {
         setDescription(description);
         setMinValueForSell(minValueForSell);
         setSeller(seller);
-        id++;
     }
 }

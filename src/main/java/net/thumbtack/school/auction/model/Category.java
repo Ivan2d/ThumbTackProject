@@ -9,10 +9,9 @@ import lombok.*;
 
 
 public class Category {
-    private int id = -1;
+    private int id;
     private String name;
     public Category(String name){
         setName(name);
-        id++;
     }
 }

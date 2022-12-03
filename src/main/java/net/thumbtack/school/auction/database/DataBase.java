@@ -1,6 +1,7 @@
 package net.thumbtack.school.auction.database;
-import net.thumbtack.school.auction.exception.UserErrorCode;
-import net.thumbtack.school.auction.exception.UserException;
+import net.thumbtack.school.auction.dto.response.UserDtoResponse;
+import net.thumbtack.school.auction.exception.ServerErrorCode;
+import net.thumbtack.school.auction.exception.ServerException;
 import net.thumbtack.school.auction.model.*;
 import org.apache.commons.collections4.BidiMap;
 import org.apache.commons.collections4.MultiValuedMap;
@@ -35,42 +36,43 @@ public class DataBase {
         return (List<Lot>) lotMultiValuedMapByCategoryId.get(idCategory);
     }
 
-    public void insert(User user) throws UserException {
+    public void insert(User user) throws ServerException {
         if (userByLogin.putIfAbsent(user.getLogin(), user) != null) {
-            throw new UserException(UserErrorCode.DUPLICATE_LOGIN);
+            throw new ServerException(ServerErrorCode.DUPLICATE_LOGIN);
         }
         user.setId(nextUserId++);
-         userByID.put(user.getId(), user);
+        userByID.put(user.getId(), user);
     }
 
     public User get(String login) {
         return userByLogin.get(login);
     }
 
-    public User getByToken(UUID uuid) throws UserException {
-        return userByToken.get(uuid);
+    public UserDtoResponse getByToken(UUID uuid) throws ServerException {
+        User user = userByToken.get(uuid);
+        return new UserDtoResponse(user.getFirstname(), user.getLastname(), user.getLogin());
     }
 
-    public Lot getLotBySeller(int idSeller, int idLot) throws UserException {
+    public Lot getLotBySeller(int idSeller, int idLot) throws ServerException {
         Seller seller = (Seller) userByID.get(idSeller);
         Lot lot = integerLotMap.get(idLot);
-        if(lotMultiValuedMap.containsKey(seller) && lotMultiValuedMap.containsValue(lot)) {
+        if(lotsBySeller.containsKey(seller) && lotsBySeller.containsValue(lot)) {
             return lot;
         }
         else {
-            throw new UserException(UserErrorCode.LOT_NOT_FOUND);
+            throw new ServerException(ServerErrorCode.LOT_NOT_FOUND);
         }
     }
 
-    public void addLot(Lot lot) throws UserException {
-        lotMultiValuedMap.put(lot.getSeller(), lot);
+    public void addLot(Lot lot) throws ServerException {
+        lotsBySeller.put(lot.getSeller(), lot);
         for(Category item: lot.getCategories()){
             lotMultiValuedMapByCategoryId.put(item.getId(), lot);
         }
         integerLotMap.put(lot.getId(), lot);
     }
 
-    public void deleteLot(int ID) throws UserException {
+    public void deleteLot(int ID) throws ServerException {
         integerLotMap.remove(ID);
     }
 
@@ -79,7 +81,7 @@ public class DataBase {
         if(user instanceof Buyer){
            Lot lot = integerLotMap.get(idLot);
            Price price = new Price((Buyer) user, value, lot);
-           priceById.put(price.getId(), price);
+           priceById.put(price.getBid(), price);
         }
     }
 
@@ -87,7 +89,7 @@ public class DataBase {
         priceById.remove(idValue);
     }
 
-    public UUID login(User user) throws UserException {
+    public UUID login(User user) throws ServerException {
         UUID uuid = userByToken.getKey(user);
         if(uuid != null) {
             return uuid;
@@ -97,9 +99,9 @@ public class DataBase {
         return token;
     }
 
-    public void logout(UUID token) throws UserException {
+    public void logout(UUID token) throws ServerException {
         if (userByToken.remove(token) == null) {
-            throw new UserException(UserErrorCode.SESSION_NOT_FOUND);
+            throw new ServerException(ServerErrorCode.SESSION_NOT_FOUND);
         }
     }
 }

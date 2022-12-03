@@ -1,4 +1,5 @@
-package net.thumbtack.school.auction.dto.request;
+package net.thumbtack.school.auction.dto.response;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -8,7 +9,8 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class InfoAboutLotRequest {
-    private int idLot;
-    private int idSeller;
+public class UserDtoResponse {
+    private String firstname;
+    private String lastname;
+    private String login;
 }

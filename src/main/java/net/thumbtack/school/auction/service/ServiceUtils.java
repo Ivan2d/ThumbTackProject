@@ -1,37 +1,111 @@
 package net.thumbtack.school.auction.service;
 import com.google.gson.Gson;
-import net.thumbtack.school.auction.dto.request.RegisterDtoRequest;
-import net.thumbtack.school.auction.exception.UserErrorCode;
-import net.thumbtack.school.auction.exception.UserException;
+import net.thumbtack.school.auction.dto.request.*;
+import net.thumbtack.school.auction.exception.ServerErrorCode;
+import net.thumbtack.school.auction.exception.ServerException;
 import org.apache.commons.lang3.StringUtils;
 
 import static org.apache.commons.lang3.StringUtils.isBlank;
+import static org.apache.commons.lang3.StringUtils.remove;
 
 public class ServiceUtils {
     private static final int MIN_LOGIN_LEN = 8;
     private static final int MIN_PASSWORD_LEN = 8;
     private static final Gson GSON = new Gson();
 
-    public static <T> T getObjectFromJson(String requestJsonString, Class<T> classOfT) throws UserException {
+    public static <T> T getObjectFromJson(String requestJsonString, Class<T> classOfT) throws ServerException {
             if (isBlank(requestJsonString)) {
-                throw new UserException(UserErrorCode.WRONG_JSON);
+                throw new ServerException(ServerErrorCode.WRONG_JSON);
             }
             return GSON.fromJson(requestJsonString, classOfT);
     }
 
-    public static void checkRequest(RegisterDtoRequest request) throws UserException {
-        if (request.getFirstName() == null || StringUtils.isEmpty(request.getFirstName()))
-            throw new UserException(UserErrorCode.EMPTY_FIRST_NAME);
-        if (request.getLastName() == null || StringUtils.isEmpty(request.getLastName()))
-            throw new UserException(UserErrorCode.EMPTY_LAST_NAME);
-        if (request.getLogin() == null || StringUtils.isEmpty(request.getLogin()))
-            throw new UserException(UserErrorCode.EMPTY_LOGIN);
-        if (request.getLogin().length() < MIN_LOGIN_LEN)
-            throw new UserException(UserErrorCode.SHORT_LOGIN);
-        if (request.getPassword() == null || StringUtils.isEmpty(request.getPassword()))
-            throw new UserException(UserErrorCode.EMPTY_PASSWORD);
-        if (request.getPassword().length() < MIN_PASSWORD_LEN)
-            throw new UserException(UserErrorCode.SHORT_PASSWORD);
+    public static void checkRequest(RegisterDtoRequest request) throws ServerException {
+        if (request.getFirstName() == null || StringUtils.isEmpty(request.getFirstName())) {
+            throw new ServerException(ServerErrorCode.EMPTY_FIRST_NAME);
+        }
+        if (request.getLastName() == null || StringUtils.isEmpty(request.getLastName())) {
+            throw new ServerException(ServerErrorCode.EMPTY_LAST_NAME);
+        }
+        if (request.getLogin() == null || StringUtils.isEmpty(request.getLogin())) {
+            throw new ServerException(ServerErrorCode.EMPTY_LOGIN);
+        }
+        if (request.getLogin().length() < MIN_LOGIN_LEN) {
+            throw new ServerException(ServerErrorCode.SHORT_LOGIN);
+        }
+        if (request.getPassword() == null || StringUtils.isEmpty(request.getPassword())) {
+            throw new ServerException(ServerErrorCode.EMPTY_PASSWORD);
+        }
+        if (request.getPassword().length() < MIN_PASSWORD_LEN) {
+            throw new ServerException(ServerErrorCode.SHORT_PASSWORD);
+        }
     }
+
+    public static void checkAddLotRequest(AddLotDtoRequest request) throws ServerException {
+        if(request.getCategories() == null){
+            throw new ServerException(ServerErrorCode.EMPTY_LIST);
+        }
+        if(request.getSellerId() <= 0){
+            throw new ServerException(ServerErrorCode.ID_LESSER_THAN_ZERO);
+        }
+        if(request.getMinValueForSell() <= 0){
+            throw new ServerException(ServerErrorCode.VALUE_LESSER_THAN_ZERO);
+        }
+        if(request.getDescription() == null || StringUtils.isEmpty(request.getDescription())){
+            throw new ServerException(ServerErrorCode.EMPTY_DESCRIPTION);
+        }
+        if(request.getName() == null || StringUtils.isEmpty(request.getName())){
+            throw new ServerException(ServerErrorCode.EMPTY_FIRST_NAME);
+        }
+    }
+
+    public static void checkDeleteLotRequest(DeleteLotDtoRequest request) throws ServerException{
+        if (request.getLotID() <= 0){
+            throw new ServerException(ServerErrorCode.ID_LESSER_THAN_ZERO);
+        }
+    }
+
+    public static void checkInfoSomeLotRequest(InfoAboutLotRequest request) throws ServerException{
+        if(request.getIdSeller() <= 0 || request.getIdLot() <= 0){
+            throw new ServerException(ServerErrorCode.ID_LESSER_THAN_ZERO);
+        }
+    }
+
+    public static void checkInfoAllLotsRequest(InfoAboutLotsByCategory request) throws  ServerException{
+        if (request.getIdCategory() <= 0){
+            throw new ServerException(ServerErrorCode.ID_LESSER_THAN_ZERO);
+        }
+    }
+
+    public static void checkAddPrice(AddPriceDtoRequest request) throws  ServerException{
+        if(request.getLotID() <= 0){
+            throw new ServerException(ServerErrorCode.ID_LESSER_THAN_ZERO);
+        }
+        if(request.getValue() <= 0){
+            throw new ServerException(ServerErrorCode.VALUE_LESSER_THAN_ZERO);
+        }
+    }
+
+    public static void checkUserByToken(GetUserByTokenDtoRequest request) throws ServerException{
+        if(request.getUuid() == null){
+            throw new ServerException(ServerErrorCode.TOKEN_NOT_FOUND);
+        }
+    }
+
+    public static void checkRequest(LoginDtoRequest request) throws ServerException {
+        if(request.getLogin() == null || StringUtils.isEmpty(request.getLogin()) || request.getLogin().length() <= MIN_LOGIN_LEN) {
+            throw new ServerException(ServerErrorCode.EMPTY_LOGIN);
+        }
+        if(request.getPassword() == null || StringUtils.isEmpty(request.getPassword()) || request.getPassword().length() <= MIN_PASSWORD_LEN) {
+            throw new ServerException(ServerErrorCode.EMPTY_PASSWORD);
+        }
+    }
+
+    public static void checkDeleteLotRequest(LogoutDtoRequest buyerDtoRequest) throws ServerException {
+        if (buyerDtoRequest.getToken() == null){
+            throw new ServerException(ServerErrorCode.TOKEN_NOT_FOUND);
+        }
+    }
+
 }
 

@@ -1,14 +1,9 @@
 import com.google.gson.Gson;
 import lombok.SneakyThrows;
-import net.thumbtack.school.auction.dto.request.GetUserByTokenDtoRequest;
 import net.thumbtack.school.auction.dto.request.LoginDtoRequest;
 import net.thumbtack.school.auction.dto.request.LogoutDtoRequest;
 import net.thumbtack.school.auction.dto.request.RegisterDtoRequest;
 import net.thumbtack.school.auction.dto.response.LoginDtoResponse;
-// REVU тест это клиент, он внутренности сервера не видит
-// поэтому лассы модели тут использоват нельзя
-// а также DAO, сервисы и БД
-// только Server, ServerResponse и DTO
 import net.thumbtack.school.auction.server.ServerResponse;
 import net.thumbtack.school.auction.dto.response.EmptySuccessDtoResponse;
 import net.thumbtack.school.auction.server.Server;
@@ -35,11 +30,6 @@ public class TestAuction {
         assertEquals(serverResponseLogin.getResponseCode(), 200);
         LoginDtoResponse loginDtoResponse = gson.fromJson(serverResponseLogin.getResponseData(), LoginDtoResponse.class);
         assertNotNull(loginDtoResponse.getToken());
-
-        GetUserByTokenDtoRequest getUserByTokenDtoRequest = new GetUserByTokenDtoRequest(loginDtoResponse.getToken());
-        User user = server.getUserByToken(gson.toJson(getUserByTokenDtoRequest));
-        assertEquals(user.getLogin(), dtoRequest.getLogin());
-        assertEquals(user.getPassword(), dtoRequest.getPassword());
 
         LogoutDtoRequest logoutDtoRequest = new LogoutDtoRequest(loginDtoResponse.getToken());
         ServerResponse serverResponseLogout = server.logoutUser(gson.toJson(logoutDtoRequest));

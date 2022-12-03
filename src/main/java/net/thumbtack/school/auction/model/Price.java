@@ -9,9 +9,8 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-// REVU скорее Bid
 public class Price {
-    private int id = -1;
+    private int Bid;
     private Buyer buyer;
     private int value;
     private Lot lot;
@@ -24,6 +23,5 @@ public class Price {
         // получится в итоге 0, но каким-то очень хитрым способом. Зачем ?
         // это когда в БД сохраняете, там надо счетчик продвингать, а тут какой смысл ?
         // это же локальное поле
-        id++;
     }
 }

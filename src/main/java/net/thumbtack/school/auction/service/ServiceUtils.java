@@ -4,9 +4,8 @@ import net.thumbtack.school.auction.dto.request.*;
 import net.thumbtack.school.auction.exception.ServerErrorCode;
 import net.thumbtack.school.auction.exception.ServerException;
 import org.apache.commons.lang3.StringUtils;
-
 import static org.apache.commons.lang3.StringUtils.isBlank;
-import static org.apache.commons.lang3.StringUtils.remove;
+
 
 public class ServiceUtils {
     private static final int MIN_LOGIN_LEN = 8;

@@ -41,8 +41,9 @@ public class SellerService {
     }
 
     // REVU где передача токена ?
-    public ServerResponse addLotOnAuction(UUID token, String requestJsonString) throws ServerException {
+    public ServerResponse addLotOnAuction(String token, String requestJsonString) throws ServerException {
         try {
+            Seller seller = getSellerByToken(token);
             AddLotDtoRequest dtoRequest = ServiceUtils.getObjectFromJson(requestJsonString, AddLotDtoRequest.class);
             ServiceUtils.checkAddLotRequest(dtoRequest);
             Lot lot = LotMapperFromDto.MAPPER.toLot(dtoRequest);
@@ -53,21 +54,11 @@ public class SellerService {
         }
     }
 
-    private Seller getSellerByToken(UUID token) throws ServerException {
-        UserDtoResponse userDtoResponse = userDao.getUserByToken(token);
-        User user = UserMapperFromLogin.MAPPER.toUser(userDtoResponse);
-        if (user == null) {
-            throw new ServerException(ServerErrorCode.USER_NOT_FOUND);
-        }
-        if (!(user instanceof Seller)) {
-            throw new ServerException(ServerErrorCode.NOT_A_SELLER);
-        }
-        return (Seller) user;
-    }
 
     // REVU где передача токена ?
-    public ServerResponse deleteLotOnAuction(String requestJsonString) throws ServerException {
+    public ServerResponse deleteLotOnAuction(String token, String requestJsonString) throws ServerException {
         try {
+            Seller seller = getSellerByToken(token);
             DeleteLotDtoRequest dtoRequest = ServiceUtils.getObjectFromJson(requestJsonString, DeleteLotDtoRequest.class);
             ServiceUtils.checkDeleteLotRequest(dtoRequest);
             int ID = dtoRequest.getLotID();
@@ -76,6 +67,21 @@ public class SellerService {
         } catch (ServerException e) {
             return new ServerResponse(CODE_ERROR, e.getMessage());
         }
+    }
+
+    private Seller getSellerByToken(String token) throws ServerException {
+        if (token == null){
+            throw new ServerException(ServerErrorCode.TOKEN_NOT_FOUND);
+        }
+        UserDtoResponse userDtoResponse = userDao.getUserByToken(UUID.fromString(token));
+        User user = UserMapperFromLogin.MAPPER.toUser(userDtoResponse);
+        if (user == null) {
+            throw new ServerException(ServerErrorCode.USER_NOT_FOUND);
+        }
+        if (!(user instanceof Seller)) {
+            throw new ServerException(ServerErrorCode.NOT_A_SELLER);
+        }
+        return (Seller) user;
     }
 
 }

@@ -35,13 +35,12 @@ public class BuyerService {
             EmptySuccessDtoResponse emptySuccessDtoResponse = new EmptySuccessDtoResponse();
             return new ServerResponse(CODE_SUCCESS, gson.toJson(emptySuccessDtoResponse));
         } catch (ServerException e) {
-            return new ServerResponse(CODE_ERROR, gson.toJson(new ErrorDtoResponse(e)));
+            return new ServerResponse(CODE_ERROR, e.getUserErrorCode().getErrorString());
         }
     }
 
     // REVU где передача токена ?
     public ServerResponse takeInfoAboutSomeLot(String token, String requestJsonString) throws JsonSyntaxException, ServerException {
-        // REVU и тут try и тут валидация, и тут catch
         try {
             Buyer buyer = getSellerByToken(token);
             InfoAboutLotRequest dtoRequest = ServiceUtils.getObjectFromJson(requestJsonString, InfoAboutLotRequest.class);
@@ -49,12 +48,11 @@ public class BuyerService {
             Lot lot = buyerDao.getLot(dtoRequest.getIdSeller(), dtoRequest.getIdLot());
             return new ServerResponse(CODE_SUCCESS, gson.toJson(lot));
         } catch (ServerException e) {
-            return new ServerResponse(CODE_ERROR, e.getMessage());
+            return new ServerResponse(CODE_ERROR, e.getUserErrorCode().getErrorString());
         }
 
     }
 
-    // REVU где передача токена ?
     public ServerResponse takeInfoAboutAllLotsByCategory(String token, String requestJsonString) throws JsonSyntaxException, ServerException {
         try {
             Buyer buyer = getSellerByToken(token);
@@ -63,12 +61,11 @@ public class BuyerService {
             List<Lot> list = buyerDao.getLotListByCategory(dtoRequest.getIdCategory());
             return new ServerResponse(CODE_SUCCESS, gson.toJson(list));
         } catch (ServerException e) {
-            return new ServerResponse(CODE_ERROR, e.getMessage());
+            return new ServerResponse(CODE_ERROR, e.getUserErrorCode().getErrorString());
         }
 
     }
 
-    // REVU где передача токена ?
     public ServerResponse addPrice(String token, String requestJsonString) throws JsonSyntaxException, ServerException {
         try {
             Buyer buyer = getSellerByToken(token);
@@ -77,12 +74,11 @@ public class BuyerService {
             buyerDao.addPrice(dtoRequest.getBuyerID(), dtoRequest.getValue(), dtoRequest.getLotID());
             return new ServerResponse(CODE_SUCCESS, gson.toJson(new EmptySuccessDtoResponse()));
         } catch (ServerException e) {
-            return new ServerResponse(CODE_ERROR, e.getMessage());
+            return new ServerResponse(CODE_ERROR, e.getUserErrorCode().getErrorString());
         }
 
     }
 
-    // REVU где передача токена ?
     public ServerResponse deletePrice(String token, String requestJsonString) throws JsonSyntaxException, ServerException {
         try {
             Buyer buyer = getSellerByToken(token);
@@ -91,7 +87,7 @@ public class BuyerService {
             buyerDao.deletePrice(dtoRequest.getLotID());
             return new ServerResponse(CODE_SUCCESS, gson.toJson(new EmptySuccessDtoResponse()));
         } catch (ServerException e) {
-            return new ServerResponse(CODE_ERROR, e.getMessage());
+            return new ServerResponse(CODE_ERROR, e.getUserErrorCode().getErrorString());
         }
     }
 

@@ -1,4 +1,5 @@
 package net.thumbtack.school.auction.mapper;
+
 import net.thumbtack.school.auction.dto.request.AddLotDtoRequest;
 import net.thumbtack.school.auction.dto.request.InfoAboutLotRequest;
 import net.thumbtack.school.auction.model.Lot;

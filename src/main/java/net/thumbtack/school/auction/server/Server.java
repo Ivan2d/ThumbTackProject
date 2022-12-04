@@ -1,6 +1,7 @@
 package net.thumbtack.school.auction.server;
 // REVU сервер не знает классов модели и исключений
 // уберите эти 2 import
+import net.thumbtack.school.auction.dto.request.AddLotDtoRequest;
 import net.thumbtack.school.auction.dto.response.UserDtoResponse;
 import net.thumbtack.school.auction.exception.ServerException;
 import net.thumbtack.school.auction.service.BuyerService;
@@ -28,8 +29,12 @@ public class Server {
         return userService.logout(requestJsonString);
     }
 
-    public UserDtoResponse getUserByToken (String requestJsonString) throws ServerException {
+    public UserDtoResponse getUserByToken(String requestJsonString) throws ServerException {
         return userService.getUserByToken(requestJsonString);
+    }
+
+    public ServerResponse addLot(String token, String requestJsonString) throws ServerException {
+        return sellerService.addLotOnAuction(token, requestJsonString);
     }
 }
 

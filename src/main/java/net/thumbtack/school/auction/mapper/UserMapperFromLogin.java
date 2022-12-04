@@ -1,4 +1,5 @@
 package net.thumbtack.school.auction.mapper;
+
 import net.thumbtack.school.auction.dto.request.LoginDtoRequest;
 import net.thumbtack.school.auction.dto.response.UserDtoResponse;
 import net.thumbtack.school.auction.model.User;

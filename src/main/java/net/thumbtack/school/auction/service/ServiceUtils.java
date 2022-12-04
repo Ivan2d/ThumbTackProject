@@ -20,10 +20,10 @@ public class ServiceUtils {
     }
 
     public static void checkRequest(RegisterDtoRequest request) throws ServerException {
-        if (request.getFirstName() == null || StringUtils.isEmpty(request.getFirstName())) {
+        if (request.getFirstname() == null || StringUtils.isEmpty(request.getFirstname())) {
             throw new ServerException(ServerErrorCode.EMPTY_FIRST_NAME);
         }
-        if (request.getLastName() == null || StringUtils.isEmpty(request.getLastName())) {
+        if (request.getLastname() == null || StringUtils.isEmpty(request.getLastname())) {
             throw new ServerException(ServerErrorCode.EMPTY_LAST_NAME);
         }
         if (request.getLogin() == null || StringUtils.isEmpty(request.getLogin())) {

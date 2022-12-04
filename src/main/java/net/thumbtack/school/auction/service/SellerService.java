@@ -33,14 +33,12 @@ public class SellerService {
             ServiceUtils.checkRequest(dtoRequest);
             Seller seller = SellerMapperFromRegister.MAPPER.toSeller(dtoRequest);
             sellerDao.insert(seller);
-            EmptySuccessDtoResponse emptySuccessDtoResponse = new EmptySuccessDtoResponse();
-            return new ServerResponse(CODE_SUCCESS, gson.toJson(emptySuccessDtoResponse));
+            return new ServerResponse(CODE_SUCCESS, gson.toJson(new EmptySuccessDtoResponse()));
         } catch (ServerException e) {
-            return new ServerResponse(CODE_ERROR, e.getMessage());
+            return new ServerResponse(CODE_ERROR, e.getUserErrorCode().getErrorString());
         }
     }
 
-    // REVU где передача токена ?
     public ServerResponse addLotOnAuction(String token, String requestJsonString) throws ServerException {
         try {
             Seller seller = getSellerByToken(token);
@@ -50,12 +48,11 @@ public class SellerService {
             sellerDao.addLot(lot);
             return new ServerResponse(CODE_SUCCESS, gson.toJson(new EmptySuccessDtoResponse()));
         } catch (ServerException e) {
-            return new ServerResponse(CODE_ERROR, e.getMessage());
+            return new ServerResponse(CODE_ERROR, e.getUserErrorCode().getErrorString());
         }
     }
 
 
-    // REVU где передача токена ?
     public ServerResponse deleteLotOnAuction(String token, String requestJsonString) throws ServerException {
         try {
             Seller seller = getSellerByToken(token);
@@ -65,7 +62,7 @@ public class SellerService {
             sellerDao.deleteLot(ID);
             return new ServerResponse(CODE_SUCCESS, gson.toJson(new EmptySuccessDtoResponse()));
         } catch (ServerException e) {
-            return new ServerResponse(CODE_ERROR, e.getMessage());
+            return new ServerResponse(CODE_ERROR, e.getUserErrorCode().getErrorString());
         }
     }
 

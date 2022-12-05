@@ -1,7 +1,6 @@
 package net.thumbtack.school.auction.daoimpl;
 import net.thumbtack.school.auction.dao.UserDao;
 import net.thumbtack.school.auction.database.DataBase;
-import net.thumbtack.school.auction.dto.response.UserDtoResponse;
 import net.thumbtack.school.auction.exception.ServerException;
 import net.thumbtack.school.auction.model.User;
 import java.util.UUID;

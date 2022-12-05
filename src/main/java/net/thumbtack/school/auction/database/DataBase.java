@@ -1,5 +1,4 @@
 package net.thumbtack.school.auction.database;
-import net.thumbtack.school.auction.dto.response.UserDtoResponse;
 import net.thumbtack.school.auction.exception.ServerErrorCode;
 import net.thumbtack.school.auction.exception.ServerException;
 import net.thumbtack.school.auction.model.*;

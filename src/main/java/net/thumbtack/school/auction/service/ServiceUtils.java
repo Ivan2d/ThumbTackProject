@@ -79,12 +79,6 @@ public class ServiceUtils {
         }
     }
 
-    public static void checkUserByToken(GetUserByTokenDtoRequest request) throws ServerException{
-        if(request.getUuid() == null){
-            throw new ServerException(ServerErrorCode.TOKEN_NOT_FOUND);
-        }
-    }
-
     public static void checkRequest(LoginDtoRequest request) throws ServerException {
         if(request.getLogin() == null || StringUtils.isEmpty(request.getLogin()) || request.getLogin().length() <= MIN_LOGIN_LEN) {
             throw new ServerException(ServerErrorCode.EMPTY_LOGIN);

@@ -13,7 +13,7 @@ public class SellerDaoImpl implements SellerDao
     }
 
     @Override
-    public User get(String login) throws ServerException {
+    public User get(String login) {
         return DataBase.getInstance().get(login);
     }
 

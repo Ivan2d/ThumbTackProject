@@ -14,7 +14,7 @@ public class BuyerDaoImpl implements BuyerDao
         DataBase.getInstance().insert(user);
     }
     @Override
-    public User get(String login) throws ServerException {
+    public User get(String login) {
         return DataBase.getInstance().get(login);
     }
 

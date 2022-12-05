@@ -1,12 +1,10 @@
 package net.thumbtack.school.auction.service;
 import com.google.gson.Gson;
-import com.google.gson.JsonSyntaxException;
 import net.thumbtack.school.auction.dao.UserDao;
 import net.thumbtack.school.auction.daoimpl.UserDaoImpl;
 import net.thumbtack.school.auction.exception.ServerErrorCode;
 import net.thumbtack.school.auction.mapper.LotMapperFromDto;
 import net.thumbtack.school.auction.mapper.SellerMapperFromRegister;
-import net.thumbtack.school.auction.mapper.UserMapperFromLogin;
 import net.thumbtack.school.auction.model.Lot;
 import net.thumbtack.school.auction.model.User;
 import net.thumbtack.school.auction.server.ServerResponse;

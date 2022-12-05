@@ -98,7 +98,7 @@ public class BuyerService {
             throw new ServerException(ServerErrorCode.USER_NOT_FOUND);
         }
         if (!(user instanceof Buyer)) {
-            throw new ServerException(ServerErrorCode.NOT_A_SELLER);
+            throw new ServerException(ServerErrorCode.NOT_A_BUYER);
         }
         return (Buyer) user;
     }

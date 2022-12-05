@@ -29,12 +29,12 @@ public class BuyerDaoImpl implements BuyerDao
     }
 
     @Override
-    public void addPrice(int idBuyer, int value, int idLot) {
+    public void addPrice(int idBuyer, int value, int idLot) throws ServerException {
         DataBase.getInstance().addPrice(idBuyer, value, idLot);
     }
 
     @Override
-    public void deletePrice(int idPrice) {
+    public void deletePrice(int idPrice) throws ServerException {
         DataBase.getInstance().deletePrice(idPrice);
     }
 

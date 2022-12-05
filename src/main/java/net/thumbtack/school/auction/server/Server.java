@@ -33,5 +33,13 @@ public class Server {
     public ServerResponse deleteLot(String token, String requestJsonString) {
         return sellerService.deleteLotOnAuction(token, requestJsonString);
     }
+
+    public ServerResponse addPrice(String token, String requestJsonString) {
+        return buyerService.addPrice(token, requestJsonString);
+    }
+
+    public ServerResponse deletePrice(String token, String requestJsonString) {
+        return buyerService.deletePrice(token, requestJsonString);
+    }
 }
 

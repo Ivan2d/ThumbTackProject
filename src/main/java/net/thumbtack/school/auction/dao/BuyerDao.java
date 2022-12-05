@@ -10,8 +10,8 @@ public interface BuyerDao {
     User get(String login) throws ServerException;
     Lot getLot(int idSeller, int idLot) throws ServerException;
     List<Lot> getLotListByCategory(int idCategory);
-    void addPrice(int idSeller, int value, int idLot);
+    void addPrice(int idSeller, int value, int idLot) throws ServerException;
 
-    void deletePrice(int idPrice);
+    void deletePrice(int idPrice) throws ServerException;
 
 }

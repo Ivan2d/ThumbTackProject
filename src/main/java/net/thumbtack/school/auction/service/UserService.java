@@ -31,8 +31,7 @@ public class UserService {
             LoginDtoResponse loginUserDtoResponse = new LoginDtoResponse(uuid);
             return new ServerResponse(CODE_SUCCESS, gson.toJson(loginUserDtoResponse));
         } catch (ServerException e) {
-            ErrorDtoResponse errorDtoResponse = new ErrorDtoResponse(e);
-            return new ServerResponse(CODE_ERROR, gson.toJson(errorDtoResponse));
+            return new ServerResponse(CODE_ERROR, e.getUserErrorCode().getErrorString());
         }
     }
 
@@ -43,8 +42,7 @@ public class UserService {
             return new ServerResponse(CODE_SUCCESS, gson.toJson(new EmptySuccessDtoResponse()));
         }
         catch (ServerException e){
-            ErrorDtoResponse errorDtoResponse = new ErrorDtoResponse(e);
-            return new ServerResponse(CODE_ERROR, gson.toJson(errorDtoResponse));
+            return new ServerResponse(CODE_ERROR, e.getUserErrorCode().getErrorString());
         }
     }
 

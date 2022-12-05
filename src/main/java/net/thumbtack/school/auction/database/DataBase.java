@@ -79,17 +79,22 @@ public class DataBase {
         integerLotMap.remove(ID);
     }
 
-    public void addPrice(int idBuyer, int value, int idLot){
+    public void addPrice(int idBuyer, int value, int idLot) throws ServerException {
         User user = userByID.get(idBuyer);
         if(user instanceof Buyer){
+            if(!integerLotMap.containsKey(idLot)){
+                throw new ServerException(ServerErrorCode.LOT_NOT_FOUND);
+            }
            Lot lot = integerLotMap.get(idLot);
            Price price = new Price((Buyer) user, value, lot);
            priceById.put(price.getBid(), price);
         }
     }
 
-    public void deletePrice(int idValue){
-        priceById.remove(idValue);
+    public void deletePrice(int idValue) throws ServerException{
+        if(priceById.remove(idValue) == null){
+            throw new ServerException(ServerErrorCode.PRICE_NOT_FOUND);
+        }
     }
 
     public UUID login(User user) throws ServerException {

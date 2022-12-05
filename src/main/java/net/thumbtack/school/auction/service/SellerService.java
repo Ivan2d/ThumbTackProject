@@ -27,7 +27,7 @@ public class SellerService {
     private static final int CODE_ERROR = 400;
     private static Gson gson = new Gson();
 
-    public ServerResponse registerUser(String requestJsonString) throws JsonSyntaxException {
+    public ServerResponse registerUser(String requestJsonString) {
         try {
             RegisterDtoRequest dtoRequest = ServiceUtils.getObjectFromJson(requestJsonString, RegisterDtoRequest.class);
             ServiceUtils.checkRequest(dtoRequest);
@@ -39,7 +39,7 @@ public class SellerService {
         }
     }
 
-    public ServerResponse addLotOnAuction(String token, String requestJsonString) throws ServerException {
+    public ServerResponse addLotOnAuction(String token, String requestJsonString) {
         try {
             Seller seller = getSellerByToken(token);
             AddLotDtoRequest dtoRequest = ServiceUtils.getObjectFromJson(requestJsonString, AddLotDtoRequest.class);
@@ -53,7 +53,7 @@ public class SellerService {
     }
 
 
-    public ServerResponse deleteLotOnAuction(String token, String requestJsonString) throws ServerException {
+    public ServerResponse deleteLotOnAuction(String token, String requestJsonString)  {
         try {
             Seller seller = getSellerByToken(token);
             DeleteLotDtoRequest dtoRequest = ServiceUtils.getObjectFromJson(requestJsonString, DeleteLotDtoRequest.class);
@@ -70,8 +70,7 @@ public class SellerService {
         if (token == null){
             throw new ServerException(ServerErrorCode.TOKEN_NOT_FOUND);
         }
-        UserDtoResponse userDtoResponse = userDao.getUserByToken(UUID.fromString(token));
-        User user = userDao.get(userDtoResponse.getLogin());
+        User user = userDao.getUserByToken(UUID.fromString(token));
         if (user == null) {
             throw new ServerException(ServerErrorCode.USER_NOT_FOUND);
         }

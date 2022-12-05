@@ -1,6 +1,7 @@
 package net.thumbtack.school.auction.model;
 import lombok.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @EqualsAndHashCode
@@ -11,7 +12,7 @@ import java.util.List;
 @Getter
 public class Lot {
     private int id;
-    private List<Category> categories;
+    private List<Category> categories = new ArrayList<>();
     private String name;
     private String description;
     private int minValueForSell;

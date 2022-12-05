@@ -1,8 +1,8 @@
 import com.google.gson.Gson;
 import lombok.SneakyThrows;
 import net.thumbtack.school.auction.dto.request.AddLotDtoRequest;
+import net.thumbtack.school.auction.dto.request.DeleteLotDtoRequest;
 import net.thumbtack.school.auction.dto.request.LoginDtoRequest;
-import net.thumbtack.school.auction.dto.request.LogoutDtoRequest;
 import net.thumbtack.school.auction.dto.request.RegisterDtoRequest;
 import net.thumbtack.school.auction.dto.response.LoginDtoResponse;
 import net.thumbtack.school.auction.exception.ServerException;
@@ -10,7 +10,6 @@ import net.thumbtack.school.auction.server.ServerResponse;
 import net.thumbtack.school.auction.dto.response.EmptySuccessDtoResponse;
 import net.thumbtack.school.auction.server.Server;
 import org.junit.jupiter.api.Test;
-import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -40,25 +39,32 @@ public class TestAuction {
         LoginDtoResponse loginDtoResponse = gson.fromJson(serverResponseLogin.getResponseData(), LoginDtoResponse.class);
         assertNotNull(loginDtoResponse.getToken());
 
-        LogoutDtoRequest logoutDtoRequest = new LogoutDtoRequest(loginDtoResponse.getToken());
-        ServerResponse serverResponseLogout = server.logoutUser(gson.toJson(logoutDtoRequest));
+        ServerResponse serverResponseLogout = server.logoutUser(loginDtoResponse.getToken());
         assertEquals(serverResponseLogout.getResponseCode(), 200);
     }
 
     @Test
     public void testAddAndDeleteLot() throws ServerException {
         Server server = new Server();
-        List<Integer> categories = List.of(1, 2, 3);
         RegisterDtoRequest dtoRequest = new RegisterDtoRequest("Никитаа", "Асаевичъ", "Nicoolenkosd", "firetreesd");
         server.registerSeller(gson.toJson(dtoRequest));
         ServerResponse serverResponse = server.loginUser(gson.toJson(new LoginDtoRequest(dtoRequest.getLogin(), dtoRequest.getPassword())));
         LoginDtoResponse loginDtoResponse = gson.fromJson(serverResponse.getResponseData(), LoginDtoResponse.class);
         String uuid = loginDtoResponse.getToken().toString();
 
-        AddLotDtoRequest addLotDtoRequest = new AddLotDtoRequest(categories, "Table", "good", 2000,  1);
-        ServerResponse response = server.addLot(uuid, gson.toJson(addLotDtoRequest));
-        assertEquals(response.getResponseCode(), 400);
-        assertEquals(response.getResponseData(), " ");
+        DeleteLotDtoRequest deleteLotWithoutAddDtoRequest = new DeleteLotDtoRequest(1);
+        ServerResponse deleteWithoutAddResponse = server.deleteLot(uuid, gson.toJson(deleteLotWithoutAddDtoRequest));
+        assertEquals(deleteWithoutAddResponse.getResponseCode(), 400);
+
+        AddLotDtoRequest addLotDtoRequest = new AddLotDtoRequest("Table", "good", 2000);
+        ServerResponse addResponse = server.addLot(uuid, gson.toJson(addLotDtoRequest));
+        assertEquals(addResponse.getResponseCode(), 200);
+        assertEquals(addResponse.getResponseData(),  gson.toJson(new EmptySuccessDtoResponse()));
+
+        DeleteLotDtoRequest deleteLotDtoRequest = new DeleteLotDtoRequest(1);
+        ServerResponse deleteResponse = server.deleteLot(uuid, gson.toJson(deleteLotDtoRequest));
+        assertEquals(deleteResponse.getResponseCode(), 200);
+
     }
 }
 

@@ -17,4 +17,5 @@ public interface UserMapperFromLogin {
 
     @InheritInverseConfiguration
     LoginDtoRequest fromUser(User user);
+
 }

@@ -31,6 +31,7 @@ public class DataBase {
     private Map<Integer, Category> categoryById = new HashMap<>();
 
     private int nextUserId = 1;
+    private int nextLotId = 1;
 
     public List<Lot> getListByCategory(int idCategory){
         return (List<Lot>) lotMultiValuedMapByCategoryId.get(idCategory);
@@ -48,9 +49,8 @@ public class DataBase {
         return userByLogin.get(login);
     }
 
-    public UserDtoResponse getByToken(UUID uuid) throws ServerException {
-        User user = userByToken.get(uuid);
-        return new UserDtoResponse(user.getFirstname(), user.getLastname(), user.getLogin());
+    public User getByToken(UUID uuid) throws ServerException {
+        return userByToken.get(uuid);
     }
 
     public Lot getLotBySeller(int idSeller, int idLot) throws ServerException {
@@ -66,13 +66,17 @@ public class DataBase {
 
     public void addLot(Lot lot) throws ServerException {
         lotsBySeller.put(lot.getSeller(), lot);
-        for(Category item: lot.getCategories()){
-            lotMultiValuedMapByCategoryId.put(item.getId(), lot);
-        }
+    //    for(Category item: lot.getCategories()){
+    //        lotMultiValuedMapByCategoryId.put(item.getId(), lot);
+    //    }
+        lot.setId(nextLotId++);
         integerLotMap.put(lot.getId(), lot);
     }
 
     public void deleteLot(int ID) throws ServerException {
+        if(!integerLotMap.containsKey(ID) ){
+            throw new ServerException(ServerErrorCode.ID_NOT_EXIST);
+        }
         integerLotMap.remove(ID);
     }
 

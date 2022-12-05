@@ -20,7 +20,8 @@ public enum ServerErrorCode {
     ID_LESSER_THAN_ZERO("ID can't be < 0"),
     EMPTY_LIST("This list can't be empty"),
     EMPTY_DESCRIPTION("Empty description"),
-    VALUE_LESSER_THAN_ZERO("Value can't be < 0");
+    VALUE_LESSER_THAN_ZERO("Value can't be < 0"),
+    ID_NOT_EXIST("ID not exist");
 
     private String message;
 

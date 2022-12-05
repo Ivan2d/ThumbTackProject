@@ -10,9 +10,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class AddLotDtoRequest {
-    private List<Integer> categories;
     private String name;
     private String description;
     private int minValueForSell;
-    private int sellerId;
 }

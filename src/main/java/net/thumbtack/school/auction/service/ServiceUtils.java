@@ -41,12 +41,6 @@ public class ServiceUtils {
     }
 
     public static void checkAddLotRequest(AddLotDtoRequest request) throws ServerException {
-        if(request.getCategories() == null){
-            throw new ServerException(ServerErrorCode.EMPTY_LIST);
-        }
-        if(request.getSellerId() <= 0){
-            throw new ServerException(ServerErrorCode.ID_LESSER_THAN_ZERO);
-        }
         if(request.getMinValueForSell() <= 0){
             throw new ServerException(ServerErrorCode.VALUE_LESSER_THAN_ZERO);
         }
@@ -100,11 +94,7 @@ public class ServiceUtils {
         }
     }
 
-    public static void checkDeleteLotRequest(LogoutDtoRequest buyerDtoRequest) throws ServerException {
-        if (buyerDtoRequest.getToken() == null){
-            throw new ServerException(ServerErrorCode.TOKEN_NOT_FOUND);
-        }
-    }
+
 
 }
 

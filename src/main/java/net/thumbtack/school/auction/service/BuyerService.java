@@ -1,12 +1,10 @@
 package net.thumbtack.school.auction.service;
 import com.google.gson.Gson;
-import com.google.gson.JsonSyntaxException;
 import net.thumbtack.school.auction.dao.UserDao;
 import net.thumbtack.school.auction.daoimpl.UserDaoImpl;
 import net.thumbtack.school.auction.dto.request.*;
 import net.thumbtack.school.auction.exception.ServerErrorCode;
 import net.thumbtack.school.auction.mapper.BuyerMapperFromRegister;
-import net.thumbtack.school.auction.mapper.UserMapperFromLogin;
 import net.thumbtack.school.auction.model.Lot;
 import net.thumbtack.school.auction.model.User;
 import net.thumbtack.school.auction.server.ServerResponse;
@@ -26,7 +24,7 @@ public class BuyerService {
     private static final int CODE_ERROR = 400;
 
 
-    public ServerResponse registerUser(String requestJsonString) throws JsonSyntaxException {
+    public ServerResponse registerUser(String requestJsonString) {
         try {
             RegisterDtoRequest dtoRequest = ServiceUtils.getObjectFromJson(requestJsonString, RegisterDtoRequest.class);
             ServiceUtils.checkRequest(dtoRequest);
@@ -40,9 +38,9 @@ public class BuyerService {
     }
 
     // REVU где передача токена ?
-    public ServerResponse takeInfoAboutSomeLot(String token, String requestJsonString) throws JsonSyntaxException, ServerException {
+    public ServerResponse takeInfoAboutSomeLot(String token, String requestJsonString) {
         try {
-            Buyer buyer = getSellerByToken(token);
+            Buyer buyer = getBuyerByToken(token);
             InfoAboutLotRequest dtoRequest = ServiceUtils.getObjectFromJson(requestJsonString, InfoAboutLotRequest.class);
             ServiceUtils.checkInfoSomeLotRequest(dtoRequest);
             Lot lot = buyerDao.getLot(dtoRequest.getIdSeller(), dtoRequest.getIdLot());
@@ -53,9 +51,9 @@ public class BuyerService {
 
     }
 
-    public ServerResponse takeInfoAboutAllLotsByCategory(String token, String requestJsonString) throws JsonSyntaxException, ServerException {
+    public ServerResponse takeInfoAboutAllLotsByCategory(String token, String requestJsonString) {
         try {
-            Buyer buyer = getSellerByToken(token);
+            Buyer buyer = getBuyerByToken(token);
             InfoAboutLotsByCategory dtoRequest = ServiceUtils.getObjectFromJson(requestJsonString, InfoAboutLotsByCategory.class);
             ServiceUtils.checkInfoAllLotsRequest(dtoRequest);
             List<Lot> list = buyerDao.getLotListByCategory(dtoRequest.getIdCategory());
@@ -66,9 +64,9 @@ public class BuyerService {
 
     }
 
-    public ServerResponse addPrice(String token, String requestJsonString) throws JsonSyntaxException, ServerException {
+    public ServerResponse addPrice(String token, String requestJsonString) {
         try {
-            Buyer buyer = getSellerByToken(token);
+            Buyer buyer = getBuyerByToken(token);
             AddPriceDtoRequest dtoRequest = ServiceUtils.getObjectFromJson(requestJsonString, AddPriceDtoRequest.class);
             ServiceUtils.checkAddPrice(dtoRequest);
             buyerDao.addPrice(dtoRequest.getBuyerID(), dtoRequest.getValue(), dtoRequest.getLotID());
@@ -79,9 +77,9 @@ public class BuyerService {
 
     }
 
-    public ServerResponse deletePrice(String token, String requestJsonString) throws JsonSyntaxException, ServerException {
+    public ServerResponse deletePrice(String token, String requestJsonString) {
         try {
-            Buyer buyer = getSellerByToken(token);
+            Buyer buyer = getBuyerByToken(token);
             DeleteLotDtoRequest dtoRequest = ServiceUtils.getObjectFromJson(requestJsonString, DeleteLotDtoRequest.class);
             ServiceUtils.checkDeleteLotRequest(dtoRequest);
             buyerDao.deletePrice(dtoRequest.getLotID());
@@ -91,12 +89,11 @@ public class BuyerService {
         }
     }
 
-    private Buyer getSellerByToken(String token) throws ServerException {
+    private Buyer getBuyerByToken(String token) throws ServerException {
         if (token == null){
             throw new ServerException(ServerErrorCode.TOKEN_NOT_FOUND);
         }
-        UserDtoResponse userDtoResponse = userDao.getUserByToken(UUID.fromString(token));
-        User user = UserMapperFromLogin.MAPPER.toUser(userDtoResponse);
+        User user = userDao.getUserByToken(UUID.fromString(token));
         if (user == null) {
             throw new ServerException(ServerErrorCode.USER_NOT_FOUND);
         }

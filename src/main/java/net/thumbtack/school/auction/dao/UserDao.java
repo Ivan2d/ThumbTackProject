@@ -13,5 +13,5 @@ public interface UserDao {
 
     User get(String login) throws ServerException;
 
-    UserDtoResponse getUserByToken(UUID uuid) throws ServerException;
+    User getUserByToken(UUID uuid) throws ServerException;
 }

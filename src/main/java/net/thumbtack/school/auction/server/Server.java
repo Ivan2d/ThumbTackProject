@@ -1,12 +1,9 @@
 package net.thumbtack.school.auction.server;
-// REVU сервер не знает классов модели и исключений
-// уберите эти 2 import
-import net.thumbtack.school.auction.dto.request.AddLotDtoRequest;
-import net.thumbtack.school.auction.dto.response.UserDtoResponse;
-import net.thumbtack.school.auction.exception.ServerException;
 import net.thumbtack.school.auction.service.BuyerService;
 import net.thumbtack.school.auction.service.SellerService;
 import net.thumbtack.school.auction.service.UserService;
+
+import java.util.UUID;
 
 public class Server {
 
@@ -14,27 +11,27 @@ public class Server {
     private SellerService sellerService = new SellerService();
     private UserService userService = new UserService();
 
-    public ServerResponse registerBuyer (String requestJsonString) throws ServerException {
+    public ServerResponse registerBuyer (String requestJsonString){
         return buyerService.registerUser(requestJsonString);
     }
-    public ServerResponse registerSeller (String requestJsonString) throws ServerException {
+    public ServerResponse registerSeller (String requestJsonString){
         return sellerService.registerUser(requestJsonString);
     }
 
-    public ServerResponse loginUser (String requestJsonString) throws ServerException {
+    public ServerResponse loginUser (String requestJsonString) {
         return userService.login(requestJsonString);
     }
 
-    public ServerResponse logoutUser (String requestJsonString) throws ServerException {
-        return userService.logout(requestJsonString);
+    public ServerResponse logoutUser (UUID token){
+        return userService.logout(token);
     }
 
-    public UserDtoResponse getUserByToken(String requestJsonString) throws ServerException {
-        return userService.getUserByToken(requestJsonString);
-    }
-
-    public ServerResponse addLot(String token, String requestJsonString) throws ServerException {
+    public ServerResponse addLot(String token, String requestJsonString) {
         return sellerService.addLotOnAuction(token, requestJsonString);
+    }
+
+    public ServerResponse deleteLot(String token, String requestJsonString) {
+        return sellerService.deleteLotOnAuction(token, requestJsonString);
     }
 }
 

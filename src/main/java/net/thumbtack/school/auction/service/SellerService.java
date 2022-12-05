@@ -71,7 +71,7 @@ public class SellerService {
             throw new ServerException(ServerErrorCode.TOKEN_NOT_FOUND);
         }
         UserDtoResponse userDtoResponse = userDao.getUserByToken(UUID.fromString(token));
-        User user = UserMapperFromLogin.MAPPER.toUser(userDtoResponse);
+        User user = userDao.get(userDtoResponse.getLogin());
         if (user == null) {
             throw new ServerException(ServerErrorCode.USER_NOT_FOUND);
         }

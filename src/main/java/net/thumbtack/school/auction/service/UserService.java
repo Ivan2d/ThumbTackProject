@@ -29,7 +29,7 @@ public class UserService {
         try {
             LoginDtoRequest loginBuyerDtoRequest = ServiceUtils.getObjectFromJson(requestJsonString, LoginDtoRequest.class);
             ServiceUtils.checkRequest(loginBuyerDtoRequest);
-            User user = UserMapperFromLogin.MAPPER.toUser(loginBuyerDtoRequest);
+            User user = userDao.get(loginBuyerDtoRequest.getLogin());
             if (user == null || !user.getPassword().equals(loginBuyerDtoRequest.getPassword())) {
                 throw new ServerException(ServerErrorCode.WRONG_LOGIN_OR_PASSWORD);
             }

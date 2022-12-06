@@ -17,9 +17,19 @@ import java.util.List;
 import java.util.UUID;
 
 public class BuyerService {
+    // REVU нет, не надо static
+    // кто его знает, вдруг еще один экземпляр Dao понадобится
+    // static вообще редк нужен (кроме констант)
+    // и должны быть серьезные причины для его употребления
     private static BuyerDao buyerDao = new BuyerDaoImpl();
     private static UserDao userDao = new UserDaoImpl();
+    // REVU тоже не надо static
+    // у нас нет потоков, а если бы были, то 2 потока использовали бы один и тот же экземпляр Gson
+    // а он вроде как потокобезопасен (то есть можно из нескольких потоков) по документации
+    // а в то же время пишут, что могут быть проблемы с потоками
+    // зачем они Вам нужны ? Проще сделать обычное поле
     private static Gson gson = new Gson();
+    // а вот эти действительно static. Константы.
     private static final int CODE_SUCCESS = 200;
     private static final int CODE_ERROR = 400;
 
@@ -33,14 +43,22 @@ public class BuyerService {
             EmptySuccessDtoResponse emptySuccessDtoResponse = new EmptySuccessDtoResponse();
             return new ServerResponse(CODE_SUCCESS, gson.toJson(emptySuccessDtoResponse));
         } catch (ServerException e) {
+            // REVU а так можно ?
+            // return new ServerResponse(e);
+            // и пусть ctor ServerResponse по ServerException все и делает
+            // не нужны тут подробности, скрывайте их
             return new ServerResponse(CODE_ERROR, e.getUserErrorCode().getErrorString());
         }
     }
 
     // REVU где передача токена ?
+    // REVU take - взять что-то. Тут get
+    // About и Some - лишнее
+    // getLotInfo
     public ServerResponse takeInfoAboutSomeLot(String token, String requestJsonString) {
         try {
             Buyer buyer = getBuyerByToken(token);
+            // REVU GetLotInfoRequest
             InfoAboutLotRequest dtoRequest = ServiceUtils.getObjectFromJson(requestJsonString, InfoAboutLotRequest.class);
             ServiceUtils.checkInfoSomeLotRequest(dtoRequest);
             Lot lot = buyerDao.getLot(dtoRequest.getIdSeller(), dtoRequest.getIdLot());

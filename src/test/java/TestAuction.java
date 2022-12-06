@@ -11,6 +11,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 public class TestAuction {
     private final Gson gson = new Gson();
+
     @Test
     public void testRegisterUser() {
         Server server = new Server();
@@ -334,7 +335,7 @@ public class TestAuction {
     }
 
     @Test
-    public void testAddPrice() {
+    public void testAddPriceNotExistLot() {
         Server server = new Server();
         RegisterDtoRequest dtoRequest = new RegisterDtoRequest(
                 "Никитаа",
@@ -361,6 +362,58 @@ public class TestAuction {
 
     }
 
+//    @Test
+//    public void testAddPriceExistLot() {
+//        Server server = new Server();
+//
+//        RegisterDtoRequest dtoRequest = new RegisterDtoRequest(
+//                "Никитаа",
+//                "Асаевичъ",
+//                "qwertyuiosspp",
+//                "firetreesddas"
+//        );
+//
+//        RegisterDtoRequest dtoRequestBuyer = new RegisterDtoRequest(
+//                "Никитаа",
+//                "Асаевичъ",
+//                "qwertyuiopp",
+//                "firetreesdpoisiodi"
+//        );
+//
+//        server.registerSeller(gson.toJson(dtoRequest));
+//        server.registerBuyer(gson.toJson(dtoRequestBuyer));
+//
+//        ServerResponse serverResponseSeller = server.loginUser
+//                (gson.toJson(new LoginDtoRequest
+//                        (dtoRequest.getLogin(), dtoRequest.getPassword())));
+//
+//        ServerResponse serverResponseBuyer = server.loginUser
+//                (gson.toJson(new LoginDtoRequest
+//                        (dtoRequestBuyer.getLogin(), dtoRequestBuyer.getPassword())));
+//
+//        LoginDtoResponse loginDtoResponseSeller = gson.fromJson
+//                (serverResponseSeller.getResponseData(), LoginDtoResponse.class);
+//
+//        String sellerUuid = loginDtoResponseSeller.getToken().toString();
+//
+//        LoginDtoResponse loginDtoResponseBuyer = gson.fromJson
+//                (serverResponseBuyer.getResponseData(), LoginDtoResponse.class);
+//
+//        String buyerUuid = loginDtoResponseBuyer.getToken().toString();
+//
+//        ServerResponse serverResponseAddLot = server.addLot(sellerUuid, gson.toJson
+//                (new AddLotDtoRequest("Table", "good_quality", 2000)));
+//        Assertions.assertEquals
+//                (serverResponseAddLot.getResponseData(), gson.toJson(new EmptySuccessDtoResponse()));
+//        Assertions.assertEquals(serverResponseAddLot.getResponseCode(), 200);
+//
+//        ServerResponse serverResponseAddPrice = server.addPrice(buyerUuid, gson.toJson
+//                (new AddPriceDtoRequest(200, 1)));
+//        Assertions.assertEquals
+//                (serverResponseAddPrice.getResponseData(), gson.toJson(new EmptySuccessDtoResponse()));
+//        Assertions.assertEquals(serverResponseAddPrice.getResponseCode(), 200);
+//
+//    }
 
 }
 

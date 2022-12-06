@@ -4,6 +4,7 @@ import net.thumbtack.school.auction.dao.UserDao;
 import net.thumbtack.school.auction.daoimpl.UserDaoImpl;
 import net.thumbtack.school.auction.dto.request.*;
 import net.thumbtack.school.auction.exception.ServerErrorCode;
+import net.thumbtack.school.auction.mapper.BuyerMapperFromBuyerDto;
 import net.thumbtack.school.auction.mapper.BuyerMapperFromRegister;
 import net.thumbtack.school.auction.model.Lot;
 import net.thumbtack.school.auction.model.Price;
@@ -79,6 +80,18 @@ public class BuyerService {
             return new ServerResponse(CODE_ERROR, e.getUserErrorCode().getErrorString());
         }
 
+    }
+
+    public ServerResponse getBuyerByTokenResponse(String token) {
+       try {
+           Buyer buyer = getBuyerByToken(token);
+           GetBuyerByTokenDtoResponse getBuyerByTokenDtoResponse =
+                   BuyerMapperFromBuyerDto.MAPPER.fromBuyer(buyer);
+           return new ServerResponse(CODE_SUCCESS, gson.toJson(getBuyerByTokenDtoResponse));
+       }
+       catch (ServerException e){
+           return new ServerResponse(e);
+       }
     }
 
     private Buyer getBuyerByToken(String token) throws ServerException {

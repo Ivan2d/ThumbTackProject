@@ -11,7 +11,7 @@ import java.util.List;
 @Setter
 @Getter
 public class Lot {
-    private int id;
+    private int id = 1;
     private List<Category> categories = new ArrayList<>();
     private String name;
     private String description;

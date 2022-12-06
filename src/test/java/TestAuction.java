@@ -180,6 +180,14 @@ public class TestAuction extends TestCleanDatabase {
         ServerResponse logoutUserResponse = server.logoutUser(loginDtoResponse.getToken());
         Assertions.assertEquals(logoutUserResponse.getResponseCode(), 200);
         Assertions.assertEquals(logoutUserResponse.getResponseData(), gson.toJson(new EmptySuccessDtoResponse()));
+
+        ServerResponse getBuyerDtoUnexistedToken = server.getBuyerDtoResponse
+                (String.valueOf(loginDtoResponse.getToken()));
+
+        Assertions.assertEquals(getBuyerDtoUnexistedToken.getResponseCode(), 400);
+        Assertions.assertEquals(getBuyerDtoUnexistedToken.getResponseData(), "This user don't exist");
+
+
     }
 
     @Test
@@ -278,7 +286,7 @@ public class TestAuction extends TestCleanDatabase {
         Assertions.assertEquals(serverResponseAddLot.getResponseCode(), 200);
 
         ServerResponse serverResponseAddPrice = server.addPrice(buyerUuid, gson.toJson
-                (new AddPriceDtoRequest(200, 2)));
+                (new AddPriceDtoRequest(200, 1)));
         Assertions.assertEquals
                 (serverResponseAddPrice.getResponseData(), gson.toJson(new EmptySuccessDtoResponse()));
         Assertions.assertEquals(serverResponseAddPrice.getResponseCode(), 200);

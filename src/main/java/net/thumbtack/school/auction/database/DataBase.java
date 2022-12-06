@@ -71,8 +71,8 @@ public class DataBase {
         //    for(Category item: lot.getCategories()){
         //        lotMultiValuedMapByCategoryId.put(item.getId(), lot);
         //    }
-        lot.setId(nextLotId++);
         lotById.put(lot.getId(), lot);
+        lot.setId(nextLotId++);
     }
 
     public void deleteLot(int id) throws ServerException {

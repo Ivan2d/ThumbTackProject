@@ -39,6 +39,10 @@ public class Server {
     public ServerResponse addPrice(String token, String requestJsonString) {
         return buyerService.addPrice(token, requestJsonString);
     }
+
+    public ServerResponse getBuyerDtoResponse(String token) {
+        return buyerService.getBuyerByTokenResponse(token);
+    }
     public void clear() {
         debugService.clear();
     }

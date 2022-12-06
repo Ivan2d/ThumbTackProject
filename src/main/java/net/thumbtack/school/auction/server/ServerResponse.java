@@ -21,7 +21,7 @@ public class ServerResponse
     }
 
     public ServerResponse(ServerException exception){
-        setResponseCode(responseCode);
+        setResponseCode(400);
         setResponseData(exception.getUserErrorCode().getErrorString());
     }
 }

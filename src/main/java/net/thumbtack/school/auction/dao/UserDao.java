@@ -13,4 +13,5 @@ public interface UserDao {
     User getByLogin(String login) throws ServerException;
 
     User getUserByToken(UUID uuid) throws ServerException;
+    void clear();
 }

@@ -6,7 +6,6 @@ public interface SellerDao {
       void insert(User seller) throws ServerException;
       User getByLogin(String login) throws ServerException;
       void addLot(Lot lot) throws ServerException;
-
       void deleteLot(int id) throws ServerException;
 }
 

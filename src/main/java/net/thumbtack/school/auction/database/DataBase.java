@@ -99,5 +99,16 @@ public class DataBase {
            priceById.put(price.getBid(), price);
     }
 
+    public void clear(){
+        userByLogin.clear();
+        userByToken.clear();
+        userByID.clear();
+        lotsBySeller.clear();
+        lotById.clear();
+        lotsByCategoryId.clear();
+        priceById.clear();
+        categoryById.clear();
+    }
+
 }
 

@@ -1,10 +1,8 @@
 package net.thumbtack.school.auction.mapper;
-
 import net.thumbtack.school.auction.dto.request.RegisterDtoRequest;
 import net.thumbtack.school.auction.model.Seller;
 import org.mapstruct.InheritInverseConfiguration;
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 
 @Mapper

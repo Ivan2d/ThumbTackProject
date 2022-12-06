@@ -1,4 +1,5 @@
 package net.thumbtack.school.auction.daoimpl;
+import lombok.Data;
 import net.thumbtack.school.auction.dao.UserDao;
 import net.thumbtack.school.auction.database.DataBase;
 import net.thumbtack.school.auction.exception.ServerException;
@@ -24,5 +25,10 @@ public class UserDaoImpl implements UserDao {
     @Override
     public User getUserByToken(UUID uuid) throws ServerException {
         return DataBase.getInstance().getByToken(uuid);
+    }
+
+    @Override
+    public void clear() {
+        DataBase.getInstance().clear();
     }
 }

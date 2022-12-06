@@ -1,5 +1,6 @@
 package net.thumbtack.school.auction.server;
 import net.thumbtack.school.auction.service.BuyerService;
+import net.thumbtack.school.auction.service.DebugService;
 import net.thumbtack.school.auction.service.SellerService;
 import net.thumbtack.school.auction.service.UserService;
 
@@ -10,6 +11,7 @@ public class Server {
     private BuyerService buyerService = new BuyerService();
     private SellerService sellerService = new SellerService();
     private UserService userService = new UserService();
+    private DebugService debugService = new DebugService();
 
     public ServerResponse registerBuyer (String requestJsonString){
         return buyerService.registerUser(requestJsonString);
@@ -36,6 +38,9 @@ public class Server {
 
     public ServerResponse addPrice(String token, String requestJsonString) {
         return buyerService.addPrice(token, requestJsonString);
+    }
+    public void clear() {
+        debugService.clear();
     }
 }
 

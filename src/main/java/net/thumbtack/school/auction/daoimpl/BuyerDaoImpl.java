@@ -3,9 +3,9 @@ import net.thumbtack.school.auction.dao.BuyerDao;
 import net.thumbtack.school.auction.database.DataBase;
 import net.thumbtack.school.auction.exception.ServerException;
 import net.thumbtack.school.auction.model.Lot;
+import net.thumbtack.school.auction.model.Price;
 import net.thumbtack.school.auction.model.User;
-
-import java.util.List;
+import java.util.Collection;
 
 public class BuyerDaoImpl implements BuyerDao
 {
@@ -14,28 +14,23 @@ public class BuyerDaoImpl implements BuyerDao
         DataBase.getInstance().insert(user);
     }
     @Override
-    public User get(String login) {
-        return DataBase.getInstance().get(login);
+    public User getByLogin(String login) {
+        return DataBase.getInstance().getByLogin(login);
     }
 
     @Override
-    public Lot getLot(int idSeller, int idLot) throws ServerException {
-       return DataBase.getInstance().getLotBySeller(idSeller, idLot);
+    public Lot getLot(int idLot) throws ServerException {
+       return DataBase.getInstance().getLotBySeller(idLot);
     }
 
     @Override
-    public List<Lot> getLotListByCategory(int idCategory) {
+    public Collection<Lot> getLotListByCategory(int idCategory) {
         return DataBase.getInstance().getListByCategory(idCategory);
     }
 
     @Override
-    public void addPrice(int idBuyer, int value, int idLot) throws ServerException {
-        DataBase.getInstance().addPrice(idBuyer, value, idLot);
-    }
-
-    @Override
-    public void deletePrice(int idPrice) throws ServerException {
-        DataBase.getInstance().deletePrice(idPrice);
+    public void addPrice(Price price) {
+        DataBase.getInstance().addPrice(price);
     }
 
 }

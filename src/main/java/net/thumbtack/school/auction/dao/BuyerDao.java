@@ -1,17 +1,15 @@
 package net.thumbtack.school.auction.dao;
 import net.thumbtack.school.auction.exception.ServerException;
 import net.thumbtack.school.auction.model.Lot;
+import net.thumbtack.school.auction.model.Price;
 import net.thumbtack.school.auction.model.User;
 
-import java.util.List;
-
+import java.util.Collection;
 public interface BuyerDao {
     void insert(User buyer) throws ServerException;
-    User get(String login) throws ServerException;
-    Lot getLot(int idSeller, int idLot) throws ServerException;
-    List<Lot> getLotListByCategory(int idCategory);
-    void addPrice(int idSeller, int value, int idLot) throws ServerException;
-
-    void deletePrice(int idPrice) throws ServerException;
+    User getByLogin(String login) throws ServerException;
+    Lot getLot(int idLot) throws ServerException;
+    Collection<Lot> getLotListByCategory(int idCategory);
+    void addPrice(Price price) throws ServerException;
 
 }

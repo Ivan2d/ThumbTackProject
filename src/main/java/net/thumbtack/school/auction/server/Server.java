@@ -37,9 +37,5 @@ public class Server {
     public ServerResponse addPrice(String token, String requestJsonString) {
         return buyerService.addPrice(token, requestJsonString);
     }
-
-    public ServerResponse deletePrice(String token, String requestJsonString) {
-        return buyerService.deletePrice(token, requestJsonString);
-    }
 }
 

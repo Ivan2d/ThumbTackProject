@@ -2,6 +2,8 @@ package net.thumbtack.school.auction.server;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import net.thumbtack.school.auction.exception.ServerException;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -16,5 +18,10 @@ public class ServerResponse
             responseCode = reCode;
             responseData = reData;
         }
+    }
+
+    public ServerResponse(ServerException exception){
+        setResponseCode(responseCode);
+        setResponseData(exception.getUserErrorCode().getErrorString());
     }
 }

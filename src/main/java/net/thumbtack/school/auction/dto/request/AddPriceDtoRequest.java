@@ -9,7 +9,6 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class AddPriceDtoRequest {
-    private int buyerID;
     private int value;
-    private int lotID;
+    private int lotId;
 }

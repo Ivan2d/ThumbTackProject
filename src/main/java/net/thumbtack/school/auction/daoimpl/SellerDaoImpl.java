@@ -13,8 +13,8 @@ public class SellerDaoImpl implements SellerDao
     }
 
     @Override
-    public User get(String login) {
-        return DataBase.getInstance().get(login);
+    public User getByLogin(String login) {
+        return DataBase.getInstance().getByLogin(login);
     }
 
     @Override
@@ -23,7 +23,7 @@ public class SellerDaoImpl implements SellerDao
     }
 
     @Override
-    public void deleteLot(int ID) throws ServerException {
-        DataBase.getInstance().deleteLot(ID);
+    public void deleteLot(int id) throws ServerException {
+        DataBase.getInstance().deleteLot(id);
     }
 }

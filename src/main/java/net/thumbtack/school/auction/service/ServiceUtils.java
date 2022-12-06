@@ -53,25 +53,25 @@ public class ServiceUtils {
     }
 
     public static void checkDeleteLotRequest(DeleteLotDtoRequest request) throws ServerException{
-        if (request.getLotID() <= 0){
+        if (request.getLotId() <= 0){
             throw new ServerException(ServerErrorCode.ID_LESSER_THAN_ZERO);
         }
     }
 
-    public static void checkInfoSomeLotRequest(InfoAboutLotRequest request) throws ServerException{
-        if(request.getIdSeller() <= 0 || request.getIdLot() <= 0){
+    public static void checkInfoSomeLotRequest(GetLotInfoRequest request) throws ServerException{
+        if(request.getIdLot() <= 0){
             throw new ServerException(ServerErrorCode.ID_LESSER_THAN_ZERO);
         }
     }
 
-    public static void checkInfoAllLotsRequest(InfoAboutLotsByCategory request) throws  ServerException{
+    public static void checkInfoAllLotsRequest(GetLotsInfoByCategoryRequest request) throws  ServerException{
         if (request.getIdCategory() <= 0){
             throw new ServerException(ServerErrorCode.ID_LESSER_THAN_ZERO);
         }
     }
 
     public static void checkAddPrice(AddPriceDtoRequest request) throws  ServerException{
-        if(request.getLotID() <= 0){
+        if(request.getLotId() <= 0){
             throw new ServerException(ServerErrorCode.ID_LESSER_THAN_ZERO);
         }
         if(request.getValue() <= 0){

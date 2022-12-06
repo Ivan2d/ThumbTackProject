@@ -8,10 +8,6 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-// REVU GetLotInfoRequest
-public class InfoAboutLotRequest {
+public class GetLotInfoRequest {
     private int idLot;
-    // REVU лишнее. Хватит и idLot
-    // по idLot можно всегда найти его Seller
-    private int idSeller;
 }

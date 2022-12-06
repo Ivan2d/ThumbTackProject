@@ -9,7 +9,6 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-// REVU GetLotsInfoByCategoryRequest
-public class InfoAboutLotsByCategory {
+public class GetLotsInfoByCategoryRequest {
     private int idCategory;
 }

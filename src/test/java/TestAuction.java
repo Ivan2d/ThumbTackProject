@@ -226,7 +226,7 @@ public class TestAuction {
         LoginDtoResponse loginDtoResponse = gson.fromJson
                 (response.getResponseData(), LoginDtoResponse.class);
 
-        AddPriceDtoRequest priceDtoRequest = new AddPriceDtoRequest(1, 2000, 1);
+        AddPriceDtoRequest priceDtoRequest = new AddPriceDtoRequest(2000, 1);
 
         ServerResponse serverResponse = server.addPrice
                 (String.valueOf(loginDtoResponse.getToken()), gson.toJson(priceDtoRequest));
@@ -333,33 +333,33 @@ public class TestAuction {
                 (addLotNegativeValueForSellResponse.getResponseData(), "Value can't be < 0");
     }
 
-//    @Test
-//    public void testAddPrice() {
-//        Server server = new Server();
-//        RegisterDtoRequest dtoRequest = new RegisterDtoRequest(
-//                "Никитаа",
-//                "Асаевичъ",
-//                "weweweqwewqe",
-//                "firetreesd"
-//        );
-//
-//        server.registerBuyer(gson.toJson(dtoRequest));
-//        ServerResponse serverResponse = server.loginUser
-//                (gson.toJson(new LoginDtoRequest
-//                        (dtoRequest.getLogin(), dtoRequest.getPassword())));
-//
-//        LoginDtoResponse loginDtoResponse = gson.fromJson
-//                (serverResponse.getResponseData(), LoginDtoResponse.class);
-//
-//        String uuid = loginDtoResponse.getToken().toString();
-//
-//        AddPriceDtoRequest priceDtoRequest = new AddPriceDtoRequest(3, 4000, 1);
-//
-//        ServerResponse addPriceServerResponse = server.addPrice(uuid, gson.toJson(priceDtoRequest));
-//        Assertions.assertEquals(addPriceServerResponse.getResponseData(), "This lot not found");
-//        Assertions.assertEquals(addPriceServerResponse.getResponseCode(), 400);
-//
-//    }
+    @Test
+    public void testAddPrice() {
+        Server server = new Server();
+        RegisterDtoRequest dtoRequest = new RegisterDtoRequest(
+                "Никитаа",
+                "Асаевичъ",
+                "weweweqwewqe",
+                "firetreesd"
+        );
+
+        server.registerBuyer(gson.toJson(dtoRequest));
+        ServerResponse serverResponse = server.loginUser
+                (gson.toJson(new LoginDtoRequest
+                        (dtoRequest.getLogin(), dtoRequest.getPassword())));
+
+        LoginDtoResponse loginDtoResponse = gson.fromJson
+                (serverResponse.getResponseData(), LoginDtoResponse.class);
+
+        String uuid = loginDtoResponse.getToken().toString();
+
+        AddPriceDtoRequest priceDtoRequest = new AddPriceDtoRequest(2000, 1);
+
+        ServerResponse addPriceServerResponse = server.addPrice(uuid, gson.toJson(priceDtoRequest));
+        Assertions.assertEquals(addPriceServerResponse.getResponseData(), "This lot not found");
+        Assertions.assertEquals(addPriceServerResponse.getResponseCode(), 400);
+
+    }
 
 
 }

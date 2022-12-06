@@ -4,9 +4,9 @@ import net.thumbtack.school.auction.model.Lot;
 import net.thumbtack.school.auction.model.User;
 public interface SellerDao {
       void insert(User seller) throws ServerException;
-      User get(String login) throws ServerException;
+      User getByLogin(String login) throws ServerException;
       void addLot(Lot lot) throws ServerException;
 
-      void deleteLot(int ID) throws ServerException;
+      void deleteLot(int id) throws ServerException;
 }
 

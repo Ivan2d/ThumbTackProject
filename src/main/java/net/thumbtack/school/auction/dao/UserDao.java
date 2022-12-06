@@ -10,7 +10,7 @@ public interface UserDao {
 
     void logout(UUID token) throws ServerException;
 
-    User get(String login) throws ServerException;
+    User getByLogin(String login) throws ServerException;
 
     User getUserByToken(UUID uuid) throws ServerException;
 }

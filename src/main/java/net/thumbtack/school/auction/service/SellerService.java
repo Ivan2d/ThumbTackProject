@@ -19,11 +19,11 @@ import java.util.UUID;
 
 public class SellerService {
 
-    private static SellerDao sellerDao = new SellerDaoImpl();
-    private static UserDao userDao = new UserDaoImpl();
+    private SellerDao sellerDao = new SellerDaoImpl();
+    private UserDao userDao = new UserDaoImpl();
     private static final int CODE_SUCCESS = 200;
     private static final int CODE_ERROR = 400;
-    private static Gson gson = new Gson();
+    private static final Gson gson = new Gson();
 
     public ServerResponse registerUser(String requestJsonString) {
         try {
@@ -56,8 +56,8 @@ public class SellerService {
             Seller seller = getSellerByToken(token);
             DeleteLotDtoRequest dtoRequest = ServiceUtils.getObjectFromJson(requestJsonString, DeleteLotDtoRequest.class);
             ServiceUtils.checkDeleteLotRequest(dtoRequest);
-            int ID = dtoRequest.getLotID();
-            sellerDao.deleteLot(ID);
+            int id = dtoRequest.getLotId();
+            sellerDao.deleteLot(id);
             return new ServerResponse(CODE_SUCCESS, gson.toJson(new EmptySuccessDtoResponse()));
         } catch (ServerException e) {
             return new ServerResponse(CODE_ERROR, e.getUserErrorCode().getErrorString());

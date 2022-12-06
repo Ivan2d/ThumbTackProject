@@ -4,7 +4,6 @@ import net.thumbtack.school.auction.dao.UserDao;
 import net.thumbtack.school.auction.daoimpl.UserDaoImpl;
 import net.thumbtack.school.auction.dto.request.LoginDtoRequest;
 import net.thumbtack.school.auction.dto.response.EmptySuccessDtoResponse;
-import net.thumbtack.school.auction.dto.response.ErrorDtoResponse;
 import net.thumbtack.school.auction.dto.response.LoginDtoResponse;
 import net.thumbtack.school.auction.exception.ServerErrorCode;
 import net.thumbtack.school.auction.exception.ServerException;
@@ -14,7 +13,7 @@ import net.thumbtack.school.auction.server.ServerResponse;
 import java.util.UUID;
 
 public class UserService {
-    private static final UserDao userDao = new UserDaoImpl();
+    private UserDao userDao = new UserDaoImpl();
     private static final int CODE_SUCCESS = 200;
     private static final int CODE_ERROR = 400;
     private static final Gson gson = new Gson();
@@ -23,7 +22,7 @@ public class UserService {
         try {
             LoginDtoRequest loginBuyerDtoRequest = ServiceUtils.getObjectFromJson(requestJsonString, LoginDtoRequest.class);
             ServiceUtils.checkRequest(loginBuyerDtoRequest);
-            User user = userDao.get(loginBuyerDtoRequest.getLogin());
+            User user = userDao.getByLogin(loginBuyerDtoRequest.getLogin());
             if (user == null || !user.getPassword().equals(loginBuyerDtoRequest.getPassword())) {
                 throw new ServerException(ServerErrorCode.WRONG_LOGIN_OR_PASSWORD);
             }

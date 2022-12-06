@@ -10,6 +10,5 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class DeleteLotDtoRequest {
-    // REVU lotId
-    private int lotID;
+    private int lotId;
 }

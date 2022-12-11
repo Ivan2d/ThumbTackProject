@@ -6,15 +6,37 @@ import org.apache.commons.collections4.BidiMap;
 import org.apache.commons.collections4.MultiValuedMap;
 import org.apache.commons.collections4.bidimap.DualHashBidiMap;
 import org.apache.commons.collections4.multimap.HashSetValuedHashMap;
-
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.*;
 
 public class DataBase {
 
     private static DataBase ourInstance = new DataBase();
 
-    public static DataBase getInstance() {
+    public static synchronized DataBase getInstance() {
+        if (ourInstance == null) {
+            ourInstance = new DataBase();
+        }
         return ourInstance;
+    }
+
+    private DataBase() {
+        try {
+            addCategoryToMap(Files.readAllLines
+                    (Path.of("categories.txt")));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private void addCategoryToMap(List<String> categories) {
+        for(String category: categories){
+            categoryById.put(nextCategoryId, new Category(nextCategoryId, category));
+            nextCategoryId++;
+        }
     }
 
     private Map<Integer, User> userByID = new HashMap<>();
@@ -24,6 +46,7 @@ public class DataBase {
     private MultiValuedMap<Seller, Lot> lotsBySeller = new HashSetValuedHashMap<>();
 
     private MultiValuedMap<Integer, Lot> lotsByCategoryId = new HashSetValuedHashMap<>();
+    private MultiValuedMap<Lot, Category> lotWithCategories = new HashSetValuedHashMap<>();
     private Map<Integer, Lot> lotById = new HashMap<>();
 
     private Map<Integer, Price> priceById = new HashMap<>();
@@ -32,6 +55,7 @@ public class DataBase {
 
     private int nextUserId = 1;
     private int nextLotId = 1;
+    private int nextCategoryId = 1;
 
 
     public void insert(User user) throws ServerException {
@@ -62,17 +86,50 @@ public class DataBase {
         return userByLogin.get(login);
     }
 
-    public User getByToken(UUID uuid) throws ServerException {
+    public User getByToken(UUID uuid) {
         return userByToken.get(uuid);
     }
 
-    public void addLot(Lot lot) throws ServerException {
+    public void addLot(Lot lot) {
         lotsBySeller.put(lot.getSeller(), lot);
-        //    for(Category item: lot.getCategories()){
-        //        lotMultiValuedMapByCategoryId.put(item.getId(), lot);
-        //    }
         lotById.put(lot.getId(), lot);
         lot.setId(nextLotId++);
+    }
+    
+    public void addCategoryToLot(int idLot, int idCategory) throws ServerException {
+        Lot lot = lotById.get(idLot);
+        if (lot == null) {
+            throw new ServerException(ServerErrorCode.LOT_NOT_FOUND);
+        }
+        Category category = categoryById.get(idCategory);
+        if (category == null || !categoryById.containsKey(idCategory)){
+            throw new ServerException(ServerErrorCode.CATEGORY_NOT_FOUND);
+        }
+        if(lot.getCategories().contains(category)){
+            throw new ServerException(ServerErrorCode.CATEGORY_ALREADY_HERE);
+        }
+        List<Category> categoryList = lot.getCategories();
+        categoryList.add(category);
+        lot.setCategories(categoryList);
+        lotWithCategories.put(lot, category);
+    }
+
+    public void deleteCategoryFromLot(int idLot, int idCategory) throws ServerException {
+        Lot lot = lotById.get(idLot);
+        if (lot == null) {
+            throw new ServerException(ServerErrorCode.LOT_NOT_FOUND);
+        }
+        Category category = categoryById.get(idCategory);
+        if (category == null || !categoryById.containsKey(idCategory)){
+            throw new ServerException(ServerErrorCode.CATEGORY_NOT_FOUND);
+        }
+        List<Category> categoryList = lot.getCategories();
+        if(!categoryList.contains(category)){
+            throw new ServerException(ServerErrorCode.CATEGORY_NOT_FOUND);
+        }
+        categoryList.remove(category);
+        lot.setCategories(categoryList);
+        lotWithCategories.remove(category);
     }
 
     public void deleteLot(int id) throws ServerException {
@@ -107,8 +164,7 @@ public class DataBase {
         lotById.clear();
         lotsByCategoryId.clear();
         priceById.clear();
-        categoryById.clear();
+        //categoryById.clear();
     }
-
 }
 

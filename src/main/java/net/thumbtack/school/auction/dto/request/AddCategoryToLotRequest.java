@@ -8,7 +8,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class AddPriceDtoRequest {
-    private int value;
+public class AddCategoryToLotRequest {
     private int idLot;
+    private int idCategory;
 }

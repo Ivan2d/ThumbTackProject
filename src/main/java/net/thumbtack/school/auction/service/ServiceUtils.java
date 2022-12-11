@@ -53,7 +53,7 @@ public class ServiceUtils {
     }
 
     public static void checkDeleteLotRequest(DeleteLotDtoRequest request) throws ServerException{
-        if (request.getLotId() <= 0){
+        if (request.getIdLot() <= 0){
             throw new ServerException(ServerErrorCode.ID_LESSER_THAN_ZERO);
         }
     }
@@ -71,7 +71,7 @@ public class ServiceUtils {
     }
 
     public static void checkAddPrice(AddPriceDtoRequest request) throws  ServerException{
-        if(request.getLotId() <= 0){
+        if(request.getIdLot() <= 0){
             throw new ServerException(ServerErrorCode.ID_LESSER_THAN_ZERO);
         }
         if(request.getValue() <= 0){
@@ -88,6 +88,17 @@ public class ServiceUtils {
         }
     }
 
+    public static void checkAddCategoryToLot(AddCategoryToLotRequest request) throws ServerException {
+        if (request.getIdCategory() <= 0 || request.getIdLot() <= 0){
+            throw new ServerException(ServerErrorCode.VALUE_LESSER_THAN_ZERO);
+        }
+    }
+
+    public static void checkDeleteCategoryFromLot(DeleteCategoryFromLotRequest request) throws ServerException {
+        if (request.getIdCategory() <= 0 || request.getIdLot() <= 0){
+            throw new ServerException(ServerErrorCode.VALUE_LESSER_THAN_ZERO);
+        }
+    }
 
 
 }

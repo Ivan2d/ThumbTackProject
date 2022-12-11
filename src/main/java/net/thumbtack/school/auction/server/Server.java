@@ -36,6 +36,14 @@ public class Server {
         return sellerService.deleteLotOnAuction(token, requestJsonString);
     }
 
+    public ServerResponse addCategoryToLot(String token, String requestJsonString) {
+        return sellerService.addCategoryToLot(token, requestJsonString);
+    }
+
+    public ServerResponse deleteCategoryFromLot(String token, String requestJsonString) {
+        return sellerService.deleteCategoryFromLot(token, requestJsonString);
+    }
+
     public ServerResponse addPrice(String token, String requestJsonString) {
         return buyerService.addPrice(token, requestJsonString);
     }

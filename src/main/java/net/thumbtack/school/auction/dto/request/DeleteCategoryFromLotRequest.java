@@ -1,4 +1,5 @@
 package net.thumbtack.school.auction.dto.request;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -8,7 +9,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class AddPriceDtoRequest {
-    private int value;
+public class DeleteCategoryFromLotRequest {
     private int idLot;
+    private int idCategory;
 }

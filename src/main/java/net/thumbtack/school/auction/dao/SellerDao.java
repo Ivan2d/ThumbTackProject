@@ -7,5 +7,9 @@ public interface SellerDao {
       User getByLogin(String login) throws ServerException;
       void addLot(Lot lot) throws ServerException;
       void deleteLot(int id) throws ServerException;
+
+      void addCategoryToLot(int idLot, int idCategory) throws ServerException;
+
+      void deleteCategoryFromLot(int idLot, int idCategory) throws ServerException;
 }
 

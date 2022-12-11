@@ -19,6 +19,8 @@ public enum ServerErrorCode {
     NOT_A_SELLER("This user not seller"),
     NOT_A_BUYER("This user not buyer"),
     PRICE_NOT_FOUND("This price don't exist"),
+    CATEGORY_ALREADY_HERE("Lot already in this category"),
+    CATEGORY_NOT_FOUND("This category not found"),
     ID_LESSER_THAN_ZERO("ID can't be < 0"),
     EMPTY_LIST("This list can't be empty"),
     EMPTY_DESCRIPTION("Empty description"),

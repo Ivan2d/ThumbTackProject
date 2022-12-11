@@ -18,12 +18,22 @@ public class SellerDaoImpl implements SellerDao
     }
 
     @Override
-    public void addLot(Lot lot) throws ServerException {
+    public void addLot(Lot lot) {
         DataBase.getInstance().addLot(lot);
     }
 
     @Override
     public void deleteLot(int id) throws ServerException {
         DataBase.getInstance().deleteLot(id);
+    }
+
+    @Override
+    public void addCategoryToLot(int idLot, int idCategory) throws ServerException {
+        DataBase.getInstance().addCategoryToLot(idLot, idCategory);
+    }
+
+    @Override
+    public void deleteCategoryFromLot(int idLot, int idCategory) throws ServerException {
+        DataBase.getInstance().deleteCategoryFromLot(idLot, idCategory);
     }
 }

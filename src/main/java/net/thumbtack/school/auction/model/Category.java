@@ -11,7 +11,8 @@ import lombok.*;
 public class Category {
     private int id;
     private String name;
-    public Category(String name){
+    public Category(Integer id, String name){
+        setId(id);
         setName(name);
     }
 }

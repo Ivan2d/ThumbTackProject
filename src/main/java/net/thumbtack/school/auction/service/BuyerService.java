@@ -48,12 +48,12 @@ public class BuyerService {
             Lot lot = buyerDao.getLot(dtoRequest.getIdLot());
             return new ServerResponse(CODE_SUCCESS, gson.toJson(lot));
         } catch (ServerException e) {
-            return new ServerResponse(CODE_ERROR, e.getUserErrorCode().getErrorString());
+            return new ServerResponse(e);
         }
 
     }
 
-    public ServerResponse takeInfoAboutAllLotsByCategory(String token, String requestJsonString) {
+    public ServerResponse getLotsInfoByCategory(String token, String requestJsonString) {
         try {
             Buyer buyer = getBuyerByToken(token);
             GetLotsInfoByCategoryRequest dtoRequest = ServiceUtils.getObjectFromJson
@@ -62,7 +62,7 @@ public class BuyerService {
             Collection<Lot> list = buyerDao.getLotListByCategory(dtoRequest.getIdCategory());
             return new ServerResponse(CODE_SUCCESS, gson.toJson(list));
         } catch (ServerException e) {
-            return new ServerResponse(CODE_ERROR, e.getUserErrorCode().getErrorString());
+            return new ServerResponse(e);
         }
 
     }
@@ -73,11 +73,11 @@ public class BuyerService {
             AddPriceDtoRequest dtoRequest = ServiceUtils.getObjectFromJson
                     (requestJsonString, AddPriceDtoRequest.class);
             ServiceUtils.checkAddPrice(dtoRequest);
-            Lot lot = buyerDao.getLot(dtoRequest.getLotId());
+            Lot lot = buyerDao.getLot(dtoRequest.getIdLot());
             buyerDao.addPrice(new Price(buyer, dtoRequest.getValue(), lot));
             return new ServerResponse(CODE_SUCCESS, gson.toJson(new EmptySuccessDtoResponse()));
         } catch (ServerException e) {
-            return new ServerResponse(CODE_ERROR, e.getUserErrorCode().getErrorString());
+            return new ServerResponse(e);
         }
 
     }

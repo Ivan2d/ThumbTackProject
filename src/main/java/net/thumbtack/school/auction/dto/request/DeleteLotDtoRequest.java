@@ -10,5 +10,5 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class DeleteLotDtoRequest {
-    private int lotId;
+    private int idLot;
 }

@@ -5,15 +5,23 @@ import net.thumbtack.school.auction.server.ServerResponse;
 import net.thumbtack.school.auction.dto.response.EmptySuccessDtoResponse;
 import net.thumbtack.school.auction.server.Server;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 
-public class TestAuction extends TestCleanDatabase {
+public class TestAuction {
 
+    Server server = new Server();
     private static final int SUCCESS_CODE = 200;
     private static final int ERROR_CODE = 400;
     private final Gson gson = new Gson();
+
+
+    @BeforeEach
+    public void clearDataBase() {
+        server.clear();
+    }
 
     @Test
     public void testRegisterUser() {
@@ -30,7 +38,7 @@ public class TestAuction extends TestCleanDatabase {
     }
 
     @Test
-    public void testRegisterUserWithNullOrEmptyName(){
+    public void testRegisterUserWithNullOrEmptyName() {
         RegisterDtoRequest nullFirstnameDtoRequest = new RegisterDtoRequest(
                 null,
                 "s",
@@ -77,7 +85,7 @@ public class TestAuction extends TestCleanDatabase {
     }
 
     @Test
-    public void testRegisterWithProblemLoginOrPassword(){
+    public void testRegisterWithProblemLoginOrPassword() {
         RegisterDtoRequest nullLoginRequest = new RegisterDtoRequest(
                 "sdffdg",
                 "rgrgrd",
@@ -126,7 +134,7 @@ public class TestAuction extends TestCleanDatabase {
 
 
     @Test
-    public void testLoginUser(){
+    public void testLoginUser() {
         RegisterDtoRequest dtoRequest = new RegisterDtoRequest(
                 "Никитаа",
                 "Асаевичъ",
@@ -146,7 +154,7 @@ public class TestAuction extends TestCleanDatabase {
     }
 
     @Test
-    public void testLoginWithoutRegister(){
+    public void testLoginWithoutRegister() {
         //logout невозможен из-за того, что мы не сможем получить токен
         //пока не зарегистрируемся и не залогинимся
 
@@ -161,7 +169,7 @@ public class TestAuction extends TestCleanDatabase {
     }
 
     @Test
-    public void testLoginAndLogoutUser(){
+    public void testLoginAndLogoutUser() {
         RegisterDtoRequest dtoRequest = new RegisterDtoRequest(
                 "Никитаа",
                 "Асаевичъ",
@@ -328,6 +336,7 @@ public class TestAuction extends TestCleanDatabase {
         Assertions.assertEquals(deleteResponse.getResponseCode(), 200);
         Assertions.assertEquals(deleteResponse.getResponseData(), gson.toJson(new EmptySuccessDtoResponse()));
     }
+
     @Test
     public void testAddLotWithProblemData() {
         RegisterDtoRequest dtoRequest = new RegisterDtoRequest(
@@ -415,6 +424,231 @@ public class TestAuction extends TestCleanDatabase {
 
     }
 
+    @Test
+    public void testAddCategoryToLot() {
+        Server server = new Server();
+        RegisterDtoRequest dtoRequest = new RegisterDtoRequest(
+                "Никитаа",
+                "Асаевичъ",
+                "prodavec20078",
+                "firetreesd"
+        );
+
+        server.registerSeller(gson.toJson(dtoRequest));
+
+        ServerResponse serverResponse = server.loginUser
+                (gson.toJson(new LoginDtoRequest
+                        (dtoRequest.getLogin(), dtoRequest.getPassword())));
+
+        LoginDtoResponse response = gson.fromJson
+                (serverResponse.getResponseData(), LoginDtoResponse.class);
+
+        String uuid = response.getToken().toString();
+        server.addLot(uuid, gson.toJson
+                (new AddLotDtoRequest("Table", "good_quality", 2000)));
+
+        AddCategoryToLotRequest addCategoryToLotRequest = new AddCategoryToLotRequest(1, 2);
+
+        ServerResponse addCategoryResponse = server.addCategoryToLot
+                (uuid, gson.toJson(addCategoryToLotRequest));
+
+        Assertions.assertEquals(addCategoryResponse.getResponseCode(), 200);
+        Assertions.assertEquals(addCategoryResponse.getResponseData(),
+                gson.toJson(new EmptySuccessDtoResponse()));
+    }
+
+    @Test
+    public void testAddCategoryToInexistedLot() {
+        RegisterDtoRequest dtoRequest = new RegisterDtoRequest(
+                "Никитаа",
+                "Асаевичъ",
+                "prodavec2007",
+                "firetreesd"
+        );
+
+        server.registerSeller(gson.toJson(dtoRequest));
+
+        ServerResponse serverResponse = server.loginUser
+                (gson.toJson(new LoginDtoRequest
+                        (dtoRequest.getLogin(), dtoRequest.getPassword())));
+
+        LoginDtoResponse response = gson.fromJson
+                (serverResponse.getResponseData(), LoginDtoResponse.class);
+
+        String uuid = response.getToken().toString();
+        server.addLot(uuid, gson.toJson
+                (new AddLotDtoRequest("Table", "good_quality", 2000)));
+
+        AddCategoryToLotRequest addCategoryToLotRequest = new AddCategoryToLotRequest(2, 1);
+
+        ServerResponse addCategoryResponse = server.addCategoryToLot
+                (uuid, gson.toJson(addCategoryToLotRequest));
+        Assertions.assertEquals(addCategoryResponse.getResponseCode(), 400);
+        Assertions.assertEquals(addCategoryResponse.getResponseData(), "This lot not found");
+    }
+
+    @Test
+    public void testAddInexistedCategoryToLot() {
+        RegisterDtoRequest dtoRequest = new RegisterDtoRequest(
+                "Никитаа",
+                "Асаевичъ",
+                "prodavec2007",
+                "firetreesd"
+        );
+
+        server.registerSeller(gson.toJson(dtoRequest));
+
+        ServerResponse serverResponse = server.loginUser
+                (gson.toJson(new LoginDtoRequest
+                        (dtoRequest.getLogin(), dtoRequest.getPassword())));
+
+        LoginDtoResponse response = gson.fromJson
+                (serverResponse.getResponseData(), LoginDtoResponse.class);
+
+        String uuid = response.getToken().toString();
+        server.addLot(uuid, gson.toJson
+                (new AddLotDtoRequest("Table", "good_quality", 2000)));
+
+        AddCategoryToLotRequest addCategoryToLotRequest = new AddCategoryToLotRequest(1, 10);
+
+        ServerResponse addCategoryResponse = server.addCategoryToLot
+                (uuid, gson.toJson(addCategoryToLotRequest));
+        Assertions.assertEquals(addCategoryResponse.getResponseCode(), 400);
+        Assertions.assertEquals(addCategoryResponse.getResponseData(), "This category not found");
+    }
+
+    @Test
+    public void testAddDuplicateCategoryToLot() {
+        RegisterDtoRequest dtoRequest = new RegisterDtoRequest(
+                "Никитаа",
+                "Асаевичъ",
+                "prodavec2007",
+                "firetreesd"
+        );
+
+        server.registerSeller(gson.toJson(dtoRequest));
+
+        ServerResponse serverResponse = server.loginUser
+                (gson.toJson(new LoginDtoRequest
+                        (dtoRequest.getLogin(), dtoRequest.getPassword())));
+
+        LoginDtoResponse response = gson.fromJson
+                (serverResponse.getResponseData(), LoginDtoResponse.class);
+
+        String uuid = response.getToken().toString();
+        server.addLot(uuid, gson.toJson
+                (new AddLotDtoRequest("Table", "good_quality", 2000)));
+
+        AddCategoryToLotRequest addCategoryToLotRequest = new AddCategoryToLotRequest(1, 1);
+
+        server.addCategoryToLot(uuid, gson.toJson(addCategoryToLotRequest));
+
+        AddCategoryToLotRequest addCategoryToLotRequestAgainRequest = new AddCategoryToLotRequest(1, 1);
+
+        ServerResponse addCategoryAgainResponse = server.addCategoryToLot
+                (uuid, gson.toJson(addCategoryToLotRequestAgainRequest));
+
+        Assertions.assertEquals(addCategoryAgainResponse.getResponseCode(), 400);
+        Assertions.assertEquals(addCategoryAgainResponse.getResponseData(), "Lot already in this category");
+    }
+
+    @Test
+    public void testDeleteInexistedCategoryFromLot() {
+        Server server = new Server();
+        RegisterDtoRequest dtoRequest = new RegisterDtoRequest(
+                "Никитаа",
+                "Асаевичъ",
+                "prodavec20078",
+                "firetreesd"
+        );
+
+        server.registerSeller(gson.toJson(dtoRequest));
+
+        ServerResponse serverResponse = server.loginUser
+                (gson.toJson(new LoginDtoRequest
+                        (dtoRequest.getLogin(), dtoRequest.getPassword())));
+
+        LoginDtoResponse response = gson.fromJson
+                (serverResponse.getResponseData(), LoginDtoResponse.class);
+
+        String uuid = response.getToken().toString();
+        server.addLot(uuid, gson.toJson
+                (new AddLotDtoRequest("Table", "good_quality", 2000)));
+
+        DeleteCategoryFromLotRequest request = new DeleteCategoryFromLotRequest(1, 1);
+
+        ServerResponse deleteInexistedCategoryResponse = server.deleteCategoryFromLot(uuid, gson.toJson(request));
+
+        Assertions.assertEquals(deleteInexistedCategoryResponse.getResponseCode(), 400);
+        Assertions.assertEquals(deleteInexistedCategoryResponse.getResponseData(), "This category not found");
+    }
+
+    @Test
+    public void testDeleteCategoryFromInexistedLot() {
+        Server server = new Server();
+        RegisterDtoRequest dtoRequest = new RegisterDtoRequest(
+                "Никитаа",
+                "Асаевичъ",
+                "prodavec20078",
+                "firetreesd"
+        );
+
+        server.registerSeller(gson.toJson(dtoRequest));
+
+        ServerResponse serverResponse = server.loginUser
+                (gson.toJson(new LoginDtoRequest
+                        (dtoRequest.getLogin(), dtoRequest.getPassword())));
+
+        LoginDtoResponse response = gson.fromJson
+                (serverResponse.getResponseData(), LoginDtoResponse.class);
+
+        String uuid = response.getToken().toString();
+        server.addLot(uuid, gson.toJson
+                (new AddLotDtoRequest("Table", "good_quality", 2000)));
+
+        DeleteCategoryFromLotRequest request = new DeleteCategoryFromLotRequest(2, 1);
+
+        ServerResponse deleteInexistedCategoryResponse = server.deleteCategoryFromLot(uuid, gson.toJson(request));
+
+        Assertions.assertEquals(deleteInexistedCategoryResponse.getResponseCode(), 400);
+        Assertions.assertEquals(deleteInexistedCategoryResponse.getResponseData(), "This lot not found");
+    }
+
+    @Test
+    public void testDeleteCategoryFromLot() {
+        Server server = new Server();
+        RegisterDtoRequest dtoRequest = new RegisterDtoRequest(
+                "Никитаа",
+                "Асаевичъ",
+                "prodavec20078",
+                "firetreesd"
+        );
+
+        server.registerSeller(gson.toJson(dtoRequest));
+
+        ServerResponse serverResponse = server.loginUser
+                (gson.toJson(new LoginDtoRequest
+                        (dtoRequest.getLogin(), dtoRequest.getPassword())));
+
+        LoginDtoResponse response = gson.fromJson
+                (serverResponse.getResponseData(), LoginDtoResponse.class);
+
+        String uuid = response.getToken().toString();
+        server.addLot(uuid, gson.toJson
+                (new AddLotDtoRequest("Table", "good_quality", 2000)));
+
+        AddCategoryToLotRequest addCategoryToLotRequest = new AddCategoryToLotRequest(1, 1);
+        server.addCategoryToLot(uuid, gson.toJson(addCategoryToLotRequest));
+
+        DeleteCategoryFromLotRequest request = new DeleteCategoryFromLotRequest(1, 1);
+        ServerResponse deleteInexistedCategoryResponse = server.deleteCategoryFromLot(uuid, gson.toJson(request));
+
+        Assertions.assertEquals(deleteInexistedCategoryResponse.getResponseCode(), 200);
+        Assertions.assertEquals
+                (deleteInexistedCategoryResponse.getResponseData(), gson.toJson(new EmptySuccessDtoResponse()));
+    }
+
 }
+
 
 

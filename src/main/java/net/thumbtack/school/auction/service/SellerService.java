@@ -33,7 +33,7 @@ public class SellerService {
             sellerDao.insert(seller);
             return new ServerResponse(CODE_SUCCESS, gson.toJson(new EmptySuccessDtoResponse()));
         } catch (ServerException e) {
-            return new ServerResponse(CODE_ERROR, e.getUserErrorCode().getErrorString());
+            return new ServerResponse(e);
         }
     }
 
@@ -46,7 +46,7 @@ public class SellerService {
             sellerDao.addLot(lot);
             return new ServerResponse(CODE_SUCCESS, gson.toJson(new EmptySuccessDtoResponse()));
         } catch (ServerException e) {
-            return new ServerResponse(CODE_ERROR, e.getUserErrorCode().getErrorString());
+            return new ServerResponse(e);
         }
     }
 
@@ -56,13 +56,43 @@ public class SellerService {
             Seller seller = getSellerByToken(token);
             DeleteLotDtoRequest dtoRequest = ServiceUtils.getObjectFromJson(requestJsonString, DeleteLotDtoRequest.class);
             ServiceUtils.checkDeleteLotRequest(dtoRequest);
-            int id = dtoRequest.getLotId();
+            int id = dtoRequest.getIdLot();
             sellerDao.deleteLot(id);
             return new ServerResponse(CODE_SUCCESS, gson.toJson(new EmptySuccessDtoResponse()));
         } catch (ServerException e) {
-            return new ServerResponse(CODE_ERROR, e.getUserErrorCode().getErrorString());
+            return new ServerResponse(e);
         }
     }
+
+    public ServerResponse addCategoryToLot(String token, String requestJsonString) {
+        try {
+            Seller seller = getSellerByToken(token);
+            AddCategoryToLotRequest dtoRequest = ServiceUtils.
+                    getObjectFromJson(requestJsonString, AddCategoryToLotRequest.class);
+            ServiceUtils.checkAddCategoryToLot(dtoRequest);
+            sellerDao.addCategoryToLot(dtoRequest.getIdLot(), dtoRequest.getIdCategory());
+            return new ServerResponse(CODE_SUCCESS, gson.toJson(new EmptySuccessDtoResponse()));
+        }
+        catch (ServerException e){
+            return new ServerResponse(e);
+        }
+    }
+
+    public ServerResponse deleteCategoryFromLot(String token, String requestJsonString) {
+        try {
+            Seller seller = getSellerByToken(token);
+            DeleteCategoryFromLotRequest dtoRequest = ServiceUtils.
+                    getObjectFromJson(requestJsonString, DeleteCategoryFromLotRequest.class);
+            ServiceUtils.checkDeleteCategoryFromLot(dtoRequest);
+            sellerDao.deleteCategoryFromLot(dtoRequest.getIdLot(), dtoRequest.getIdCategory());
+            return new ServerResponse(CODE_SUCCESS, gson.toJson(new EmptySuccessDtoResponse()));
+        }
+        catch (ServerException e){
+            return new ServerResponse(e);
+        }
+    }
+
+
 
     private Seller getSellerByToken(String token) throws ServerException {
         if (token == null){

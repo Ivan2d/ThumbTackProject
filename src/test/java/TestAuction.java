@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 public class TestAuction {
 
-    Server server = new Server();
+    private Server server = new Server();
     private static final int SUCCESS_CODE = 200;
     private static final int ERROR_CODE = 400;
     private final Gson gson = new Gson();
@@ -741,77 +741,74 @@ public class TestAuction {
         Assertions.assertEquals(getInfoResponse.getResponseCode(), 400);
     }
 
-//    @Test
-//    public void testGetListInfoLotFromCategory(){
-//        Server server = new Server();
-//        RegisterDtoRequest dtoRequest = new RegisterDtoRequest(
-//                "Никитаа",
-//                "Асаевичъ",
-//                "prodavec20078",
-//                "firetreesd"
-//        );
-//
-//        RegisterDtoRequest dtoRequestBuyer = new RegisterDtoRequest(
-//                "Никитаа",
-//                "Асаевичъ",
-//                "prodavec20078ff",
-//                "firetreesd"
-//        );
-//
-//        server.registerSeller(gson.toJson(dtoRequest));
-//
-//        server.registerBuyer(gson.toJson(dtoRequestBuyer));
-//
-//        ServerResponse serverResponse = server.loginUser
-//                (gson.toJson(new LoginDtoRequest
-//                        (dtoRequest.getLogin(), dtoRequest.getPassword())));
-//
-//        ServerResponse serverResponseBuyer = server.loginUser
-//                (gson.toJson(new LoginDtoRequest
-//                        (dtoRequestBuyer.getLogin(), dtoRequestBuyer.getPassword())));
-//
-//        LoginDtoResponse response = gson.fromJson
-//                (serverResponse.getResponseData(), LoginDtoResponse.class);
-//
-//        LoginDtoResponse responseBuyer = gson.fromJson
-//                (serverResponseBuyer.getResponseData(), LoginDtoResponse.class);
-//
-//        String uuid = response.getToken().toString();
-//        String uuidBuyer = responseBuyer.getToken().toString();
-//
-//        server.addLot(uuid, gson.toJson
-//                (new AddLotDtoRequest("Table", "good_quality", 2000)));
-//
-//        server.addLot(uuid, gson.toJson
-//                (new AddLotDtoRequest("Computer mouse", "good_quality", 2000)));
-//
-//        server.addLot(uuid, gson.toJson
-//                (new AddLotDtoRequest("Monitor", "good_quality", 2000)));
-//
-//        AddCategoryToLotRequest addCategoryToLotRequest = new
-//                AddCategoryToLotRequest(1, 2);
-//        server.addCategoryToLot(uuid, gson.toJson(addCategoryToLotRequest));
-//
-//        Assertions.assertEquals(server.addCategoryToLot
-//                (uuid, gson.toJson(addCategoryToLotRequest)).getResponseData(), 200);
-//
-//        AddCategoryToLotRequest addCategoryToLotRequestComputer = new
-//                AddCategoryToLotRequest(2, 4);
-//        server.addCategoryToLot(uuid, gson.toJson(addCategoryToLotRequestComputer));
-//
-//        AddCategoryToLotRequest addCategoryToLotRequestComputerNext = new
-//                AddCategoryToLotRequest(3, 4);
-//        server.addCategoryToLot(uuid, gson.toJson(addCategoryToLotRequestComputerNext));
-//
-//        ServerResponse listLotsResponse = server.getInfoLotByCategory
-//                (uuidBuyer, gson.toJson(new GetLotsInfoByCategoryRequest(4)));
-//
-//        Assertions.assertEquals(listLotsResponse.getResponseCode(), 200);
-//        Assertions.assertEquals(listLotsResponse.getResponseData(), " ");
-//
-//
-//
-//    }
+    @Test
+    public void testGetListInfoLotFromCategory(){
+        RegisterDtoRequest dtoRequest = new RegisterDtoRequest(
+                "Никитаа",
+                "Асаевичъ",
+                "prodavec20078",
+                "firetreesd"
+        );
+
+        RegisterDtoRequest dtoRequestBuyer = new RegisterDtoRequest(
+                "Никитаа",
+                "Асаевичъ",
+                "prodavec20078ff",
+                "firetreesd"
+        );
+
+        server.registerSeller(gson.toJson(dtoRequest));
+
+        server.registerBuyer(gson.toJson(dtoRequestBuyer));
+
+        ServerResponse serverResponse = server.loginUser
+                (gson.toJson(new LoginDtoRequest
+                        (dtoRequest.getLogin(), dtoRequest.getPassword())));
+
+        ServerResponse serverResponseBuyer = server.loginUser
+                (gson.toJson(new LoginDtoRequest
+                        (dtoRequestBuyer.getLogin(), dtoRequestBuyer.getPassword())));
+
+        LoginDtoResponse response = gson.fromJson
+                (serverResponse.getResponseData(), LoginDtoResponse.class);
+
+        LoginDtoResponse responseBuyer = gson.fromJson
+                (serverResponseBuyer.getResponseData(), LoginDtoResponse.class);
+
+        String uuid = response.getToken().toString();
+        String uuidBuyer = responseBuyer.getToken().toString();
+
+        server.addLot(uuid, gson.toJson
+                (new AddLotDtoRequest("Stol", "norm_quality", 3000)));
+
+        AddCategoryToLotRequest addCategoryToLotRequest = new
+                AddCategoryToLotRequest(1, 2);
+
+        Assertions.assertEquals(server.addCategoryToLot
+                        (uuid, gson.toJson(addCategoryToLotRequest)).
+                getResponseData(), gson.toJson(new EmptySuccessDtoResponse()));
+
+       server.addLot(uuid, gson.toJson
+               (new AddLotDtoRequest("Computer mouse", "good_quality", 500)));
+
+       Assertions.assertEquals(server.addCategoryToLot
+                (uuid, gson.toJson( new AddCategoryToLotRequest(2, 4)))
+                .getResponseData(), gson.toJson(new EmptySuccessDtoResponse()));
+
+        Assertions.assertEquals(server.addLot(uuid, gson.toJson
+                (new AddLotDtoRequest("Monitor", "good_quality", 6000)))
+                .getResponseData(), gson.toJson(new EmptySuccessDtoResponse()));
+
+
+        AddCategoryToLotRequest addCategoryToLotRequestComputerNext = new
+                AddCategoryToLotRequest(3, 4);
+        server.addCategoryToLot(uuid, gson.toJson(addCategoryToLotRequestComputerNext));
+
+        ServerResponse listLotsResponse = server.getInfoLotByCategory
+                (uuidBuyer, gson.toJson(new GetLotsInfoByCategoryRequest(4)));
+
+        Assertions.assertEquals(listLotsResponse.getResponseCode(), 200);
+    }
 }
 
 

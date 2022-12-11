@@ -7,7 +7,6 @@ import org.apache.commons.collections4.MultiValuedMap;
 import org.apache.commons.collections4.bidimap.DualHashBidiMap;
 import org.apache.commons.collections4.multimap.HashSetValuedHashMap;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
@@ -15,30 +14,6 @@ import java.util.*;
 public class DataBase {
 
     private static DataBase ourInstance = new DataBase();
-
-    public static synchronized DataBase getInstance() {
-        if (ourInstance == null) {
-            ourInstance = new DataBase();
-        }
-        return ourInstance;
-    }
-
-    private DataBase() {
-        try {
-            addCategoryToMap(Files.readAllLines
-                    (Path.of("categories.txt")));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    private void addCategoryToMap(List<String> categories) {
-        for(String category: categories){
-            categoryById.put(nextCategoryId, new Category(nextCategoryId, category));
-            nextCategoryId++;
-        }
-    }
-
     private Map<Integer, User> userByID = new HashMap<>();
     private Map<String, User> userByLogin = new HashMap<>();
     private BidiMap<UUID, User> userByToken = new DualHashBidiMap<>();
@@ -92,8 +67,8 @@ public class DataBase {
 
     public void addLot(Lot lot) {
         lotsBySeller.put(lot.getSeller(), lot);
-        lotById.put(lot.getId(), lot);
         lot.setId(nextLotId++);
+        lotById.put(lot.getId(), lot);
     }
     
     public void addCategoryToLot(int idLot, int idCategory) throws ServerException {
@@ -166,6 +141,33 @@ public class DataBase {
         lotsByCategoryId.clear();
         priceById.clear();
         //categoryById.clear();
+        nextUserId = 1;
+        nextLotId = 1;
+        nextCategoryId = 1;
+    }
+
+    public static synchronized DataBase getInstance() {
+        if (ourInstance == null) {
+            ourInstance = new DataBase();
+        }
+        return ourInstance;
+    }
+
+    private DataBase() {
+        try {
+            loadCategories(Files.readAllLines
+                    (Path.of("categories.txt")));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        categoryById = Collections.unmodifiableMap(categoryById);
+    }
+
+    private void loadCategories(List<String> categories) {
+        for(String category: categories){
+            categoryById.put(nextCategoryId, new Category(nextCategoryId, category));
+            nextCategoryId++;
+        }
     }
 }
 

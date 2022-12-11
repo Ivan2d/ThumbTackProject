@@ -51,6 +51,15 @@ public class Server {
     public ServerResponse getBuyerDtoResponse(String token) {
         return buyerService.getBuyerByTokenResponse(token);
     }
+
+    public ServerResponse getInfoLot(String token, String requestJsonString) {
+        return buyerService.getInfoLot(token, requestJsonString);
+    }
+
+    public ServerResponse getInfoLotByCategory(String token, String requestJsonString) {
+        return buyerService.getLotsInfoByCategory(token, requestJsonString);
+    }
+
     public void clear() {
         debugService.clear();
     }

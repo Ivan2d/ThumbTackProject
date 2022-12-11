@@ -93,7 +93,6 @@ public class SellerService {
     }
 
 
-
     private Seller getSellerByToken(String token) throws ServerException {
         if (token == null){
             throw new ServerException(ServerErrorCode.TOKEN_NOT_FOUND);

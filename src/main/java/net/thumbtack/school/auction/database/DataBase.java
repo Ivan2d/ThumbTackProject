@@ -112,6 +112,7 @@ public class DataBase {
         categoryList.add(category);
         lot.setCategories(categoryList);
         lotWithCategories.put(lot, category);
+        lotsByCategoryId.put(idCategory, lot);
     }
 
     public void deleteCategoryFromLot(int idLot, int idCategory) throws ServerException {
@@ -153,7 +154,7 @@ public class DataBase {
     }
 
     public void addPrice(Price price) {
-           priceById.put(price.getBid(), price);
+        priceById.put(price.getBid(), price);
     }
 
     public void clear(){

@@ -50,7 +50,6 @@ public class BuyerService {
         } catch (ServerException e) {
             return new ServerResponse(e);
         }
-
     }
 
     public ServerResponse getLotsInfoByCategory(String token, String requestJsonString) {

@@ -70,6 +70,14 @@ public class ServiceUtils {
         }
     }
 
+    public static void checkInfoAllLotsListCategoryRequest(GetLotsInfoByListCategoryRequest request) throws  ServerException{
+        for(int item: request.getIdCategories()) {
+            if (item <= 0) {
+                throw new ServerException(ServerErrorCode.ID_LESSER_THAN_ZERO);
+            }
+        }
+    }
+
     public static void checkAddPrice(AddPriceDtoRequest request) throws  ServerException{
         if(request.getIdLot() <= 0){
             throw new ServerException(ServerErrorCode.ID_LESSER_THAN_ZERO);

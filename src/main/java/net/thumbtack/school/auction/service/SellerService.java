@@ -14,7 +14,6 @@ import net.thumbtack.school.auction.dto.request.*;
 import net.thumbtack.school.auction.dto.response.*;
 import net.thumbtack.school.auction.exception.ServerException;
 import net.thumbtack.school.auction.model.Seller;
-
 import java.util.UUID;
 
 public class SellerService {
@@ -44,6 +43,7 @@ public class SellerService {
             ServiceUtils.checkAddLotRequest(dtoRequest);
             Lot lot = LotMapperFromDto.MAPPER.toLot(dtoRequest);
             sellerDao.addLot(lot);
+            lot.setSeller(seller);
             return new ServerResponse(CODE_SUCCESS, gson.toJson(new EmptySuccessDtoResponse()));
         } catch (ServerException e) {
             return new ServerResponse(e);

@@ -6,6 +6,7 @@ import net.thumbtack.school.auction.model.Lot;
 import net.thumbtack.school.auction.model.Price;
 import net.thumbtack.school.auction.model.User;
 import java.util.Collection;
+import java.util.List;
 
 public class BuyerDaoImpl implements BuyerDao
 {
@@ -26,6 +27,11 @@ public class BuyerDaoImpl implements BuyerDao
     @Override
     public Collection<Lot> getLotListByCategory(int idCategory) {
         return DataBase.getInstance().getListByCategory(idCategory);
+    }
+
+    @Override
+    public Collection<Lot> getLotListByCategoryList(List<Integer> idCategories) {
+        return DataBase.getInstance().getListByListCategory(idCategories);
     }
 
     @Override

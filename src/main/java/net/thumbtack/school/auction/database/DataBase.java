@@ -128,6 +128,25 @@ public class DataBase {
         return lotsByCategoryId.get(idCategory);
     }
 
+    public Collection<Lot> getListByListCategory(List<Integer> idCategories) {
+        int check = 0;
+        Collection<Lot> lots = new ArrayList<>();
+        for(Lot lot: lotWithCategories.keySet()){
+           for(Category category: lot.getCategories()){
+               for (int item: idCategories){
+                   if(category.getId() == item){
+                       check++;
+                   }
+               }
+               if(check == idCategories.size()){
+                   lots.add(lot);
+               }
+               check = 0;
+           }
+        }
+        return lots;
+    }
+
     public void addPrice(Price price) {
         priceById.put(price.getBid(), price);
     }
@@ -140,7 +159,6 @@ public class DataBase {
         lotById.clear();
         lotsByCategoryId.clear();
         priceById.clear();
-        //categoryById.clear();
         nextUserId = 1;
         nextLotId = 1;
         nextCategoryId = 1;

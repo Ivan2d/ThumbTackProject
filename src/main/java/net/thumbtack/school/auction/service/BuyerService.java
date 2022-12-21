@@ -63,8 +63,22 @@ public class BuyerService {
         } catch (ServerException e) {
             return new ServerResponse(e);
         }
-
     }
+
+    public ServerResponse getLotsInfoByListCategory(String token, String requestJsonString) {
+        try {
+            Buyer buyer = getBuyerByToken(token);
+            GetLotsInfoByListCategoryRequest dtoRequest = ServiceUtils.getObjectFromJson
+                    (requestJsonString, GetLotsInfoByListCategoryRequest.class);
+            ServiceUtils.checkInfoAllLotsListCategoryRequest(dtoRequest);
+            Collection<Lot> list = buyerDao.getLotListByCategoryList(dtoRequest.getIdCategories());
+            return new ServerResponse(CODE_SUCCESS, gson.toJson(list));
+        } catch (ServerException e) {
+            return new ServerResponse(e);
+        }
+    }
+
+
 
     public ServerResponse addPrice(String token, String requestJsonString) {
         try {

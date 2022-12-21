@@ -60,6 +60,9 @@ public class Server {
         return buyerService.getLotsInfoByCategory(token, requestJsonString);
     }
 
+    public ServerResponse getInfoLotByListCategory(String token, String requestJsonString) {
+        return buyerService.getLotsInfoByListCategory(token, requestJsonString);
+    }
     public void clear() {
         debugService.clear();
     }

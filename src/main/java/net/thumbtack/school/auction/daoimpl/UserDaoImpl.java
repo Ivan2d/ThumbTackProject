@@ -22,7 +22,7 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public User getUserByToken(UUID uuid) throws ServerException {
+    public User getUserByToken(UUID uuid){
         return DataBase.getInstance().getByToken(uuid);
     }
 

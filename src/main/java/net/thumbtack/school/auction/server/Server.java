@@ -60,8 +60,12 @@ public class Server {
         return buyerService.getLotsInfoByCategory(token, requestJsonString);
     }
 
-    public ServerResponse getInfoLotByListCategory(String token, String requestJsonString) {
-        return buyerService.getLotsInfoByListCategory(token, requestJsonString);
+    public ServerResponse getInfoLotByListCategoryUnion(String token, String requestJsonString) {
+        return buyerService.getLotsInfoByListCategoryUnion(token, requestJsonString);
+    }
+
+    public ServerResponse getInfoLotByListCategoryIntersection(String token, String requestJsonString) {
+        return buyerService.getLotsInfoByListCategoryIntersection(token, requestJsonString);
     }
     public void clear() {
         debugService.clear();

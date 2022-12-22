@@ -15,7 +15,7 @@ public class Lot {
     private String description;
     private int minValueForSell;
     private int obligatoryValueForSell;
-    private Seller seller;
+    private Seller seller = new Seller();
 
     public Lot(List<Category> categories, String name, String description, int minValueForSell, Seller seller){
         setCategories(categories);

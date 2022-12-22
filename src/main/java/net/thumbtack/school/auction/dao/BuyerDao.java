@@ -13,7 +13,8 @@ public interface BuyerDao {
     Lot getLot(int idLot) throws ServerException;
     Collection<Lot> getLotListByCategory(int idCategory);
 
-    Collection<Lot> getLotListByCategoryList(List<Integer> idCategories);
+    Collection<Lot> getLotListByCategoryListUnion(List<Integer> idCategories);
+    Collection<Lot> getLotListByCategoryListIntersection(List<Integer> idCategories);
     void addPrice(Price price) throws ServerException;
 
 }

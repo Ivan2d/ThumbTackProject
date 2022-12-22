@@ -865,7 +865,7 @@ public class TestAuction {
     }
 
     @Test
-    public void testGetListLotsByListCategory(){
+    public void testGetListLotsByListCategoryUnion(){
         RegisterDtoRequest dtoRequest = new RegisterDtoRequest(
                 "Никитаа",
                 "Асаевичъ",
@@ -914,8 +914,74 @@ public class TestAuction {
 
         GetLotsInfoByListCategoryRequest listLotDtoRequest = new GetLotsInfoByListCategoryRequest(List.of(3, 4));
 
-        Assertions.assertEquals(server.getInfoLotByListCategory(uuidBuyer, gson.toJson(listLotDtoRequest))
-                .getResponseData(), gson.toJson(new ArrayList<>()));
+        Assertions.assertNotEquals(server.getInfoLotByListCategoryUnion
+                (uuidBuyer, gson.toJson(listLotDtoRequest)).getResponseData(), gson.toJson(new ArrayList<>()));
+    }
+
+    @Test
+    public void testGetListLotsByListCategoryIntersection(){
+        RegisterDtoRequest dtoRequest = new RegisterDtoRequest(
+                "Никитаа",
+                "Асаевичъ",
+                "prodavec20078",
+                "firetreesd"
+        );
+
+        RegisterDtoRequest dtoRequestBuyer = new RegisterDtoRequest(
+                "Никитаа",
+                "Асаевичъ",
+                "prodavec20078ff",
+                "firetreesd"
+        );
+
+        server.registerSeller(gson.toJson(dtoRequest));
+
+        server.registerBuyer(gson.toJson(dtoRequestBuyer));
+
+        ServerResponse serverResponse = server.loginUser
+                (gson.toJson(new LoginDtoRequest
+                        (dtoRequest.getLogin(), dtoRequest.getPassword())));
+
+        ServerResponse serverResponseBuyer = server.loginUser
+                (gson.toJson(new LoginDtoRequest
+                        (dtoRequestBuyer.getLogin(), dtoRequestBuyer.getPassword())));
+
+        LoginDtoResponse response = gson.fromJson
+                (serverResponse.getResponseData(), LoginDtoResponse.class);
+
+        LoginDtoResponse responseBuyer = gson.fromJson
+                (serverResponseBuyer.getResponseData(), LoginDtoResponse.class);
+
+        String uuid = response.getToken().toString();
+        String uuidBuyer = responseBuyer.getToken().toString();
+
+        server.addLot(uuid, gson.toJson
+                (new AddLotDtoRequest("Table", "good_quality", 500)));
+
+        server.addLot(uuid, gson.toJson
+                (new AddLotDtoRequest("Computer mouse", "good_quality", 500)));
+
+        Assertions.assertEquals(server.addCategoryToLot
+                        (uuid, gson.toJson( new AddCategoryToLotRequest(1, 2)))
+                .getResponseData(), gson.toJson(new EmptySuccessDtoResponse()));
+
+        Assertions.assertEquals(server.addCategoryToLot
+                        (uuid, gson.toJson( new AddCategoryToLotRequest(1, 4)))
+                .getResponseData(), gson.toJson(new EmptySuccessDtoResponse()));
+
+        Assertions.assertEquals(server.addCategoryToLot
+                        (uuid, gson.toJson( new AddCategoryToLotRequest(2, 1)))
+                .getResponseData(), gson.toJson(new EmptySuccessDtoResponse()));
+
+        Assertions.assertEquals(server.addCategoryToLot
+                        (uuid, gson.toJson( new AddCategoryToLotRequest(2, 3)))
+                .getResponseData(), gson.toJson(new EmptySuccessDtoResponse()));
+
+
+        GetLotsInfoByListCategoryRequest listLotDtoRequest = new GetLotsInfoByListCategoryRequest(List.of(1, 2));
+
+        Assertions.assertEquals(server.getInfoLotByListCategoryIntersection
+                (uuidBuyer, gson.toJson(listLotDtoRequest)).getResponseData(), gson.toJson(new ArrayList<>()));
     }
 }
 

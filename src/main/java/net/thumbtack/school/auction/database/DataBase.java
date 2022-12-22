@@ -3,6 +3,7 @@ import net.thumbtack.school.auction.exception.ServerErrorCode;
 import net.thumbtack.school.auction.exception.ServerException;
 import net.thumbtack.school.auction.model.*;
 import org.apache.commons.collections4.BidiMap;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.MultiValuedMap;
 import org.apache.commons.collections4.bidimap.DualHashBidiMap;
 import org.apache.commons.collections4.multimap.HashSetValuedHashMap;
@@ -22,6 +23,8 @@ public class DataBase {
 
     private MultiValuedMap<Integer, Lot> lotsByCategoryId = new HashSetValuedHashMap<>();
     private MultiValuedMap<Lot, Category> lotWithCategories = new HashSetValuedHashMap<>();
+
+    private MultiValuedMap<Category, Lot> categoriesLots = new HashSetValuedHashMap<>();
     private Map<Integer, Lot> lotById = new HashMap<>();
 
     private Map<Integer, Price> priceById = new HashMap<>();
@@ -88,6 +91,7 @@ public class DataBase {
         lot.setCategories(categoryList);
         lotWithCategories.put(lot, category);
         lotsByCategoryId.put(idCategory, lot);
+        categoriesLots.put(category, lot);
     }
 
     public void deleteCategoryFromLot(int idLot, int idCategory) throws ServerException {
@@ -128,24 +132,45 @@ public class DataBase {
         return lotsByCategoryId.get(idCategory);
     }
 
-    public Collection<Lot> getListByListCategory(List<Integer> idCategories) {
-        int check = 0;
-        Collection<Lot> lots = new ArrayList<>();
-        for(Lot lot: lotWithCategories.keySet()){
-           for(Category category: lot.getCategories()){
-               for (int item: idCategories){
-                   if(category.getId() == item){
-                       check++;
-                   }
-               }
-               if(check == idCategories.size()){
-                   lots.add(lot);
-               }
-               check = 0;
-           }
+    public Collection<Lot> getListByListCategoryUnion(List<Integer> idCategories) {
+
+        List<Category> categories = new ArrayList<>();
+        Collection<Lot> lotCollection = new HashSet<>();
+        for(int item: idCategories) {
+            for(Map.Entry<Integer, Category> entry: categoryById.entrySet()){
+                if (entry.getKey() == item){
+                    categories.add(entry.getValue());
+                }
+            }
         }
-        return lots;
+
+        for(int i = 0; i < categories.size()-1; i++){
+            lotCollection.addAll(CollectionUtils.union
+                    (categoriesLots.get(categories.get(i)), categoriesLots.get(categories.get(i+1))));
+        }
+        return lotCollection;
     }
+
+    public Collection<Lot> getListByListCategoryIntersection(List<Integer> idCategories) {
+
+        List<Category> categories = new ArrayList<>();
+        Collection<Lot> lotCollection = new HashSet<>();
+        for (int item : idCategories) {
+            for (Map.Entry<Integer, Category> entry : categoryById.entrySet()) {
+                if (entry.getKey() == item) {
+                    categories.add(entry.getValue());
+                }
+            }
+        }
+
+        for(int i = 0; i < categories.size()-1; i++){
+            lotCollection.addAll(CollectionUtils.intersection
+                    (categoriesLots.get(categories.get(i)), categoriesLots.get(categories.get(i+1))));
+        }
+        return lotCollection;
+    }
+
+
 
     public void addPrice(Price price) {
         priceById.put(price.getBid(), price);

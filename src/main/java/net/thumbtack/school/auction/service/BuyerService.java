@@ -65,13 +65,26 @@ public class BuyerService {
         }
     }
 
-    public ServerResponse getLotsInfoByListCategory(String token, String requestJsonString) {
+    public ServerResponse getLotsInfoByListCategoryUnion(String token, String requestJsonString) {
         try {
             Buyer buyer = getBuyerByToken(token);
             GetLotsInfoByListCategoryRequest dtoRequest = ServiceUtils.getObjectFromJson
                     (requestJsonString, GetLotsInfoByListCategoryRequest.class);
             ServiceUtils.checkInfoAllLotsListCategoryRequest(dtoRequest);
-            Collection<Lot> list = buyerDao.getLotListByCategoryList(dtoRequest.getIdCategories());
+            Collection<Lot> list = buyerDao.getLotListByCategoryListUnion(dtoRequest.getIdCategories());
+            return new ServerResponse(CODE_SUCCESS, gson.toJson(list));
+        } catch (ServerException e) {
+            return new ServerResponse(e);
+        }
+    }
+
+    public ServerResponse getLotsInfoByListCategoryIntersection(String token, String requestJsonString) {
+        try {
+            Buyer buyer = getBuyerByToken(token);
+            GetLotsInfoByListCategoryRequest dtoRequest = ServiceUtils.getObjectFromJson
+                    (requestJsonString, GetLotsInfoByListCategoryRequest.class);
+            ServiceUtils.checkInfoAllLotsListCategoryRequest(dtoRequest);
+            Collection<Lot> list = buyerDao.getLotListByCategoryListIntersection(dtoRequest.getIdCategories());
             return new ServerResponse(CODE_SUCCESS, gson.toJson(list));
         } catch (ServerException e) {
             return new ServerResponse(e);

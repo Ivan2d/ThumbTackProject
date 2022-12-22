@@ -13,4 +13,7 @@ public class Seller extends User {
         super(firstName, lastName, login, password);
         this.lots = lots;
     }
+    public void addLot(Lot lot){
+        lots.add(lot);
+    }
 }

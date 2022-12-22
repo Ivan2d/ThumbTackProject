@@ -30,8 +30,13 @@ public class BuyerDaoImpl implements BuyerDao
     }
 
     @Override
-    public Collection<Lot> getLotListByCategoryList(List<Integer> idCategories) {
-        return DataBase.getInstance().getListByListCategory(idCategories);
+    public Collection<Lot> getLotListByCategoryListUnion(List<Integer> idCategories) {
+        return DataBase.getInstance().getListByListCategoryUnion(idCategories);
+    }
+
+    @Override
+    public Collection<Lot> getLotListByCategoryListIntersection(List<Integer> idCategories) {
+        return DataBase.getInstance().getListByListCategoryIntersection(idCategories);
     }
 
     @Override

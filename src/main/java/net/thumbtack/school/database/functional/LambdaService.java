@@ -23,16 +23,16 @@ public class LambdaService {
     // дать компилятору самому определить типы на основе контекста, в котором используется функция.
 
     // #3
-    // Тут падает  Function<String, List<String>> splitReference = String::split;
+    Function<String, List<String>> splitReference = MyStringService::split;
     Function<List<?>, Integer> countReference = List::size;
     // можно заменить лямбда-выражение на ссылку на метод (method reference), если
     // лямбда-выражение просто вызывает метод без дополнительной логики или вычислений.
 
     // #4
-    // Тут падает   Function<String, Integer> splitAndCount = ((Function<String, List<String>>) String::split)
-    //            .andThen(List::size);
-    // Тут падает Function<String, Integer> splitAndCountCompose = ((Function<List<String>, Integer>) List::size)
-    //            .compose((Function<String, List<String>>) String::split);
+     Function<String, Integer> splitAndCount = ((Function<String, List<String>>) MyStringService::split)
+            .andThen(List::size);
+     Function<String, Integer> splitAndCountCompose = ((Function<List<String>, Integer>) List::size)
+            .compose((Function<String, List<String>>) MyStringService::split);
 
     // Использование count.apply(split.apply(str)) подразумевает,
     // что мы явно вызываем функции в нужном порядке и передаем

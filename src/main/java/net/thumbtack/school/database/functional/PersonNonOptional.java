@@ -10,9 +10,7 @@ public class PersonNonOptional {
     }
 
     public PersonNonOptional getMothersMotherFather() {
-        if (mother != null
-                && mother.getMother() != null
-                && mother.getMother().getFather() != null) {
+        if (mother != null && mother.getMother() != null) {
                     return mother.getMother().getFather();
         } else {
                     return null;

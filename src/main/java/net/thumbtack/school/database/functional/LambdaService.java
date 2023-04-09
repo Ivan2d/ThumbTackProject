@@ -108,12 +108,10 @@ public class LambdaService {
             .collect(Collectors.toList());
 
     // #16
-    Map<String, Long> nameCounts = persons
+    List<String> uniqueNames2 = persons
             .stream()
             .filter(p -> p.getAge() > 30)
-            .collect(Collectors.groupingBy(PersonWithAge::getName, Collectors.counting()));
-
-    List<String> uniqueNames2 = nameCounts
+            .collect(Collectors.groupingBy(PersonWithAge::getName, Collectors.counting()))
             .entrySet()
             .stream()
             .sorted(Map.Entry.comparingByValue())

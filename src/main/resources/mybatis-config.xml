@@ -25,11 +25,12 @@
     </environments>
 
     <mappers>
-        <mapper class="net.thumbtack.school.database.mybatis.mappers.TraineeMapper"/>
-        <mapper class="net.thumbtack.school.database.mybatis.mappers.GroupMapper"/>
-        <mapper class="net.thumbtack.school.database.mybatis.mappers.SchoolMapper"/>
-        <mapper class="net.thumbtack.school.database.mybatis.mappers.SubjectMapper"/>
-        <mapper resource="net/thumbtack/school/database/mybatis/mappers/SchoolMapper.xml"/>
+        <mapper class="net.thumbtack.school.auction.mappers.mybatis.BuyerMapper"/>
+        <mapper class="net.thumbtack.school.auction.mappers.mybatis.SellerMapper"/>
+        <mapper class="net.thumbtack.school.auction.mappers.mybatis.LotMapper"/>
+        <mapper class="net.thumbtack.school.auction.mappers.mybatis.CategoryMapper"/>
+        <mapper class="net.thumbtack.school.auction.mappers.mybatis.UserMapper"/>
+        <mapper class="net.thumbtack.school.auction.mappers.mybatis.PriceMapper"/>
     </mappers>
 
 </configuration>

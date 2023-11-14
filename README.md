@@ -2,7 +2,7 @@
 
 Иван Романовский
 
-Задачи от компании Thumbtack
+Задание-проект от компании Thumbtack
 
 ivan.romanovskiy.90@mail.ru
 
